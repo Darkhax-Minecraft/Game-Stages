@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class GameStages {
 
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
-    
+
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
 

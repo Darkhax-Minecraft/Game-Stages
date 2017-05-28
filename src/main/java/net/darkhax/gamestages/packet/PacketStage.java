@@ -2,7 +2,6 @@ package net.darkhax.gamestages.packet;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
-import net.darkhax.bookshelf.util.RenderUtils;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IAdditionalStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
@@ -67,11 +66,11 @@ public class PacketStage extends SerializableMessage {
             info.lockStage(this.stageName);
         }
 
-        for (IAdditionalStageData handler : PlayerDataHandler.getDataHandlers()) {
-            
+        for (final IAdditionalStageData handler : PlayerDataHandler.getDataHandlers()) {
+
             handler.onClientSync(player, this.stageName, this.unlock);
         }
-        
+
         return null;
     }
 }

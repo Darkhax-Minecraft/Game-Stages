@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -75,13 +74,14 @@ public class PlayerDataHandler {
 
         return ADDITIONAL_DATA.get(id);
     }
-    
+
     /**
      * Gets all the additional data handlers.
+     *
      * @return The additional data handlers.
      */
-    public static Collection<IAdditionalStageData> getDataHandlers() {
-        
+    public static Collection<IAdditionalStageData> getDataHandlers () {
+
         return ADDITIONAL_DATA.values();
     }
 
@@ -191,12 +191,12 @@ public class PlayerDataHandler {
         public void unlockStage (String stage) {
 
             if (!this.unlockedStages.contains(stage.toLowerCase())) {
-                
+
                 this.unlockedStages.add(stage.toLowerCase());
-                
+
                 if (this.getPlayer() instanceof EntityPlayerMP) {
-                    
-                    GameStages.NETWORK.sendTo(new PacketStage(stage, true), (EntityPlayerMP) player);
+
+                    GameStages.NETWORK.sendTo(new PacketStage(stage, true), (EntityPlayerMP) this.player);
                 }
             }
         }
@@ -205,10 +205,10 @@ public class PlayerDataHandler {
         public void lockStage (String stage) {
 
             this.unlockedStages.remove(stage.toLowerCase());
-            
+
             if (this.getPlayer() instanceof EntityPlayerMP) {
-                
-                GameStages.NETWORK.sendTo(new PacketStage(stage, false), (EntityPlayerMP) player);
+
+                GameStages.NETWORK.sendTo(new PacketStage(stage, false), (EntityPlayerMP) this.player);
             }
         }
 
