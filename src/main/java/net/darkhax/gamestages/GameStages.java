@@ -1,5 +1,6 @@
 package net.darkhax.gamestages;
 
+import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.DefaultStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
@@ -16,6 +17,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 @Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@")
 public class GameStages {
 
+    public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
+    
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
 
