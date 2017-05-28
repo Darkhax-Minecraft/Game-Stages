@@ -1,14 +1,30 @@
-# Zalgo's Command
-Zalgo's Command is a mod which allows modpacks and servers to group multiple commands together, easily. This makes game setups with multple stages, or tiers easier to maintain.
+# Game Stages
+This mod provides a universal system for adding and handling game stages. It's primary use is to be an API for other staged mods to hook into. 
 
 [![Nodecraft](https://i.imgur.com/sz9PUmK.png)](https://nodecraft.com/r/darkhax)    
 This project is sponsored by Nodecraft. Use code [Darkhax](https://nodecraft.com/r/darkhax) for 30% off your first month of service!
 
-#Usage
-This mod adds the zalgo command. This command accepts two parameters, the first is the name of the player. `@p` is a valid substitute for the player's name. The second argument is the name of the command group to execute. You can execute multiple command groups with one command! Also, a pro tip, you can use `@p` in the commands which you add to the command group, and the player from the base command will be used. 
+# Usage
+This mod adds two new commands. The first command is called gamestage. This command is used to add/remove a tier from a player. It has a few parameters. The first is the players name, you can use `@p` as a substitute. The second is the word `add` or `remove`, depending on what you want to do. The last parameter is the name of the stage. Trying to add a stage with a name that does not exist will create the stage. The second command is stageinfo. It has no parameters, and will just list out all the stages you have unlocked in chat. 
 
-# Configuration
-You can create new command groups by adding lines to the config files. Each entry should be added to the config file, on a new line. There are a few examples which are in the default config. Each entry has two components, the command group id, and the command. These two components are split using @SPLIT@. Here is an example, `test1@SPLIT@give @p minecraft:stone 1`
+# Mod Support
 
-# CraftTweaker Support!
-If you don't want to use the config options, you can use CraftTweaker! While CraftTweaker is optional, it is the recommended way to add command groups. To add a command group, use `mods.ZalgoCMD.addCommand(String commandGroup, String command);`. This will add the command to that command group. Here is an example. `mods.ZalgoCMD.addCommand("test4", "give @p minecraft:diamond 10");`
+## Getting Started
+To get started, you need to add this mod to your `build.gradle` file dependencies. After this is done, re-run the `gradlew setupDecompWorkspace` command.
+```
+repositories {
+
+    maven { url 'http://maven.epoxide.org' }
+}
+
+dependencies {
+
+    compile "net.darkhax.gamestages:GameStages:PUT_VERSION_HERE"
+}
+```
+
+## Working With Stages
+All the main hooks and methods are handled in the `IStageData` class. Each player has one of these attatched to them. You can get the stage data for a player by calling `PlayerDataHandler.getStageData(EntityPlayer player)`. Once you have the `IStageData` you can do things like `unlockStage(String stage)` and `lockStage(String stage)` and `hasUnlockedStage(String stage)`. 
+
+## Additional Hooks!
+This mod also provides a few hooks which you can use to trigger certain things. This is done by making a class that implements `IAdditionalStageData`, and then calling `PlayerDataHandler.registerDataHandler(String id, IAdditionalStageData handler)`. You can use `PlayerDataHandler.getDataHandler(String id)` to get your object at any time. The `IAdditionalStageData` interface provides three methods, one for when the data is saved, one for when the player data is read, and another for when the data is sent from the server to the client. 
