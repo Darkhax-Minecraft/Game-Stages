@@ -4,7 +4,9 @@ import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.bookshelf.util.RenderUtils;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.capabilities.PlayerDataHandler.IAdditionalStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
@@ -52,7 +54,8 @@ public class PacketStage extends SerializableMessage {
     @Override
     public IMessage handleMessage (MessageContext context) {
 
-        final IStageData info = PlayerDataHandler.getStageData(PlayerUtils.getClientPlayer());
+        final EntityPlayer player = PlayerUtils.getClientPlayer();
+        final IStageData info = PlayerDataHandler.getStageData(player);
 
         if (this.unlock) {
 
@@ -64,7 +67,11 @@ public class PacketStage extends SerializableMessage {
             info.lockStage(this.stageName);
         }
 
-        RenderUtils.markRenderersForReload(true);
+        for (IAdditionalStageData handler : PlayerDataHandler.getDataHandlers()) {
+            
+            handler.onClientSync(player, this.stageName, this.unlock);
+        }
+        
         return null;
     }
 }

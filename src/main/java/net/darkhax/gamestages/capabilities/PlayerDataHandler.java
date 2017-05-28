@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,10 +71,18 @@ public class PlayerDataHandler {
      * @param id The id of the handler to get.
      * @return The data handler that was found.
      */
-    @Nullable
     public static IAdditionalStageData getDataHandler (@Nonnull String id) {
 
         return ADDITIONAL_DATA.get(id);
+    }
+    
+    /**
+     * Gets all the additional data handlers.
+     * @return The additional data handlers.
+     */
+    public static Collection<IAdditionalStageData> getDataHandlers() {
+        
+        return ADDITIONAL_DATA.values();
     }
 
     /**
