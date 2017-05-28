@@ -29,7 +29,7 @@ public class CommandStageInfo extends CommandBase {
 
         if (sender instanceof EntityPlayer) {
 
-            final String stages = PlayerDataHandler.getStageData((EntityPlayer) sender).getUnlockedStages().stream().map(Object::toString).collect(Collectors.joining(",")).toString();
+            final String stages = PlayerDataHandler.getStageData((EntityPlayer) sender).getUnlockedStages().stream().map(Object::toString).collect(Collectors.joining(", ")).toString();
             sender.sendMessage(new TextComponentString(stages));
         }
     }
