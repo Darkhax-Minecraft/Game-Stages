@@ -1,0 +1,160 @@
+buildscript {
+
+    repositories {
+    
+        jcenter()
+        
+        maven { 
+        
+            url = 'http://files.minecraftforge.net/maven'
+        }
+        
+        maven {
+
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    
+    dependencies {
+    
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.8"
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "com.matthewprenger.cursegradle"
+
+version = "${mod_version}" + getBuildNumber()
+group = "${mod_group}"
+archivesBaseName = "${mod_name}-${version_minecraft}"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+minecraft {
+
+    version = "${version_minecraft}-${version_forge}"
+    mappings = "${version_mcp}"
+    runDir = 'run'
+    
+    replace '@VERSION@', project.version
+    replaceIn "${mod_class}.java"
+}
+
+repositories {
+    
+    maven {
+
+        url "http://maven.epoxide.org"
+    }
+}
+
+dependencies {
+
+    deobfCompile "net.darkhax.bookshelf:Bookshelf:${version_bookshelf}"
+}
+
+processResources {
+
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+    
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    from(sourceSets.main.resources.srcDirs) {
+    
+        exclude 'mcmod.info'
+    }
+    
+    from 'LICENSE'
+}
+
+// Taken from https://github.com/Inventory-Tweaks/inventory-tweaks/blob/develop/build.gradle
+def getGitChangelog = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        def gitHash = System.getenv('GIT_COMMIT')
+        def gitPrevHash = System.getenv('GIT_PREVIOUS_COMMIT')
+        def travisRange = System.getenv('TRAVIS_COMMIT_RANGE')
+        if(gitHash && gitPrevHash) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + gitPrevHash + '...' + gitHash
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } else if(travisRange) {
+            exec {
+                commandLine 'git', 'log', '--pretty=tformat:- %s', '' + travisRange
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } else {
+            return "";
+        }
+    } catch(ignored) {
+        return "";
+    }
+}
+
+String getBuildNumber() {
+
+    return System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : System.getenv('TRAVIS_BUILD_NUMBER') ? System.getenv('TRAVIS_BUILD_NUMBER') : '0';
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+
+    allprojects {
+
+        tasks.withType(Javadoc) {
+
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+task createDeobf(type: Jar) {
+
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task createSources(type: Jar, dependsOn: classes) {
+
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task createJavadoc(type: Jar, dependsOn: javadoc) {
+
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+curseforge {
+
+    apiKey = System.getenv('authCurse') ? System.getenv('authCurse') : '0';
+
+    project {
+
+        id = "${id_curse}"   
+        releaseType = 'alpha'
+        changelog = getGitChangelog()
+        changelogType = 'markdown'
+        addGameVersion "${version_minecraft}"       
+        addArtifact(createDeobf)
+        addArtifact(createSources)
+        addArtifact(createJavadoc)
+    }
+}
+
+artifacts {
+
+    archives createDeobf
+    archives createSources
+    archives createJavadoc
+}

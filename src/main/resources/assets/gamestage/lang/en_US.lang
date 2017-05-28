@@ -1,0 +1,3 @@
+#Commands
+commands.gamestage.usage=/gamestage playername add|remove stagename
+commands.stageinfo.usage=/stageinfo - No params, just shows what stages you have.
