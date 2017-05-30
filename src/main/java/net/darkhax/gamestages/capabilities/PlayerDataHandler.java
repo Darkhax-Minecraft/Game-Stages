@@ -10,11 +10,8 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.packet.PacketStage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -193,11 +190,6 @@ public class PlayerDataHandler {
             if (!this.unlockedStages.contains(stage.toLowerCase())) {
 
                 this.unlockedStages.add(stage.toLowerCase());
-
-                if (this.getPlayer() instanceof EntityPlayerMP) {
-
-                    GameStages.NETWORK.sendTo(new PacketStage(stage.toLowerCase(), true), (EntityPlayerMP) this.player);
-                }
             }
         }
 
@@ -205,11 +197,6 @@ public class PlayerDataHandler {
         public void lockStage (String stage) {
 
             this.unlockedStages.remove(stage.toLowerCase());
-
-            if (this.getPlayer() instanceof EntityPlayerMP) {
-
-                GameStages.NETWORK.sendTo(new PacketStage(stage, false), (EntityPlayerMP) this.player);
-            }
         }
 
         @Override

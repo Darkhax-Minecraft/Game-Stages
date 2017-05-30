@@ -46,7 +46,7 @@ public class PacketStage extends SerializableMessage {
      */
     public PacketStage (String stageName, boolean unlock) {
 
-        this.stageName = stageName;
+        this.stageName = stageName.toLowerCase();
         this.unlock = unlock;
     }
 
