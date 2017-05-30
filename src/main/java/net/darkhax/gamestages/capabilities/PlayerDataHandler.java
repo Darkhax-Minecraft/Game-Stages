@@ -92,7 +92,7 @@ public class PlayerDataHandler {
     public void attachCapabilities (AttachCapabilitiesEvent<Entity> event) {
 
         if (event.getObject() instanceof EntityPlayer) {
-            event.addCapability(new ResourceLocation("gamestages", "playerdata"), new Provider());
+            event.addCapability(new ResourceLocation("gamestages", "playerdata"), new Provider((EntityPlayer) event.getObject()));
         }
     }
 
@@ -196,7 +196,7 @@ public class PlayerDataHandler {
 
                 if (this.getPlayer() instanceof EntityPlayerMP) {
 
-                    GameStages.NETWORK.sendTo(new PacketStage(stage, true), (EntityPlayerMP) this.player);
+                    GameStages.NETWORK.sendTo(new PacketStage(stage.toLowerCase(), true), (EntityPlayerMP) this.player);
                 }
             }
         }
@@ -278,6 +278,11 @@ public class PlayerDataHandler {
     private static class Provider implements ICapabilitySerializable<NBTTagCompound> {
 
         IStageData instance = CAPABILITY.getDefaultInstance();
+
+        public Provider (EntityPlayer player) {
+
+            this.instance.setPlayer(player);
+        }
 
         @Override
         public boolean hasCapability (Capability<?> capability, EnumFacing facing) {
