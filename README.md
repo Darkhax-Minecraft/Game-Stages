@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
 
-    compile "net.darkhax.gamestages:GameStages:PUT_VERSION_HERE"
+    compile "net.darkhax.gamestages:GameStages-${version_minecraft}:${version_gamestages}"
 }
 ```
 
