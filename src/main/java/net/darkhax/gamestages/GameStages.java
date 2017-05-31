@@ -7,7 +7,9 @@ import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.Storage;
 import net.darkhax.gamestages.commands.CommandStage;
 import net.darkhax.gamestages.commands.CommandStageInfo;
+import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.darkhax.gamestages.packet.PacketStage;
+import net.darkhax.gamestages.packet.PacketStageAll;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +27,8 @@ public class GameStages {
     public void preInit (FMLPreInitializationEvent event) {
 
         NETWORK.register(PacketStage.class, Side.CLIENT);
+        NETWORK.register(PacketStageAll.class, Side.CLIENT);
+        NETWORK.register(PacketRequestClientSync.class, Side.SERVER);
         CapabilityManager.INSTANCE.register(IStageData.class, new Storage(), DefaultStageData.class);
         MinecraftForge.EVENT_BUS.register(new PlayerDataHandler());
     }

@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.darkhax.gamestages.GameStages;
+import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
@@ -23,6 +25,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -47,7 +50,7 @@ public class PlayerDataHandler {
      */
     public static IStageData getStageData (@Nonnull EntityPlayer player) {
 
-        return player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
+        return player != null && player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
     }
 
     /**
@@ -90,6 +93,19 @@ public class PlayerDataHandler {
 
         if (event.getObject() instanceof EntityPlayer) {
             event.addCapability(new ResourceLocation("gamestages", "playerdata"), new Provider((EntityPlayer) event.getObject()));
+        }
+    }
+
+    /**
+     * This event is used to sync stage data initially.
+     */
+    @SubscribeEvent
+    public void onEntityJoinWorld (EntityJoinWorldEvent event) {
+
+        if (event.getEntity() instanceof EntityPlayer && event.getWorld().isRemote) {
+
+            final IStageData info = PlayerDataHandler.getStageData((EntityPlayer) event.getEntity());
+            GameStages.NETWORK.sendToServer(new PacketRequestClientSync());
         }
     }
 
@@ -327,9 +343,9 @@ public class PlayerDataHandler {
          * Called when the packet is sent to the client. Allows you to do packety stuff.
          *
          * @param player The player who's being synced.
-         * @param stageName The name of the stage being synced.
+         * @param stageName The name of the stage being synced. This can be empty!
          * @param isUnlocking Whether or not the stage is being unlocked.
          */
-        void onClientSync (@Nonnull EntityPlayer player, String stageName, boolean isUnlocking);
+        void onClientSync (@Nonnull EntityPlayer player, @Nonnull String stageName, boolean isUnlocking);
     }
 }
