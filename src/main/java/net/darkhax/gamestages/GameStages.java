@@ -5,8 +5,7 @@ import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.DefaultStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.Storage;
-import net.darkhax.gamestages.commands.CommandStage;
-import net.darkhax.gamestages.commands.CommandStageInfo;
+import net.darkhax.gamestages.commands.CommandStageTree;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.darkhax.gamestages.packet.PacketStage;
 import net.darkhax.gamestages.packet.PacketStageAll;
@@ -36,7 +35,6 @@ public class GameStages {
     @EventHandler
     public void serverStarting (FMLServerStartingEvent event) {
 
-        event.registerServerCommand(new CommandStage());
-        event.registerServerCommand(new CommandStageInfo());
+        event.registerServerCommand(new CommandStageTree());
     }
 }

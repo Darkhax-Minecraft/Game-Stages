@@ -1,3 +1,12 @@
 #Commands
-commands.gamestage.usage=/gamestage playername add|remove stagename
-commands.stageinfo.usage=/stageinfo - No params, just shows what stages you have.
+commands.gamestage.usage=/gamestage - This is a tree command. Run it to see all sub commands.
+
+commands.gamestage.add.usage=/gamestage add player stage
+
+commands.gamestage.remove.usage=/gamestage remove player stage
+
+commands.gamestage.check.usage=/gamestage check player stage
+commands.gamestage.check.failure=%s does not have stage %s
+commands.gamestage.check.success=%s has stage %s
+
+commands.gamestage.info.usage=/gamestage info

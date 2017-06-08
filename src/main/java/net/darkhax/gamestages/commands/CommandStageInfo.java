@@ -17,13 +17,19 @@ public class CommandStageInfo extends CommandBase {
     @Override
     public String getName () {
 
-        return "stageinfo";
+        return "info";
+    }
+
+    @Override
+    public int getRequiredPermissionLevel () {
+
+        return 0;
     }
 
     @Override
     public String getUsage (ICommandSender sender) {
 
-        return "commands.stageinfo.usage";
+        return "commands.gamestage.info.usage";
     }
 
     @Override
