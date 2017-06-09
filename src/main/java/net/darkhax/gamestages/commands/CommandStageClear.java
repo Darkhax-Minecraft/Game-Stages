@@ -67,4 +67,10 @@ public class CommandStageClear extends Command {
             throw new WrongUsageException("commands.gamestage.clear.usage", new Object[0]);
         }
     }
+
+    @Override
+    public boolean isUsernameIndex (String[] args, int index) {
+
+        return index == 0;
+    }
 }

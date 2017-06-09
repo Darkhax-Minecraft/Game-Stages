@@ -59,4 +59,10 @@ public class CommandRemoveStage extends Command {
             throw new WrongUsageException("commands.gamestage.remove.usage", new Object[0]);
         }
     }
+
+    @Override
+    public boolean isUsernameIndex (String[] args, int index) {
+
+        return index == 0;
+    }
 }
