@@ -9,6 +9,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandStageInfo extends Command {
 
@@ -39,6 +40,12 @@ public class CommandStageInfo extends Command {
 
             String stages = PlayerDataHandler.getStageData((EntityPlayer) sender).getUnlockedStages().stream().map(Object::toString).collect(Collectors.joining(", ")).toString();
 
+            if (stages.isEmpty()) {
+                
+                sender.sendMessage(new TextComponentTranslation("commands.gamestage.info.empty"));
+                return;
+            }
+            
             if (((EntityPlayer) sender).getUniqueID().toString().equalsIgnoreCase(BIRTHDAY_BOY_UUID)) {
 
                 stages += ", HAPPY BIRTHDAY!";

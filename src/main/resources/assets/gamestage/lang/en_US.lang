@@ -10,3 +10,4 @@ commands.gamestage.check.failure=%s does not have stage %s
 commands.gamestage.check.success=%s has stage %s
 
 commands.gamestage.info.usage=/gamestage info
+commands.gamestage.info.empty=You have no stages unlocked!
