@@ -11,6 +11,7 @@ public class CommandStageTree extends CommandTree {
         this.addSubcommand(new CommandRemoveStage());
         this.addSubcommand(new CommandStageInfo());
         this.addSubcommand(new CommandCheckStage());
+        this.addSubcommand(new CommandStageClear());
     }
 
     @Override
