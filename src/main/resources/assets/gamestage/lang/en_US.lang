@@ -1,5 +1,5 @@
 #Commands
-commands.gamestage.usage=/gamestage - This is a tree command. Run it to see all sub commands.
+commands.gamestage.usage=List of commands for Game Stages
 
 commands.gamestage.add.usage=/gamestage add player stage
 

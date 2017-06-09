@@ -1,9 +1,9 @@
 package net.darkhax.gamestages.commands;
 
+import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.packet.PacketStage;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-public class CommandAddStage extends CommandBase {
+public class CommandAddStage extends Command {
 
     @Override
     public String getName () {

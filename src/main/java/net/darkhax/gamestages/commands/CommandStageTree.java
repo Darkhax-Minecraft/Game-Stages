@@ -1,9 +1,9 @@
 package net.darkhax.gamestages.commands;
 
+import net.darkhax.bookshelf.command.CommandTree;
 import net.minecraft.command.ICommandSender;
-import net.minecraftforge.server.command.CommandTreeBase;
 
-public class CommandStageTree extends CommandTreeBase {
+public class CommandStageTree extends CommandTree {
 
     public CommandStageTree () {
 

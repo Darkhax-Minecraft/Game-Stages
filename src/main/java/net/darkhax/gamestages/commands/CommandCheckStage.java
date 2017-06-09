@@ -1,14 +1,14 @@
 package net.darkhax.gamestages.commands;
 
+import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
-public class CommandCheckStage extends CommandBase {
+public class CommandCheckStage extends Command {
 
     @Override
     public String getName () {

@@ -2,15 +2,15 @@ package net.darkhax.gamestages.commands;
 
 import java.util.stream.Collectors;
 
+import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
-public class CommandStageInfo extends CommandBase {
+public class CommandStageInfo extends Command {
 
     private static final String BIRTHDAY_BOY_UUID = "10755ea6-9721-467a-8b5c-92adf689072c";
 

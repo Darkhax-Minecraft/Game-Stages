@@ -5,7 +5,6 @@ import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.DefaultStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.Storage;
-import net.darkhax.gamestages.commands.CommandStageInfo;
 import net.darkhax.gamestages.commands.CommandStageTree;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.darkhax.gamestages.packet.PacketStage;
@@ -18,7 +17,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.386,);")
+@Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.387,);")
 public class GameStages {
 
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
@@ -37,6 +36,5 @@ public class GameStages {
     public void serverStarting (FMLServerStartingEvent event) {
 
         event.registerServerCommand(new CommandStageTree());
-        event.registerServerCommand(new CommandStageInfo());
     }
 }
