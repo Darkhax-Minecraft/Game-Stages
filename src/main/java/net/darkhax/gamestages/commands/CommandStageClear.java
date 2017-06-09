@@ -55,8 +55,11 @@ public class CommandStageClear extends Command {
                 }
             }
 
-            sender.sendMessage(new TextComponentTranslation("commands.gamestage.clear.sender", stageCount, player.getDisplayNameString()));
             player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", stageCount));
+
+            if (player != sender) {
+                sender.sendMessage(new TextComponentTranslation("commands.gamestage.clear.sender", stageCount, player.getDisplayNameString()));
+            }
         }
 
         else {

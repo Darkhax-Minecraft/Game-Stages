@@ -10,6 +10,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandRemoveStage extends Command {
 
@@ -44,6 +45,12 @@ public class CommandRemoveStage extends Command {
             if (player instanceof EntityPlayerMP) {
 
                 GameStages.NETWORK.sendTo(new PacketStage(stageName, false), (EntityPlayerMP) player);
+            }
+
+            player.sendMessage(new TextComponentTranslation("commands.gamestage.remove.target", stageName));
+
+            if (player != sender) {
+                sender.sendMessage(new TextComponentTranslation("commands.gamestage.remove.sender", stageName, player.getDisplayNameString()));
             }
         }
 

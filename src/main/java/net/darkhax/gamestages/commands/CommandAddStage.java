@@ -10,6 +10,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandAddStage extends Command {
 
@@ -44,6 +45,12 @@ public class CommandAddStage extends Command {
             if (player instanceof EntityPlayerMP) {
 
                 GameStages.NETWORK.sendTo(new PacketStage(stageName, true), (EntityPlayerMP) player);
+            }
+
+            player.sendMessage(new TextComponentTranslation("commands.gamestage.add.target", stageName));
+
+            if (player != sender) {
+                sender.sendMessage(new TextComponentTranslation("commands.gamestage.add.sender", stageName, player.getDisplayNameString()));
             }
         }
 
