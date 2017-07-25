@@ -104,7 +104,6 @@ public class PlayerDataHandler {
 
         if (event.getEntity() instanceof EntityPlayer && event.getWorld().isRemote) {
 
-            final IStageData info = PlayerDataHandler.getStageData((EntityPlayer) event.getEntity());
             GameStages.NETWORK.sendToServer(new PacketRequestClientSync());
         }
     }
