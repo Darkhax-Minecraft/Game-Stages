@@ -1,11 +1,11 @@
 package net.darkhax.gamestages.capabilities;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -123,9 +123,8 @@ public class PlayerDataHandler {
     }
 
     /**
-     * This is the backing interface for the custom player data. You don't need to do anything
-     * with this class, although it does define which methods you can use when working with
-     * stage data.
+     * This is the backing interface for the custom player data. You don't need to do anything with
+     * this class, although it does define which methods you can use when working with stage data.
      */
     public interface IStageData {
 
@@ -180,7 +179,7 @@ public class PlayerDataHandler {
         /**
          * A list of all unlocked stages.
          */
-        private final List<String> unlockedStages = new ArrayList<>();
+        private final Set<String> unlockedStages = new HashSet<>();
 
         /**
          * The player who owns this data.
@@ -202,10 +201,7 @@ public class PlayerDataHandler {
         @Override
         public void unlockStage (String stage) {
 
-            if (!this.unlockedStages.contains(stage.toLowerCase())) {
-
-                this.unlockedStages.add(stage.toLowerCase());
-            }
+            this.unlockedStages.add(stage.toLowerCase());
         }
 
         @Override
@@ -228,8 +224,8 @@ public class PlayerDataHandler {
     }
 
     /**
-     * This class handles the read/write of NBT in capabilities. Another internal class. It
-     * also handles the IAdditionalStageData hooks which you can use!
+     * This class handles the read/write of NBT in capabilities. Another internal class. It also
+     * handles the IAdditionalStageData hooks which you can use!
      */
     public static class Storage implements Capability.IStorage<IStageData> {
 
@@ -333,8 +329,7 @@ public class PlayerDataHandler {
          * @param player The player who's being read.
          * @param stageData The stage data.
          * @param tag An NBTTagCompound which is specific to this handler. It can be null if
-         *        {@link #writeNBT(EntityPlayer, IStageData, NBTTagCompound)} was not called
-         *        yet.
+         *        {@link #writeNBT(EntityPlayer, IStageData, NBTTagCompound)} was not called yet.
          */
         void readNBT (@Nonnull EntityPlayer player, @Nonnull IStageData stageData, NBTTagCompound tag);
 
