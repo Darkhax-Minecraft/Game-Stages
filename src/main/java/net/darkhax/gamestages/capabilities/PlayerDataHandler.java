@@ -29,7 +29,6 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerDataHandler {
@@ -144,21 +143,23 @@ public class PlayerDataHandler {
          * @return Whether or not the player has the stage unlocked.
          */
         boolean hasUnlockedStage (@Nonnull String stage);
-        
+
         /**
          * Checks if a player has any of the passed stages. The player only needs one to be true.
-         * @param stages The stages to check for, the player only needs one of them. 
+         *
+         * @param stages The stages to check for, the player only needs one of them.
          * @return Whether or not the player has any of the passed stages.
          */
-        boolean hasUnlockedAnyOf(@Nonnull String... stages);
+        boolean hasUnlockedAnyOf (@Nonnull String... stages);
 
         /**
          * Checks if a player has all of the passed stages.
+         *
          * @param stages The stages to check for, the player must have all of them.
          * @return Whether or not the player has all of the passed stages.
          */
-        boolean hasUnlockedAll(String... stages);
-        
+        boolean hasUnlockedAll (String... stages);
+
         /**
          * Unlocks a stage for the player.
          *
@@ -213,49 +214,49 @@ public class PlayerDataHandler {
 
         @Override
         public boolean hasUnlockedAnyOf (String... stages) {
-            
-            for (String stage : stages) {
-                
-                if (hasUnlockedStage(stage)) {
-                    
+
+            for (final String stage : stages) {
+
+                if (this.hasUnlockedStage(stage)) {
+
                     return true;
                 }
             }
-            
+
             return false;
         }
 
         @Override
         public boolean hasUnlockedAll (String... stages) {
-            
-            for (String stage : stages) {
-                
-                if (!hasUnlockedStage(stage)) {
-                    
+
+            for (final String stage : stages) {
+
+                if (!this.hasUnlockedStage(stage)) {
+
                     return false;
                 }
             }
-            
+
             return true;
         }
-        
+
         @Override
         public boolean hasUnlockedStage (String stage) {
 
-            GameStageEvent event = new GameStageEvent.Remove(this.getPlayer(), stage);
+            final GameStageEvent event = new GameStageEvent.Remove(this.getPlayer(), stage);
             MinecraftForge.EVENT_BUS.post(event);
-            
+
             return !event.isCanceled() && this.unlockedStages.contains(event.getStageName().toLowerCase());
         }
 
         @Override
         public void unlockStage (String stage) {
 
-            GameStageEvent event = new GameStageEvent.Add(this.getPlayer(), stage);
+            final GameStageEvent event = new GameStageEvent.Add(this.getPlayer(), stage);
             MinecraftForge.EVENT_BUS.post(event);
-            
+
             if (!event.isCanceled()) {
-                
+
                 this.unlockedStages.add(event.getStageName().toLowerCase());
             }
         }
@@ -263,11 +264,11 @@ public class PlayerDataHandler {
         @Override
         public void lockStage (String stage) {
 
-            GameStageEvent event = new GameStageEvent.Remove(this.getPlayer(), stage);
+            final GameStageEvent event = new GameStageEvent.Remove(this.getPlayer(), stage);
             MinecraftForge.EVENT_BUS.post(event);
-            
+
             if (!event.isCanceled()) {
-                
+
                 this.unlockedStages.remove(stage.toLowerCase());
             }
         }
