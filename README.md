@@ -1,4 +1,4 @@
-# Game Stages[![](http://cf.way2muchnoise.eu/268655.svg)](https://minecraft.curseforge.com/projects/game-stages) [![](http://cf.way2muchnoise.eu/versions/268655.svg)](https://minecraft.curseforge.com/projects/game-stages)
+# Game Stages [![](http://cf.way2muchnoise.eu/268655.svg)](https://minecraft.curseforge.com/projects/game-stages) [![](http://cf.way2muchnoise.eu/versions/268655.svg)](https://minecraft.curseforge.com/projects/game-stages)
 This mod provides a universal system for adding and handling game stages. It's primary use is to be an API for other staged mods to hook into. 
 
 [![Nodecraft](https://i.imgur.com/sz9PUmK.png)](https://nodecraft.com/r/darkhax)    
