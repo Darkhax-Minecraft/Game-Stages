@@ -1,5 +1,6 @@
 package net.darkhax.gamestages;
 
+import net.darkhax.bookshelf.command.CommandTree;
 import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.DefaultStageData;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class GameStages {
 
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
+    public static final CommandTree COMMAND = new CommandStageTree();
 
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
@@ -35,6 +37,6 @@ public class GameStages {
     @EventHandler
     public void serverStarting (FMLServerStartingEvent event) {
 
-        event.registerServerCommand(new CommandStageTree());
+        event.registerServerCommand(COMMAND);
     }
 }
