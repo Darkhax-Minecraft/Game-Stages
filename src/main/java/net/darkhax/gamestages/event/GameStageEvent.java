@@ -1,5 +1,6 @@
 package net.darkhax.gamestages.event;
 
+import net.darkhax.gamestages.GameStages;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -110,6 +111,41 @@ public class GameStageEvent extends Event {
         public Check (EntityPlayer player, String stageName) {
 
             super(player, stageName);
+        }
+    }
+
+    /**
+     * This event is fired every time there is a client side stage sync. It allows mods to hook
+     * into the syncing, and perform various client side updates. It can not be canceled, and
+     * {@link GameStageEvent#setStage(String)} has been disabled.
+     */
+    public static class ClientSync extends GameStageEvent {
+
+        /**
+         * Whether or not the stage is being unlocked. true = stage is added. false = stage is removed.
+         */
+        private final boolean isUnlocking;
+
+        public ClientSync (EntityPlayer player, String stageName, boolean isUnlocking) {
+
+            super(player, stageName);
+            this.isUnlocking = isUnlocking;
+        }
+
+        /**
+         * Checks if the stage is being unlocked (added/true) or locked (removed/false).
+         *
+         * @return Whether or not the stage is being unlocked.
+         */
+        public boolean isUnlocking () {
+
+            return this.isUnlocking;
+        }
+
+        @Override
+        public void setStage (String stage) {
+
+            GameStages.LOG.warn("You can not change the stage during the ClientSync event! Stage:{}", this.getStageName());
         }
     }
 }
