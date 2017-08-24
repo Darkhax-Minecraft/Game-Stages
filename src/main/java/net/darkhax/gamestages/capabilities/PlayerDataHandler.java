@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.darkhax.gamestages.GameStages;
+import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +21,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -27,6 +29,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerDataHandler {
@@ -140,7 +143,7 @@ public class PlayerDataHandler {
          * @return Whether or not the player has the stage unlocked.
          */
         boolean hasUnlockedStage (@Nonnull String stage);
-
+        
         /**
          * Unlocks a stage for the player.
          *
@@ -191,23 +194,38 @@ public class PlayerDataHandler {
 
             return this.unlockedStages;
         }
-
+        
         @Override
         public boolean hasUnlockedStage (String stage) {
 
-            return this.unlockedStages.contains(stage.toLowerCase());
+            GameStageEvent event = new GameStageEvent.Remove(this.getPlayer(), stage);
+            MinecraftForge.EVENT_BUS.post(event);
+            
+            return !event.isCanceled() && this.unlockedStages.contains(event.getStageName().toLowerCase());
         }
 
         @Override
         public void unlockStage (String stage) {
 
-            this.unlockedStages.add(stage.toLowerCase());
+            GameStageEvent event = new GameStageEvent.Add(this.getPlayer(), stage);
+            MinecraftForge.EVENT_BUS.post(event);
+            
+            if (!event.isCanceled()) {
+                
+                this.unlockedStages.add(event.getStageName().toLowerCase());
+            }
         }
 
         @Override
         public void lockStage (String stage) {
 
-            this.unlockedStages.remove(stage.toLowerCase());
+            GameStageEvent event = new GameStageEvent.Remove(this.getPlayer(), stage);
+            MinecraftForge.EVENT_BUS.post(event);
+            
+            if (!event.isCanceled()) {
+                
+                this.unlockedStages.remove(stage.toLowerCase());
+            }
         }
 
         @Override
