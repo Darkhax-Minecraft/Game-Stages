@@ -2,6 +2,7 @@ package net.darkhax.gamestages;
 
 import net.darkhax.bookshelf.BookshelfRegistry;
 import net.darkhax.bookshelf.command.CommandTree;
+import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.bookshelf.world.gamerule.GameRule;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.425,);", acceptedMinecraftVersions = "[1.12,1.12.2)")
 public class GameStages {
 
+    public static final LoggingHelper LOG = new LoggingHelper("gamestages");
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
     public static final CommandTree COMMAND = new CommandStageTree();
     public static final GameRule GAME_RULE_SHARE_STAGES = new GameRule("shareGameStages", false);
