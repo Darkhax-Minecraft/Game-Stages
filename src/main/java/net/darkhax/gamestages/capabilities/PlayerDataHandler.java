@@ -134,6 +134,7 @@ public class PlayerDataHandler {
         /**
          * Gets the name of all unlocked stages.
          */
+        @Deprecated
         Collection<String> getUnlockedStages ();
 
         /**
@@ -190,6 +191,7 @@ public class PlayerDataHandler {
         private EntityPlayer player;
 
         @Override
+        @Deprecated
         public Collection<String> getUnlockedStages () {
 
             return this.unlockedStages;
