@@ -30,6 +30,10 @@ version = "${mod_version}" + getBuildNumber()
 group = "${mod_group}"
 archivesBaseName = "${mod_name}-${version_minecraft}"
 
+urlMaven = "${urlMaven}"
+userMaven = "${userMaven}"
+authMaven = "${authMaven}"
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -143,9 +147,9 @@ uploadArchives {
 
         mavenDeployer {
 
-            repository(url: "${urlMaven}") {
+            repository(url: urlMaven) {
             
-                authentication(userName: "${userMaven}", password: "${authMaven}")
+                authentication(userName: userMaven, password: authMaven)
             }
         }
     }
