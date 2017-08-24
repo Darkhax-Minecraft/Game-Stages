@@ -205,9 +205,7 @@ public class PlayerDataHandler {
         public boolean hasUnlockedStage (String stage) {
 
             final GameStageEvent event = new GameStageEvent.Remove(this.getPlayer(), stage);
-            MinecraftForge.EVENT_BUS.post(event);
-
-            return !event.isCanceled() && this.unlockedStages.contains(event.getStageName().toLowerCase());
+            return !MinecraftForge.EVENT_BUS.post(event) && this.unlockedStages.contains(event.getStageName().toLowerCase());
         }
 
         @Override
