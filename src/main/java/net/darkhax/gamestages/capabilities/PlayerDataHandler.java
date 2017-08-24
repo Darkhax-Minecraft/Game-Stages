@@ -111,7 +111,7 @@ public class PlayerDataHandler {
          * @param stages The stages to check for, the player only needs one of them.
          * @return Whether or not the player has any of the passed stages.
          */
-        boolean hasUnlockedAnyOf (@Nonnull String... stages);
+        boolean hasUnlockedAnyOf (Collection<String> stages);
 
         /**
          * Checks if a player has all of the passed stages.
@@ -119,7 +119,7 @@ public class PlayerDataHandler {
          * @param stages The stages to check for, the player must have all of them.
          * @return Whether or not the player has all of the passed stages.
          */
-        boolean hasUnlockedAll (String... stages);
+        boolean hasUnlockedAll (Collection<String> stages);
 
         /**
          * Unlocks a stage for the player.
@@ -174,7 +174,7 @@ public class PlayerDataHandler {
         }
 
         @Override
-        public boolean hasUnlockedAnyOf (String... stages) {
+        public boolean hasUnlockedAnyOf (Collection<String> stages) {
 
             for (final String stage : stages) {
 
@@ -188,7 +188,7 @@ public class PlayerDataHandler {
         }
 
         @Override
-        public boolean hasUnlockedAll (String... stages) {
+        public boolean hasUnlockedAll (Collection<String> stages) {
 
             for (final String stage : stages) {
 
