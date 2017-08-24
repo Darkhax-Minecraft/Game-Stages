@@ -1,6 +1,7 @@
 package net.darkhax.gamestages.capabilities;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -209,7 +210,7 @@ public class PlayerDataHandler {
         @Deprecated
         public Collection<String> getUnlockedStages () {
 
-            return this.unlockedStages;
+            return Collections.unmodifiableCollection(this.unlockedStages);
         }
 
         @Override
