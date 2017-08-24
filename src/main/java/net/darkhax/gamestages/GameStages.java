@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.425,);")
+@Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.0.0.425,);", acceptedMinecraftVersions = "[1.12,1.12.2)")
 public class GameStages {
 
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
