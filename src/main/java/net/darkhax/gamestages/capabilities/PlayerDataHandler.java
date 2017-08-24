@@ -2,10 +2,7 @@ package net.darkhax.gamestages.capabilities;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -41,11 +38,6 @@ public class PlayerDataHandler {
     public static final Capability<IStageData> CAPABILITY = null;
 
     /**
-     * A list containing all of the additional data handlers.
-     */
-    private static final Map<String, IAdditionalStageData> ADDITIONAL_DATA = new HashMap<>();
-
-    /**
      * Gets the stage data for a player.
      *
      * @param player The player to get stage data from.
@@ -54,38 +46,6 @@ public class PlayerDataHandler {
     public static IStageData getStageData (@Nonnull EntityPlayer player) {
 
         return player != null && player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
-    }
-
-    /**
-     * Registers an additional data handler.
-     *
-     * @param id The id of the handler. Please make this unique.
-     * @param data The data handler to register.
-     */
-    public static void registerDataHandler (@Nonnull String id, @Nonnull IAdditionalStageData data) {
-
-        ADDITIONAL_DATA.put(id, data);
-    }
-
-    /**
-     * Gets the additional data handler.
-     *
-     * @param id The id of the handler to get.
-     * @return The data handler that was found.
-     */
-    public static IAdditionalStageData getDataHandler (@Nonnull String id) {
-
-        return ADDITIONAL_DATA.get(id);
-    }
-
-    /**
-     * Gets all the additional data handlers.
-     *
-     * @return The additional data handlers.
-     */
-    public static Collection<IAdditionalStageData> getDataHandlers () {
-
-        return ADDITIONAL_DATA.values();
     }
 
     /**
@@ -306,13 +266,6 @@ public class PlayerDataHandler {
 
             tag.setTag("UnlockedStages", tagList);
 
-            for (final Entry<String, IAdditionalStageData> handler : ADDITIONAL_DATA.entrySet()) {
-
-                final NBTTagCompound handlerTag = new NBTTagCompound();
-                handler.getValue().writeNBT(instance.getPlayer(), instance, handlerTag);
-                tag.setTag(handler.getKey(), handlerTag);
-            }
-
             return tag;
         }
 
@@ -325,11 +278,6 @@ public class PlayerDataHandler {
 
             for (int index = 0; index < tagList.tagCount(); index++) {
                 instance.unlockStage(tagList.getStringTagAt(index));
-            }
-
-            for (final Entry<String, IAdditionalStageData> handler : ADDITIONAL_DATA.entrySet()) {
-
-                handler.getValue().readNBT(instance.getPlayer(), instance, tag.getCompoundTag(handler.getKey()));
             }
         }
     }
@@ -369,41 +317,5 @@ public class PlayerDataHandler {
 
             CAPABILITY.getStorage().readNBT(CAPABILITY, this.instance, null, nbt);
         }
-    }
-
-    /**
-     * The backing interface for additional stage data. Can be used, along with
-     * {@link PlayerDataHandler#registerDataHandler(String, IAdditionalStageData)} and
-     * {@link PlayerDataHandler#getDataHandler(String)} to have custom player nbt data.
-     */
-    public interface IAdditionalStageData {
-
-        /**
-         * Called when the player's data is being written.
-         *
-         * @param player The player whos's being saved.
-         * @param stageData The stage data.
-         * @param tag An NBTTagCompound which is specific to this handler.
-         */
-        void writeNBT (@Nonnull EntityPlayer player, @Nonnull IStageData stageData, @Nonnull NBTTagCompound tag);
-
-        /**
-         * Called when the player's data is being read.
-         *
-         * @param player The player who's being read.
-         * @param stageData The stage data.
-         * @param tag An NBTTagCompound which is specific to this handler. It can be null if
-         *        {@link #writeNBT(EntityPlayer, IStageData, NBTTagCompound)} was not called yet.
-         */
-        void readNBT (@Nonnull EntityPlayer player, @Nonnull IStageData stageData, NBTTagCompound tag);
-
-        /**
-         * Called when the packet is sent to the client. Allows you to do packety stuff.
-         *
-         * @param player The player who's being synced.
-         * @param stageName The name of the stage being synced. This can be empty!
-         * @param isUnlocking Whether or not the stage is being unlocked.
-         */
-        void onClientSync (@Nonnull EntityPlayer player, @Nonnull String stageName, boolean isUnlocking);
     }
 }

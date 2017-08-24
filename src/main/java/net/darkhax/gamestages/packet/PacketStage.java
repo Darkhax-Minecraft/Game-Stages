@@ -3,7 +3,6 @@ package net.darkhax.gamestages.packet;
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler.IAdditionalStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -64,11 +63,6 @@ public class PacketStage extends SerializableMessage {
         else {
 
             info.lockStage(this.stageName);
-        }
-
-        for (final IAdditionalStageData handler : PlayerDataHandler.getDataHandlers()) {
-
-            handler.onClientSync(player, this.stageName, this.unlock);
         }
 
         return null;
