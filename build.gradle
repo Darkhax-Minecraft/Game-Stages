@@ -143,7 +143,10 @@ uploadArchives {
 
         mavenDeployer {
 
-            repository(url: "file:///var/www/html/maven")
+            repository(url: "${urlMaven}") {
+            
+                authentication(userName: "${userMaven}", password: "${authMaven}")
+            }
         }
     }
 }
