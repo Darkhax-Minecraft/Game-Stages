@@ -9,7 +9,7 @@ This mod adds two new commands. The first command is called gamestage. This comm
 
 # Mod Support
 
-## Getting Started
+## Getting Started (Outdated)
 To get started, you need to add this mod to your `build.gradle` file dependencies. After this is done, re-run the `gradlew setupDecompWorkspace` command.
 ```
 repositories {
