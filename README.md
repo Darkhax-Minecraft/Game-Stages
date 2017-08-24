@@ -24,7 +24,4 @@ dependencies {
 ```
 
 ## Working With Stages
-All the main hooks and methods are handled in the `IStageData` class. Each player has one of these attatched to them. You can get the stage data for a player by calling `PlayerDataHandler.getStageData(EntityPlayer player)`. Once you have the `IStageData` you can do things like `unlockStage(String stage)` and `lockStage(String stage)` and `hasUnlockedStage(String stage)`. 
-
-## Additional Hooks!
-This mod also provides a few hooks which you can use to trigger certain things. This is done by making a class that implements `IAdditionalStageData`, and then calling `PlayerDataHandler.registerDataHandler(String id, IAdditionalStageData handler)`. You can use `PlayerDataHandler.getDataHandler(String id)` to get your object at any time. The `IAdditionalStageData` interface provides three methods, one for when the data is saved, one for when the player data is read, and another for when the data is sent from the server to the client. 
+All the main hooks and methods are handled in the `IStageData` class. Each player has one of these attatched to them. You can get the stage data for a player by calling `PlayerDataHandler.getStageData(EntityPlayer player)`. Once you have the `IStageData` you can do things like `unlockStage(String stage)` and `lockStage(String stage)` and `hasUnlockedStage(String stage)`.
