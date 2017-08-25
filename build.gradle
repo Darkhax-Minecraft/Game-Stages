@@ -84,6 +84,7 @@ String getBuildNumber() {
     return System.getenv('BUILD_NUMBER') ? System.getenv('BUILD_NUMBER') : System.getenv('TRAVIS_BUILD_NUMBER') ? System.getenv('TRAVIS_BUILD_NUMBER') : '0';
 }
 
+//Shuts up javadoc failures
 if (JavaVersion.current().isJava8Compatible()) {
 
     allprojects {
@@ -95,29 +96,42 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
+
 curseforge {
 
     apiKey = System.getenv('authCurse') ? System.getenv('authCurse') : '0';
+    def versions = "${curseVersions}".split(', ')
 
     project {
 
-        id = "${id_curse}"   
+        id = "${id_curse}"
         releaseType = 'alpha'
         changelog = getGitChangelog
         changelogType = 'markdown'
-        addGameVersion "${version_minecraft}"       
-        addGameVersion '1.12'
-        
-        mainArtifact(jar) {
-          
-            relations {
 
-                requiredLibrary 'bookshelf'
+        versions.each {
+
+            addGameVersion "${it}"
+        }
+
+        if (project.hasProperty('curseRequrements')) {
+
+            def requirements = "${curseRequirements}".split(', ')
+
+            mainArtifact(jar) {
+
+                relations {
+
+                    requirements.each {
+
+                       requiredLibrary "${it}"
+                    }
+                }
             }
         }
-        
-        addArtifact(sourcesJar)
-        addArtifact(javadocJar)
+
+        addArtifact(sourcesJar) 
+        addArtifact(javadocJar) 
         addArtifact(deobfJar)
     }
 }
