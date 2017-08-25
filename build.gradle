@@ -98,12 +98,12 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 curseforge {
 
-    apiKey = System.getenv('authCurse') ? System.getenv('authCurse') : '0';
-    def versions = "${curseVersions}".split(', ')
+    apiKey = System.getenv('curse_auth');
+    def versions = "${curse_versions}".split(', ')
 
     project {
 
-        id = "${id_curse}"
+        id = "${curse_project}"
         releaseType = 'alpha'
         changelog = getGitChangelog
         changelogType = 'markdown'
@@ -113,22 +113,22 @@ curseforge {
             addGameVersion "${it}"
         }
 
-        if (project.hasProperty('curseRequirements') || project.hasProperty('curseOptionals')) {
+        if (project.hasProperty('curse_requirements') || project.hasProperty('curse_optionals')) {
 
             mainArtifact(jar) {
 
                 relations {
 
-                    if (project.hasProperty('curseRequirements')) {
-                        def requirements = "${curseRequirements}".split(', ')
+                    if (project.hasProperty('curse_requirements')) {
+                        def requirements = "${curse_requirements}".split(', ')
                         requirements.each {
 
                             requiredLibrary "${it}"
                         }
                     }
 
-                    if (project.hasProperty('curseOptionals')) {
-                        def optionals = "${curseOptionals}".split(', ')
+                    if (project.hasProperty('curse_optionals')) {
+                        def optionals = "${curse_optionals}".split(', ')
                         optionals.each {
 
                             optionalLibrary "${it}"
