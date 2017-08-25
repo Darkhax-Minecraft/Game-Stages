@@ -26,6 +26,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'maven-publish' 
 
+// Collection
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/maven.gradle'
 
 version = "${mod_version}" + getBuildNumber()
