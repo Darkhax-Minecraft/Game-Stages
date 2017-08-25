@@ -96,7 +96,6 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
-
 curseforge {
 
     apiKey = System.getenv('authCurse') ? System.getenv('authCurse') : '0';
@@ -114,24 +113,33 @@ curseforge {
             addGameVersion "${it}"
         }
 
-        if (project.hasProperty('curseRequirements')) {
-
-            def requirements = "${curseRequirements}".split(', ')
+        if (project.hasProperty('curseRequirements') || project.hasProperty('curseOptionals')) {
 
             mainArtifact(jar) {
 
                 relations {
 
-                    requirements.each {
+                    if (project.hasProperty('curseRequirements')) {
+                        def requirements = "${curseRequirements}".split(', ')
+                        requirements.each {
 
-                       requiredLibrary "${it}"
+                            requiredLibrary "${it}"
+                        }
+                    }
+
+                    if (project.hasProperty('curseOptionals')) {
+                        def optionals = "${curseOptionals}".split(', ')
+                        optionals.each {
+
+                            optionalLibrary "${it}"
+                        }
                     }
                 }
             }
         }
 
-        addArtifact(sourcesJar) 
-        addArtifact(javadocJar) 
+        addArtifact(sourcesJar)
+        addArtifact(javadocJar)
         addArtifact(deobfJar)
     }
 }
