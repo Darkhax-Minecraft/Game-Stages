@@ -114,7 +114,7 @@ curseforge {
             addGameVersion "${it}"
         }
 
-        if (project.hasProperty('curseRequrements')) {
+        if (project.hasProperty('curseRequirements')) {
 
             def requirements = "${curseRequirements}".split(', ')
 
