@@ -143,8 +143,8 @@ curseforge {
             }
         }
         
-        addArtifact(createDeobf)
-        addArtifact(createSources)
-        addArtifact(createJavadoc)
+        addArtifact(sourcesJar)
+        addArtifact(javadocJar)
+        addArtifact(deobfJar)
     }
 }
