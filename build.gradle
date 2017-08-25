@@ -95,7 +95,6 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
-//temp
 curseforge {
 
     apiKey = System.getenv('authCurse') ? System.getenv('authCurse') : '0';
