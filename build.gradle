@@ -143,9 +143,9 @@ uploadArchives {
 
         mavenDeployer {
 
-            repository(url: urlMaven) {
+            repository(url: System.getenv('urlMaven')) {
             
-                authentication(userName: userMaven, password: authMaven)
+                authentication(userName: System.getenv('userMaven'), password: System.getenv('authMaven'))
             }
         }
     }
