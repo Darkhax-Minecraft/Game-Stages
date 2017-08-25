@@ -42,7 +42,6 @@ minecraft {
     version = "${version_minecraft}-${version_forge}"
     mappings = "${version_mcp}"
     runDir = 'run'
-    useDepAts = true
     
     replace '@VERSION@', project.version
     replaceIn "${mod_class}.java"
