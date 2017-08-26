@@ -141,6 +141,11 @@ public class PlayerDataHandler {
          * @param player The player to set.
          */
         void setPlayer (@Nonnull EntityPlayer player);
+        
+        /**
+         * Removes all stages for the player.
+         */
+        void clear();
 
         /**
          * Gets the player for the stage data. Provided in this way for convenience.
@@ -242,6 +247,12 @@ public class PlayerDataHandler {
         public EntityPlayer getPlayer () {
 
             return this.player;
+        }
+
+        @Override
+        public void clear () {
+            
+            this.unlockedStages.clear();
         }
     }
 

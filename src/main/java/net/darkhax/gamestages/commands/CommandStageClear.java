@@ -47,13 +47,14 @@ public class CommandStageClear extends Command {
             for (final Iterator<String> iterator = stageInfo.getUnlockedStages().iterator(); iterator.hasNext();) {
 
                 final String stage = iterator.next();
-                iterator.remove();
-
+                
                 if (player instanceof EntityPlayerMP) {
 
                     GameStages.NETWORK.sendTo(new PacketStage(stage, false), (EntityPlayerMP) player);
                 }
             }
+            
+            stageInfo.clear();
 
             player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", stageCount));
 
