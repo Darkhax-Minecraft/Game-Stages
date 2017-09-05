@@ -17,10 +17,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.427,);", acceptedMinecraftVersions = "[1.12,1.12.2)")
+@Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.427,);", acceptedMinecraftVersions = "[1.12,1.12.2)", certificateFingerprint = "@FINGERPRINT@")
 public class GameStages {
     
     public static final LoggingHelper LOG = new LoggingHelper("gamestages");
@@ -40,5 +41,11 @@ public class GameStages {
         MinecraftForge.EVENT_BUS.register(new PlayerDataHandler());
         BookshelfRegistry.addCommand(COMMAND);
         BookshelfRegistry.addGameRule(GAME_RULE_SHARE_STAGES);
+    }
+    
+    @EventHandler
+    public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+        
+        LOG.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
 }
