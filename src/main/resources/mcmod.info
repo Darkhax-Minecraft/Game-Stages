@@ -1,11 +1,11 @@
 [  
    {  
-      "modid":"zalgoscommand",
-      "name":"Zalgo's Command",
-      "description":"Adds commands which ",
+      "modid":"gamestages",
+      "name":"Game Stages",
+      "description":"Adds a universal progression system for other mods to hook into.",
       "version":"${version}",
       "mcversion":"${mcversion}",
-      "url":"https://github.com/Darkhax-Minecraft/Zalgos-Command",
+      "url":"https://minecraft.curseforge.com/projects/game-stages",
       "updateUrl":"",
       "authorList":[  
          "Darkhax"
