@@ -37,15 +37,12 @@ public class CommandCheckStage extends Command {
             final String stage = args[1];
 
             if (!PlayerDataHandler.getStageData(player).hasUnlockedStage(stage)) {
-
                 throw new CommandException("commands.gamestage.check.failure", new Object[] { player.getDisplayName(), stage });
             }
 
             notifyCommandListener(sender, this, "commands.gamestage.check.success", new Object[] { player.getDisplayName(), stage });
         }
-
         else {
-
             throw new WrongUsageException("commands.gamestage.check.usage", new Object[0]);
         }
     }

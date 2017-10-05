@@ -43,7 +43,6 @@ public class CommandRemoveStage extends Command {
             PlayerDataHandler.getStageData(player).lockStage(stageName);
 
             if (player instanceof EntityPlayerMP) {
-
                 GameStages.NETWORK.sendTo(new PacketStage(stageName, false), (EntityPlayerMP) player);
             }
 
@@ -53,9 +52,7 @@ public class CommandRemoveStage extends Command {
                 sender.sendMessage(new TextComponentTranslation("commands.gamestage.remove.sender", stageName, player.getDisplayNameString()));
             }
         }
-
         else {
-
             throw new WrongUsageException("commands.gamestage.remove.usage", new Object[0]);
         }
     }

@@ -23,29 +23,29 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.1.443,);", certificateFingerprint = "@FINGERPRINT@")
 public class GameStages {
-    
+
     public static final LoggingHelper LOG = new LoggingHelper("gamestages");
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
     public static final CommandTree COMMAND = new CommandStageTree();
     public static final GameRule GAME_RULE_SHARE_STAGES = new GameRule("shareGameStages", false);
-    
+
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
-        
+
         // Packets
         NETWORK.register(PacketStage.class, Side.CLIENT);
         NETWORK.register(PacketStageAll.class, Side.CLIENT);
         NETWORK.register(PacketRequestClientSync.class, Side.SERVER);
-        
+
         CapabilityManager.INSTANCE.register(IStageData.class, new Storage(), DefaultStageData.class);
         MinecraftForge.EVENT_BUS.register(new PlayerDataHandler());
         BookshelfRegistry.addCommand(COMMAND);
         BookshelfRegistry.addGameRule(GAME_RULE_SHARE_STAGES);
     }
-    
+
     @EventHandler
-    public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
-        
+    public void onFingerprintViolation (FMLFingerprintViolationEvent event) {
+
         LOG.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
 }

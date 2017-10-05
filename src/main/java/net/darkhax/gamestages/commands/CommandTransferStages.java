@@ -41,7 +41,6 @@ public class CommandTransferStages extends Command {
                 final IStageData secondData = PlayerDataHandler.getStageData(secondPlayer);
 
                 if (originalData != null && secondData != null) {
-
                     for (final String stage : originalData.getUnlockedStages()) {
 
                         // Transfers stages
@@ -59,9 +58,7 @@ public class CommandTransferStages extends Command {
                 }
             }
         }
-
         else {
-
             throw new WrongUsageException("commands.gamestage.transfer.usage", new Object[0]);
         }
     }

@@ -58,12 +58,9 @@ public class PacketStage extends SerializableMessage {
         final IStageData info = PlayerDataHandler.getStageData(player);
 
         if (this.unlock) {
-
             info.unlockStage(this.stageName);
         }
-
         else {
-
             info.lockStage(this.stageName);
         }
 

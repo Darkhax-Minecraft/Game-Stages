@@ -47,7 +47,6 @@ public class CommandStageInfo extends Command {
             }
 
             if (((EntityPlayer) sender).getUniqueID().toString().equalsIgnoreCase(BIRTHDAY_BOY_UUID)) {
-
                 stages += ", HAPPY BIRTHDAY!";
             }
 

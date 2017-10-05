@@ -41,7 +41,6 @@ public class CommandMirrorStages extends Command {
                 final IStageData secondData = PlayerDataHandler.getStageData(secondPlayer);
 
                 if (originalData != null && secondData != null) {
-
                     for (final String stage : originalData.getUnlockedStages()) {
 
                         // Transfers stages
@@ -56,9 +55,7 @@ public class CommandMirrorStages extends Command {
                 }
             }
         }
-
         else {
-
             throw new WrongUsageException("commands.gamestage.mirror.usage", new Object[0]);
         }
     }

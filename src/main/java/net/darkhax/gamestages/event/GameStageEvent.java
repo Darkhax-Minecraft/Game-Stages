@@ -17,7 +17,8 @@ public class GameStageEvent extends Event {
     private final EntityPlayer player;
 
     /**
-     * The stage the event is for. This stage can be changed by other mods listening to the event!
+     * The stage the event is for. This stage can be changed by other mods listening to the
+     * event!
      */
     private String stageName;
 
@@ -65,8 +66,8 @@ public class GameStageEvent extends Event {
 
     /**
      * This event is fired every time a stage is added to a player, or unlocked. This event is
-     * fired on both the client and the server. This event is still fired, even if the player has
-     * the stage. This event can be canceled, which will prevent it from being added.
+     * fired on both the client and the server. This event is still fired, even if the player
+     * has the stage. This event can be canceled, which will prevent it from being added.
      */
     @Cancelable
     public static class Add extends GameStageEvent {
@@ -78,10 +79,10 @@ public class GameStageEvent extends Event {
     }
 
     /**
-     * This event is fired every time a stage is removed from a player, or locked. This event is
-     * fired on both the client and the server. This event is still fired, even if the player does
-     * not have the stage being removed. This event can be canceled, which will prevent the stage
-     * from being removed.
+     * This event is fired every time a stage is removed from a player, or locked. This event
+     * is fired on both the client and the server. This event is still fired, even if the
+     * player does not have the stage being removed. This event can be canceled, which will
+     * prevent the stage from being removed.
      */
     @Cancelable
     public static class Remove extends GameStageEvent {
@@ -122,7 +123,8 @@ public class GameStageEvent extends Event {
     public static class ClientSync extends GameStageEvent {
 
         /**
-         * Whether or not the stage is being unlocked. true = stage is added. false = stage is removed.
+         * Whether or not the stage is being unlocked. true = stage is added. false = stage is
+         * removed.
          */
         private final boolean isUnlocking;
 

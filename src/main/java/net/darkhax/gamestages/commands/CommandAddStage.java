@@ -43,7 +43,6 @@ public class CommandAddStage extends Command {
             PlayerDataHandler.getStageData(player).unlockStage(stageName);
 
             if (player instanceof EntityPlayerMP) {
-
                 GameStages.NETWORK.sendTo(new PacketStage(stageName, true), (EntityPlayerMP) player);
             }
 
@@ -53,9 +52,7 @@ public class CommandAddStage extends Command {
                 sender.sendMessage(new TextComponentTranslation("commands.gamestage.add.sender", stageName, player.getDisplayNameString()));
             }
         }
-
         else {
-
             throw new WrongUsageException("commands.gamestage.add.usage", new Object[0]);
         }
     }

@@ -1,7 +1,5 @@
 package net.darkhax.gamestages.commands;
 
-import java.util.Iterator;
-
 import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
@@ -44,12 +42,8 @@ public class CommandStageClear extends Command {
             final IStageData stageInfo = PlayerDataHandler.getStageData(player);
             final int stageCount = stageInfo.getUnlockedStages().size();
 
-            for (final Iterator<String> iterator = stageInfo.getUnlockedStages().iterator(); iterator.hasNext();) {
-
-                final String stage = iterator.next();
-                
+            for (final String stage : stageInfo.getUnlockedStages()) {
                 if (player instanceof EntityPlayerMP) {
-
                     GameStages.NETWORK.sendTo(new PacketStage(stage, false), (EntityPlayerMP) player);
                 }
             }
@@ -62,9 +56,7 @@ public class CommandStageClear extends Command {
                 sender.sendMessage(new TextComponentTranslation("commands.gamestage.clear.sender", stageCount, player.getDisplayNameString()));
             }
         }
-
         else {
-
             throw new WrongUsageException("commands.gamestage.clear.usage", new Object[0]);
         }
     }

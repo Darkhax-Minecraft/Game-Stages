@@ -66,7 +66,6 @@ public class PlayerDataHandler {
     public void onEntityJoinWorld (EntityJoinWorldEvent event) {
 
         if (event.getEntity() instanceof EntityPlayer && event.getWorld().isRemote) {
-
             GameStages.NETWORK.sendToServer(new PacketRequestClientSync());
         }
     }
@@ -86,8 +85,9 @@ public class PlayerDataHandler {
     }
 
     /**
-     * This is the backing interface for the custom player data. You don't need to do anything with
-     * this class, although it does define which methods you can use when working with stage data.
+     * This is the backing interface for the custom player data. You don't need to do anything
+     * with this class, although it does define which methods you can use when working with
+     * stage data.
      */
     public interface IStageData {
 
@@ -105,7 +105,8 @@ public class PlayerDataHandler {
         boolean hasUnlockedStage (@Nonnull String stage);
 
         /**
-         * Checks if a player has any of the passed stages. The player only needs one to be true.
+         * Checks if a player has any of the passed stages. The player only needs one to be
+         * true.
          *
          * @param stages The stages to check for, the player only needs one of them.
          * @return Whether or not the player has any of the passed stages.
@@ -140,11 +141,11 @@ public class PlayerDataHandler {
          * @param player The player to set.
          */
         void setPlayer (@Nonnull EntityPlayer player);
-        
+
         /**
          * Removes all stages for the player.
          */
-        void clear();
+        void clear ();
 
         /**
          * Gets the player for the stage data. Provided in this way for convenience.
@@ -180,13 +181,11 @@ public class PlayerDataHandler {
         public boolean hasUnlockedAnyOf (Collection<String> stages) {
 
             for (final String stage : stages) {
-
                 if (this.hasUnlockedStage(stage)) {
-
                     return true;
                 }
             }
-
+            
             return false;
         }
 
@@ -194,13 +193,11 @@ public class PlayerDataHandler {
         public boolean hasUnlockedAll (Collection<String> stages) {
 
             for (final String stage : stages) {
-
                 if (!this.hasUnlockedStage(stage)) {
-
                     return false;
                 }
             }
-
+            
             return true;
         }
 
@@ -218,7 +215,6 @@ public class PlayerDataHandler {
             MinecraftForge.EVENT_BUS.post(event);
 
             if (!event.isCanceled()) {
-
                 this.unlockedStages.add(event.getStageName().toLowerCase());
             }
         }
@@ -230,7 +226,6 @@ public class PlayerDataHandler {
             MinecraftForge.EVENT_BUS.post(event);
 
             if (!event.isCanceled()) {
-
                 this.unlockedStages.remove(stage.toLowerCase());
             }
         }
@@ -249,14 +244,14 @@ public class PlayerDataHandler {
 
         @Override
         public void clear () {
-            
+
             this.unlockedStages.clear();
         }
     }
 
     /**
-     * This class handles the read/write of NBT in capabilities. Another internal class. It also
-     * handles the IAdditionalStageData hooks which you can use!
+     * This class handles the read/write of NBT in capabilities. Another internal class. It
+     * also handles the IAdditionalStageData hooks which you can use!
      */
     public static class Storage implements Capability.IStorage<IStageData> {
 
