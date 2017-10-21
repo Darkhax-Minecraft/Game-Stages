@@ -65,9 +65,10 @@ public class GameStageEvent extends Event {
     }
 
     /**
-     * This event is fired every time a stage is added to a player, or unlocked. This event is
-     * fired on both the client and the server. This event is still fired, even if the player
-     * has the stage. This event can be canceled, which will prevent it from being added.
+     * This event is fired every time a stage is going to be added to a player, or unlocked.
+     * This event is fired on both the client and the server. This event is still fired, even
+     * if the player has the stage. This event can be canceled, which will prevent it from
+     * being added.
      */
     @Cancelable
     public static class Add extends GameStageEvent {
@@ -79,15 +80,41 @@ public class GameStageEvent extends Event {
     }
 
     /**
-     * This event is fired every time a stage is removed from a player, or locked. This event
-     * is fired on both the client and the server. This event is still fired, even if the
-     * player does not have the stage being removed. This event can be canceled, which will
-     * prevent the stage from being removed.
+     * This event is fired every time a stage is added to a player, or unlocked. This event is
+     * fired on both the client and the server. This event is still fired, even if the player
+     * has the stage. This event can not be canceled.
+     */
+    public static class Added extends GameStageEvent {
+
+        public Added (EntityPlayer player, String stageName) {
+
+            super(player, stageName);
+        }
+    }
+
+    /**
+     * This event is fired every time a stage is going to be removed from a player, or locked.
+     * This event is fired on both the client and the server. This event is still fired, even
+     * if the player does not have the stage being removed. This event can be canceled, which
+     * will prevent the stage from being removed.
      */
     @Cancelable
     public static class Remove extends GameStageEvent {
 
         public Remove (EntityPlayer player, String stageName) {
+
+            super(player, stageName);
+        }
+    }
+
+    /**
+     * This event is fired every time a stage is removed from a player, or locked. This event
+     * is fired on both the client and the server. This event is still fired, even if the
+     * player does not have the stage being removed. This event can not be canceled.
+     */
+    public static class Removed extends GameStageEvent {
+
+        public Removed (EntityPlayer player, String stageName) {
 
             super(player, stageName);
         }

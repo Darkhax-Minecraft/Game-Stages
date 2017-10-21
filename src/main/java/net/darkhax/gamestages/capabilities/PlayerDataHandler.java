@@ -185,7 +185,7 @@ public class PlayerDataHandler {
                     return true;
                 }
             }
-            
+
             return false;
         }
 
@@ -197,7 +197,7 @@ public class PlayerDataHandler {
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -216,6 +216,7 @@ public class PlayerDataHandler {
 
             if (!event.isCanceled()) {
                 this.unlockedStages.add(event.getStageName().toLowerCase());
+                MinecraftForge.EVENT_BUS.post(new GameStageEvent.Added(this.getPlayer(), stage));
             }
         }
 
@@ -227,6 +228,7 @@ public class PlayerDataHandler {
 
             if (!event.isCanceled()) {
                 this.unlockedStages.remove(stage.toLowerCase());
+                MinecraftForge.EVENT_BUS.post(new GameStageEvent.Removed(this.getPlayer(), stage));
             }
         }
 
