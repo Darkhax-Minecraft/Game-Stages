@@ -11,6 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This packet is used to sync all of the stages from the server to the client. It must first
@@ -33,6 +35,7 @@ public class PacketStageAll extends SerializableMessage {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IMessage handleMessage (MessageContext context) {
 
         final EntityPlayer player = PlayerUtils.getClientPlayer();
