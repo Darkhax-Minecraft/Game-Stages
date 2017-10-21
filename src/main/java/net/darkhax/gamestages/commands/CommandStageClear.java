@@ -47,7 +47,7 @@ public class CommandStageClear extends Command {
                     GameStages.NETWORK.sendTo(new PacketStage(stage, false), (EntityPlayerMP) player);
                 }
             }
-            
+
             stageInfo.clear();
 
             player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", stageCount));
