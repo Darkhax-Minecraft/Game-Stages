@@ -14,7 +14,7 @@ To get started, you need to add this mod to your `build.gradle` file dependencie
 ```
 repositories {
 
-    maven { url 'http://maven.epoxide.org' }
+    maven { url 'https://maven.mcmoddev.com' }
 }
 
 dependencies {
