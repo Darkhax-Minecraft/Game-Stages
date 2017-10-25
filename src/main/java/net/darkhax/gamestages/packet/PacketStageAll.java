@@ -7,6 +7,7 @@ import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.event.StageDataEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -38,14 +39,17 @@ public class PacketStageAll extends SerializableMessage {
     @SideOnly(Side.CLIENT)
     public IMessage handleMessage (MessageContext context) {
 
-        final EntityPlayer player = PlayerUtils.getClientPlayer();
-        final IStageData info = PlayerDataHandler.getStageData(player);
+        Minecraft.getMinecraft().addScheduledTask(() -> {
+            
+            final EntityPlayer player = PlayerUtils.getClientPlayer();
+            final IStageData info = PlayerDataHandler.getStageData(player);
 
-        for (final String stageName : this.stages) {
-            info.unlockStage(stageName);
-        }
+            for (final String stageName : this.stages) {
+                info.unlockStage(stageName);
+            }
 
-        MinecraftForge.EVENT_BUS.post(new StageDataEvent.SyncRecieved(player, info));
+            MinecraftForge.EVENT_BUS.post(new StageDataEvent.SyncRecieved(player, info));
+        });
 
         return null;
     }

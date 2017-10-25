@@ -5,10 +5,13 @@ import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A packet for syncing a stage add/remove action with the client. It uses
@@ -52,19 +55,23 @@ public class PacketStage extends SerializableMessage {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IMessage handleMessage (MessageContext context) {
 
-        final EntityPlayer player = PlayerUtils.getClientPlayer();
-        final IStageData info = PlayerDataHandler.getStageData(player);
+        Minecraft.getMinecraft().addScheduledTask(() -> {
+            
+            final EntityPlayer player = PlayerUtils.getClientPlayer();
+            final IStageData info = PlayerDataHandler.getStageData(player);
 
-        if (this.unlock) {
-            info.unlockStage(this.stageName);
-        }
-        else {
-            info.lockStage(this.stageName);
-        }
+            if (this.unlock) {
+                info.unlockStage(this.stageName);
+            }
+            else {
+                info.lockStage(this.stageName);
+            }
 
-        MinecraftForge.EVENT_BUS.post(new GameStageEvent.ClientSync(player, this.stageName, this.unlock));
+            MinecraftForge.EVENT_BUS.post(new GameStageEvent.ClientSync(player, this.stageName, this.unlock));
+        });
 
         return null;
     }
