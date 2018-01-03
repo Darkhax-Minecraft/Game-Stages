@@ -54,11 +54,17 @@ repositories {
 
         url "http://maven.mcmoddev.com"
     }
+    
+    maven {
+    
+        url 'http://maven.blamejared.com'
+    }
 }
 
 dependencies {
 
     deobfCompile "net.darkhax.bookshelf:Bookshelf-1.12.2:${version_bookshelf}"
+    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${version_minetweaker}"
 }
 
 processResources {
