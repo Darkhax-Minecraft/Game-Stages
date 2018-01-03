@@ -58,8 +58,8 @@ public class PacketStage extends SerializableMessage {
     @SideOnly(Side.CLIENT)
     public IMessage handleMessage (MessageContext context) {
 
-        Minecraft.getMinecraft().addScheduledTask(() -> {
-            
+        Minecraft.getMinecraft().addScheduledTask( () -> {
+
             final EntityPlayer player = PlayerUtils.getClientPlayer();
             final IStageData info = PlayerDataHandler.getStageData(player);
 
