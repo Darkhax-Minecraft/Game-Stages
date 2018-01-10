@@ -76,6 +76,7 @@ public class PlayerDataHandler {
     @SubscribeEvent
     public void clonePlayer (PlayerEvent.Clone event) {
 
+        final long time = System.currentTimeMillis();
         final IStageData original = getStageData(event.getOriginal());
         final IStageData clone = getStageData((EntityPlayer) event.getEntity());
 
@@ -83,6 +84,8 @@ public class PlayerDataHandler {
 
             clone.unlockStage(stage);
         }
+
+        GameStages.LOG.info("Preserving data for " + event.getOriginal().getName() + ". Took " + (System.currentTimeMillis() - time) + "ms.");
     }
 
     /**
