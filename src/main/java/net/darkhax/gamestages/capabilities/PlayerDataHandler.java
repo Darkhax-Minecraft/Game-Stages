@@ -65,7 +65,7 @@ public class PlayerDataHandler {
     @SubscribeEvent
     public void onEntityJoinWorld (EntityJoinWorldEvent event) {
 
-        if (event.getEntity() instanceof EntityPlayer && event.getWorld().isRemote) {
+        if (event.getEntity() instanceof EntityPlayer && event.getWorld().isRemote && !event.getEntity().isDead) {
             GameStages.NETWORK.sendToServer(new PacketRequestClientSync());
         }
     }
@@ -80,6 +80,7 @@ public class PlayerDataHandler {
         final IStageData clone = getStageData((EntityPlayer) event.getEntity());
 
         for (final String stage : original.getUnlockedStages()) {
+
             clone.unlockStage(stage);
         }
     }
