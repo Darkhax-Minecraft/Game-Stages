@@ -1,6 +1,7 @@
 package net.darkhax.gamestages.packet;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
+import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.event.StageDataEvent;
@@ -24,6 +25,7 @@ public class PacketRequestClientSync extends SerializableMessage {
         final EntityPlayer player = context.getServerHandler().player;
         final IStageData info = PlayerDataHandler.getStageData(player);
         MinecraftForge.EVENT_BUS.post(new StageDataEvent.SyncRequested(player, info));
+        GameStages.LOG.info("Syncing data for " + player.getName());
         return new PacketStageAll(info.getUnlockedStages());
     }
 }
