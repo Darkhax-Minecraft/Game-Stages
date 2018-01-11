@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
@@ -28,6 +29,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PlayerDataHandler {
 
@@ -63,9 +66,11 @@ public class PlayerDataHandler {
      * This event is used to sync stage data initially.
      */
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public void onEntityJoinWorld (EntityJoinWorldEvent event) {
 
-        if (event.getEntity() instanceof EntityPlayer && event.getWorld().isRemote && !event.getEntity().isDead) {
+        if (event.getEntity() instanceof EntityPlayerSP && !event.getEntity().isDead) {
+
             GameStages.NETWORK.sendToServer(new PacketRequestClientSync());
         }
     }
