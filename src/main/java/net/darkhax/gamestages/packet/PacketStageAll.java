@@ -30,9 +30,9 @@ public class PacketStageAll extends SerializableMessage {
 
     }
 
-    public PacketStageAll (Collection<String> sstages) {
+    public PacketStageAll (Collection<String> stages) {
 
-        this.stages = sstages.toArray(new String[0]);
+        this.stages = stages.toArray(new String[0]);
     }
 
     @Override
