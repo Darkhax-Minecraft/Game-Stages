@@ -44,6 +44,10 @@ public class PacketStageAll extends SerializableMessage {
             final EntityPlayer player = PlayerUtils.getClientPlayer();
             final IStageData info = PlayerDataHandler.getStageData(player);
 
+            // Remove all stages
+            info.clear();
+
+            // Re-add all stages
             for (final String stageName : this.stages) {
                 info.unlockStage(stageName);
             }
