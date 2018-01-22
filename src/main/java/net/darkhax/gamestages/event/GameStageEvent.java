@@ -2,6 +2,7 @@ package net.darkhax.gamestages.event;
 
 import net.darkhax.gamestages.GameStages;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -9,12 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  * This class holds all the various game stage events. The main class itself should not be
  * treated as an event.
  */
-public class GameStageEvent extends Event {
-
-    /**
-     * The player the event is for.
-     */
-    private final EntityPlayer player;
+public class GameStageEvent extends PlayerEvent {
 
     /**
      * The stage the event is for. This stage can be changed by other mods listening to the
@@ -30,7 +26,7 @@ public class GameStageEvent extends Event {
      */
     public GameStageEvent (EntityPlayer player, String stageName) {
 
-        this.player = player;
+        super(player);
         this.stageName = stageName;
     }
 
@@ -41,7 +37,7 @@ public class GameStageEvent extends Event {
      */
     public EntityPlayer getPlayer () {
 
-        return this.player;
+        return this.getEntityPlayer();
     }
 
     /**
