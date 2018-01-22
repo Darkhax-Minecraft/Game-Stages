@@ -35,6 +35,7 @@ public class GameStageEvent extends PlayerEvent {
      *
      * @return The player that the event was fired for.
      */
+    @Deprecated
     public EntityPlayer getPlayer () {
 
         return this.getEntityPlayer();

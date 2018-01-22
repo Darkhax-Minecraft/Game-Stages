@@ -28,6 +28,7 @@ public class StageDataEvent extends PlayerEvent {
      *
      * @return The player the event is for.
      */
+    @Deprecated
     public EntityPlayer getPlayer () {
 
         return this.getEntityPlayer();
