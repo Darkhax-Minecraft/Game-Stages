@@ -4,7 +4,6 @@ import net.darkhax.gamestages.GameStages;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
-import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
  * This class holds all the various game stage events. The main class itself should not be
