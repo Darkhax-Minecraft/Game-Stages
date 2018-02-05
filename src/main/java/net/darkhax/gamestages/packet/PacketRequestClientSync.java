@@ -17,6 +17,7 @@ public class PacketRequestClientSync extends SerializableMessage {
 
     public PacketRequestClientSync () {
 
+        // Empty constructor for forge's system
     }
 
     @Override
