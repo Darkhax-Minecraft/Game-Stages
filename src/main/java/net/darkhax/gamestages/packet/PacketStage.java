@@ -28,18 +28,20 @@ public class PacketStage extends SerializableMessage {
     /**
      * The name of the stage to modify.
      */
-    public String stageName;
+    private final String stageName;
 
     /**
      * Whether or not the stage is being added or removed.
      */
-    public boolean unlock;
+    private boolean unlock;
 
     /**
      * Empty constructor, required by forge's system.
      */
     public PacketStage () {
 
+        this.unlock = false;
+        this.stageName = "";
     }
 
     /**

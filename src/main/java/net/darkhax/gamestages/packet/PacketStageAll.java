@@ -24,10 +24,11 @@ public class PacketStageAll extends SerializableMessage {
     /**
      * An array of all the stage names.
      */
-    public String[] stages;
+    private final String[] stages;
 
     public PacketStageAll () {
 
+        this.stages = new String[0];
     }
 
     public PacketStageAll (Collection<String> stages) {
