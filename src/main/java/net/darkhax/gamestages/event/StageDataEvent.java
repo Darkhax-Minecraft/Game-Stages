@@ -2,19 +2,14 @@ package net.darkhax.gamestages.event;
 
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class holds events for an entire player's stage data, and not just one stage.
  */
-public class StageDataEvent extends Event {
-
-    /**
-     * The player the event is being fired for.
-     */
-    private final EntityPlayer player;
+public class StageDataEvent extends PlayerEvent {
 
     /**
      * The player's stage data.
@@ -23,7 +18,7 @@ public class StageDataEvent extends Event {
 
     protected StageDataEvent (EntityPlayer player, IStageData stageData) {
 
-        this.player = player;
+        super(player);
         this.stageData = stageData;
     }
 
@@ -32,9 +27,10 @@ public class StageDataEvent extends Event {
      *
      * @return The player the event is for.
      */
+    @Deprecated
     public EntityPlayer getPlayer () {
 
-        return this.player;
+        return this.getEntityPlayer();
     }
 
     /**
