@@ -59,7 +59,7 @@ public class CommandTransferStages extends Command {
             }
         }
         else {
-            throw new WrongUsageException("commands.gamestage.transfer.usage", new Object[0]);
+            throw new WrongUsageException("commands.gamestage.transfer.usage");
         }
     }
 }
