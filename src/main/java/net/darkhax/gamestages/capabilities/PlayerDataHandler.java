@@ -85,12 +85,15 @@ public class PlayerDataHandler {
         final IStageData original = getStageData(event.getOriginal());
         final IStageData clone = getStageData((EntityPlayer) event.getEntity());
 
-        for (final String stage : original.getUnlockedStages()) {
+        if (original != null && clone != null) {
 
-            clone.unlockStage(stage);
+            for (final String stage : original.getUnlockedStages()) {
+
+                clone.unlockStage(stage);
+            }
+
+            GameStages.LOG.info("Preserving data for " + event.getOriginal().getName() + ". Took " + (System.currentTimeMillis() - time) + "ms.");
         }
-
-        GameStages.LOG.info("Preserving data for " + event.getOriginal().getName() + ". Took " + (System.currentTimeMillis() - time) + "ms.");
     }
 
     /**

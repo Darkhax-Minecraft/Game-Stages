@@ -33,7 +33,7 @@ public class PacketStage extends SerializableMessage {
     /**
      * Whether or not the stage is being added or removed.
      */
-    private boolean unlock;
+    private final boolean unlock;
 
     /**
      * Empty constructor, required by forge's system.

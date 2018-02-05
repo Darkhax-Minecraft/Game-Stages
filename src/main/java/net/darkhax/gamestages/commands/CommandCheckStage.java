@@ -37,7 +37,7 @@ public class CommandCheckStage extends Command {
             final String stage = args[1];
 
             if (!PlayerDataHandler.getStageData(player).hasUnlockedStage(stage)) {
-                throw new CommandException("commands.gamestage.check.failure", player.getDisplayName(), stage );
+                throw new CommandException("commands.gamestage.check.failure", player.getDisplayName(), stage);
             }
 
             notifyCommandListener(sender, this, "commands.gamestage.check.success", player.getDisplayName(), stage);
