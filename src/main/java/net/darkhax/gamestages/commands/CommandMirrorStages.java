@@ -56,7 +56,7 @@ public class CommandMirrorStages extends Command {
             }
         }
         else {
-            throw new WrongUsageException("commands.gamestage.mirror.usage", new Object[0]);
+            throw new WrongUsageException("commands.gamestage.mirror.usage");
         }
     }
 }

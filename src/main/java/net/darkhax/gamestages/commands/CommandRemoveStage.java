@@ -53,7 +53,7 @@ public class CommandRemoveStage extends Command {
             }
         }
         else {
-            throw new WrongUsageException("commands.gamestage.remove.usage", new Object[0]);
+            throw new WrongUsageException("commands.gamestage.remove.usage");
         }
     }
 

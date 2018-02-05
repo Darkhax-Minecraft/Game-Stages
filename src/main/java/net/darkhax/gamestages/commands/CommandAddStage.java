@@ -53,7 +53,7 @@ public class CommandAddStage extends Command {
             }
         }
         else {
-            throw new WrongUsageException("commands.gamestage.add.usage", new Object[0]);
+            throw new WrongUsageException("commands.gamestage.add.usage");
         }
     }
 
