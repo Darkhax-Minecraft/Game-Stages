@@ -27,6 +27,8 @@ public class GameStages {
     public static final LoggingHelper LOG = new LoggingHelper("gamestages");
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
     public static final CommandTree COMMAND = new CommandStageTree();
+
+    // Unimplemented
     public static final GameRule GAME_RULE_SHARE_STAGES = new GameRule("shareGameStages", false);
 
     @EventHandler
@@ -40,7 +42,6 @@ public class GameStages {
         CapabilityManager.INSTANCE.register(IStageData.class, new Storage(), DefaultStageData::new);
         MinecraftForge.EVENT_BUS.register(new PlayerDataHandler());
         BookshelfRegistry.addCommand(COMMAND);
-        BookshelfRegistry.addGameRule(GAME_RULE_SHARE_STAGES);
     }
 
     @EventHandler
