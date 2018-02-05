@@ -46,9 +46,9 @@ public class PlayerDataHandler {
      * @param player The player to get stage data from.
      * @return The stage data for the player.
      */
-    public static IStageData getStageData (@Nonnull EntityPlayer player) {
+    public static IStageData getStageData (EntityPlayer player) {
 
-        return player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
+        return player != null && player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
     }
 
     /**
