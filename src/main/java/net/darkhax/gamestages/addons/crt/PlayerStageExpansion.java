@@ -35,7 +35,7 @@ public class PlayerStageExpansion {
     public static boolean hasAllGameStages (IPlayer player, String... stages) {
 
         final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
-        return PlayerDataHandler.getStageData(actualPlayer).hasUnlockedAnyOf(Arrays.asList(stages));
+        return PlayerDataHandler.getStageData(actualPlayer).hasUnlockedAll(Arrays.asList(stages));
     }
 
     // Unlocks a stage for a player.
