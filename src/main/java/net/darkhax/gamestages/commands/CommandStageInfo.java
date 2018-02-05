@@ -38,7 +38,7 @@ public class CommandStageInfo extends Command {
 
         if (sender instanceof EntityPlayer) {
 
-            String stages = PlayerDataHandler.getStageData((EntityPlayer) sender).getUnlockedStages().stream().map(Object::toString).collect(Collectors.joining(", ")).toString();
+            String stages = PlayerDataHandler.getStageData((EntityPlayer) sender).getUnlockedStages().stream().map(Object::toString).collect(Collectors.joining(", "));
 
             if (stages.isEmpty()) {
 
