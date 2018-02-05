@@ -37,7 +37,7 @@ public class GameStages {
         NETWORK.register(PacketStageAll.class, Side.CLIENT);
         NETWORK.register(PacketRequestClientSync.class, Side.SERVER);
 
-        CapabilityManager.INSTANCE.register(IStageData.class, new Storage(), DefaultStageData.class);
+        CapabilityManager.INSTANCE.register(IStageData.class, new Storage(), DefaultStageData::new);
         MinecraftForge.EVENT_BUS.register(new PlayerDataHandler());
         BookshelfRegistry.addCommand(COMMAND);
         BookshelfRegistry.addGameRule(GAME_RULE_SHARE_STAGES);
