@@ -48,7 +48,7 @@ public class PlayerDataHandler {
      */
     public static IStageData getStageData (@Nonnull EntityPlayer player) {
 
-        return player != null && player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
+        return player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
     }
 
     /**
