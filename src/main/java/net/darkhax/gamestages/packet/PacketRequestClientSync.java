@@ -26,7 +26,7 @@ public class PacketRequestClientSync extends SerializableMessage {
         final EntityPlayer player = context.getServerHandler().player;
         final IStageData info = PlayerDataHandler.getStageData(player);
         MinecraftForge.EVENT_BUS.post(new StageDataEvent.SyncRequested(player, info));
-        GameStages.LOG.info("Syncing data for " + player.getName());
+        GameStages.LOG.info("Syncing data for " + player.getName() + " requested.");
         return new PacketStageAll(info.getUnlockedStages());
     }
 }
