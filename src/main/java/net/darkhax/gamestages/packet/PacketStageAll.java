@@ -25,11 +25,11 @@ public class PacketStageAll extends SerializableMessage {
     /**
      * An array of all the stage names.
      */
-    private final String[] stages;
+    public String[] stages;
 
     public PacketStageAll () {
 
-        this.stages = new String[0];
+        // Empty constructor for forge's system
     }
 
     public PacketStageAll (Collection<String> stages) {

@@ -28,20 +28,19 @@ public class PacketStage extends SerializableMessage {
     /**
      * The name of the stage to modify.
      */
-    private final String stageName;
+    public String stageName;
 
     /**
      * Whether or not the stage is being added or removed.
      */
-    private final boolean unlock;
+    public boolean unlock;
 
     /**
      * Empty constructor, required by forge's system.
      */
     public PacketStage () {
 
-        this.unlock = false;
-        this.stageName = "";
+        // Empty constructor for forge's system
     }
 
     /**
@@ -65,6 +64,7 @@ public class PacketStage extends SerializableMessage {
             final EntityPlayer player = PlayerUtils.getClientPlayer();
             final IStageData info = PlayerDataHandler.getStageData(player);
 
+            System.out.println(this.stageName);
             if (this.unlock) {
                 info.unlockStage(this.stageName);
             }
