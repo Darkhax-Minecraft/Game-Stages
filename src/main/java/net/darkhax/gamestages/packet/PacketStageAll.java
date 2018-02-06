@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
+import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.event.StageDataEvent;
@@ -44,6 +45,8 @@ public class PacketStageAll extends SerializableMessage {
 
             final EntityPlayer player = PlayerUtils.getClientPlayer();
             final IStageData info = PlayerDataHandler.getStageData(player);
+
+            GameStages.LOG.info("Syncing recived for " + player.getName());
 
             // Remove all stages
             info.clear();
