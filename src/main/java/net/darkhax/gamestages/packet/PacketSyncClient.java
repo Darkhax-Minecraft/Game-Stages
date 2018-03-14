@@ -20,19 +20,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * This packet is used to sync all of the stages from the server to the client. It must first
  * be requested by having the client send a request packet.
  */
-public class PacketStageAll extends SerializableMessage {
+public class PacketSyncClient extends SerializableMessage {
 
     /**
      * An array of all the stage names.
      */
     public String[] stages;
 
-    public PacketStageAll () {
+    public PacketSyncClient () {
 
         // Empty constructor for forge's system
     }
 
-    public PacketStageAll (Collection<String> stages) {
+    public PacketSyncClient (Collection<String> stages) {
 
         this.stages = stages.toArray(new String[0]);
     }
@@ -46,6 +46,8 @@ public class PacketStageAll extends SerializableMessage {
             final EntityPlayer player = PlayerUtils.getClientPlayer();
             final IStageData info = PlayerDataHandler.getStageData(player);
 
+            info.setSynced(false);
+
             GameStages.LOG.info("Syncing recived for " + player.getName());
 
             // Remove all stages
@@ -56,6 +58,7 @@ public class PacketStageAll extends SerializableMessage {
                 info.unlockStage(stageName);
             }
 
+            info.setSynced(true);
             MinecraftForge.EVENT_BUS.post(new StageDataEvent.SyncRecieved(player, info));
         });
 

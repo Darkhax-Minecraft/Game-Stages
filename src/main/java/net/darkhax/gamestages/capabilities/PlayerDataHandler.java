@@ -160,6 +160,22 @@ public class PlayerDataHandler {
         void clear ();
 
         /**
+         * Checks if the player data has received a sync from the server.
+         *
+         * @return Whether or not the player data has received a sync from the server.
+         */
+        @SideOnly(Side.CLIENT)
+        boolean hasBeenSynced ();
+
+        /**
+         * Sets the state for {@link #hasBeenSynced()}.
+         *
+         * @param synced Whether or not the player data has been synced.
+         */
+        @SideOnly(Side.CLIENT)
+        void setSynced (boolean synced);
+
+        /**
          * Gets the player for the stage data. Provided in this way for convenience.
          *
          * @return The player for the stage data.
@@ -177,6 +193,11 @@ public class PlayerDataHandler {
          * A list of all unlocked stages.
          */
         private final Set<String> unlockedStages = new HashSet<>();
+
+        /**
+         * Whether or not the data has been synced on the client.
+         */
+        private boolean synced = false;
 
         /**
          * The player who owns this data.
@@ -260,6 +281,20 @@ public class PlayerDataHandler {
         public void clear () {
 
             this.unlockedStages.clear();
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public boolean hasBeenSynced () {
+
+            return this.synced;
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void setSynced (boolean synced) {
+
+            this.synced = synced;
         }
     }
 
