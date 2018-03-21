@@ -238,14 +238,8 @@ public class PlayerDataHandler {
         public boolean hasUnlockedStage (String stage) {
 
             final GameStageEvent event = new GameStageEvent.Check(this.getPlayer(), stage);
-            final boolean notCanceled = !MinecraftForge.EVENT_BUS.post(event);
-            
-            if (this.unlockedStages == null || event.getStageName() == null) {
-                
-                return false;
-            }
-            
-            return (this.unlockedStages == null || event.getStageName() == null) ? false : notCanceled && this.unlockedStages.contains(event.getStageName().toLowerCase());
+            final boolean notCanceled = !MinecraftForge.EVENT_BUS.post(event);            
+            return (event.getStageName() == null) ? false : notCanceled && this.unlockedStages.contains(event.getStageName().toLowerCase());
         }
 
         @Override
