@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.darkhax.gamestages.FakePlayerData;
 import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
@@ -48,64 +49,11 @@ public class PlayerDataHandler {
      * @return The stage data for the player.
      */
     public static IStageData getStageData (EntityPlayer player) {
-
-        return player != null && player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : player instanceof FakePlayer ? new PlayerDataHandler.IStageData() {
-            @Override
-            public Collection<String> getUnlockedStages() {
-                return Collections.emptyList();
-            }
-
-            @Override
-            public boolean hasUnlockedStage(@Nonnull final String stage) {
-                return true;
-            }
-
-            @Override
-            public boolean hasUnlockedAnyOf(final Collection<String> stages) {
-                return true;
-            }
-
-            @Override
-            public boolean hasUnlockedAll(final Collection<String> stages) {
-                return true;
-            }
-
-            @Override
-            public void unlockStage(@Nonnull final String stage) {
-                //noop
-            }
-
-            @Override
-            public void lockStage(@Nonnull final String stage) {
-                // noop
-            }
-
-            @Override
-            public void setPlayer(@Nonnull final EntityPlayer player) {
-                // noop
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public boolean hasBeenSynced() {
-                return true;
-            }
-
-            @Override
-            public void setSynced(final boolean synced) {
-                //noop
-            }
-
-            @Nullable
-            @Override
-            public EntityPlayer getPlayer() {
-                return player;
-            }
-        } : null;
+        if (player != null) {
+            if (player.hasCapability(CAPABILITY, EnumFacing.DOWN)) return player.getCapability(CAPABILITY, EnumFacing.DOWN);
+            if (player instanceof FakePlayer) return FakePlayerData.getDataFor(player.getName());
+        }
+        return null;
     }
 
     /**
