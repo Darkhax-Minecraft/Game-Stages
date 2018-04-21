@@ -25,6 +25,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -48,7 +49,63 @@ public class PlayerDataHandler {
      */
     public static IStageData getStageData (EntityPlayer player) {
 
-        return player != null && player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
+        return player != null && player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : player instanceof FakePlayer ? new PlayerDataHandler.IStageData() {
+            @Override
+            public Collection<String> getUnlockedStages() {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public boolean hasUnlockedStage(@Nonnull final String stage) {
+                return true;
+            }
+
+            @Override
+            public boolean hasUnlockedAnyOf(final Collection<String> stages) {
+                return true;
+            }
+
+            @Override
+            public boolean hasUnlockedAll(final Collection<String> stages) {
+                return true;
+            }
+
+            @Override
+            public void unlockStage(@Nonnull final String stage) {
+                //noop
+            }
+
+            @Override
+            public void lockStage(@Nonnull final String stage) {
+                // noop
+            }
+
+            @Override
+            public void setPlayer(@Nonnull final EntityPlayer player) {
+                // noop
+            }
+
+            @Override
+            public void clear() {
+
+            }
+
+            @Override
+            public boolean hasBeenSynced() {
+                return true;
+            }
+
+            @Override
+            public void setSynced(final boolean synced) {
+                //noop
+            }
+
+            @Nullable
+            @Override
+            public EntityPlayer getPlayer() {
+                return player;
+            }
+        } : null;
     }
 
     /**
@@ -57,7 +114,7 @@ public class PlayerDataHandler {
     @SubscribeEvent
     public void attachCapabilities (AttachCapabilitiesEvent<Entity> event) {
 
-        if (event.getObject() instanceof EntityPlayer) {
+        if ((event.getObject() instanceof EntityPlayer) && !(event.getObject() instanceof FakePlayer)) {
             event.addCapability(new ResourceLocation("gamestages", "playerdata"), new Provider((EntityPlayer) event.getObject()));
         }
     }
