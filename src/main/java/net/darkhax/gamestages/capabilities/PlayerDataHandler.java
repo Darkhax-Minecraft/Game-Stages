@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.darkhax.gamestages.FakePlayerData;
 import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -47,8 +49,11 @@ public class PlayerDataHandler {
      * @return The stage data for the player.
      */
     public static IStageData getStageData (EntityPlayer player) {
-
-        return player != null && player.hasCapability(CAPABILITY, EnumFacing.DOWN) ? player.getCapability(CAPABILITY, EnumFacing.DOWN) : null;
+        if (player != null) {
+            if (player.hasCapability(CAPABILITY, EnumFacing.DOWN)) return player.getCapability(CAPABILITY, EnumFacing.DOWN);
+            if (player instanceof FakePlayer) return FakePlayerData.getDataFor(player.getName());
+        }
+        return null;
     }
 
     /**
@@ -57,7 +62,7 @@ public class PlayerDataHandler {
     @SubscribeEvent
     public void attachCapabilities (AttachCapabilitiesEvent<Entity> event) {
 
-        if (event.getObject() instanceof EntityPlayer) {
+        if ((event.getObject() instanceof EntityPlayer) && !(event.getObject() instanceof FakePlayer)) {
             event.addCapability(new ResourceLocation("gamestages", "playerdata"), new Provider((EntityPlayer) event.getObject()));
         }
     }
