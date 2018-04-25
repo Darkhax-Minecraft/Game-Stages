@@ -1,7 +1,7 @@
 package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
-import net.darkhax.gamestages.FakePlayerData;
+import net.darkhax.gamestages.capabilities.FakePlayerData;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;

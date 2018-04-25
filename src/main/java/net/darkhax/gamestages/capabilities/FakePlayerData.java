@@ -1,12 +1,11 @@
-package net.darkhax.gamestages;
+package net.darkhax.gamestages.capabilities;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 
-import net.darkhax.gamestages.capabilities.IStageData;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.GameStages;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.logging.log4j.Level;
 

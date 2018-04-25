@@ -6,6 +6,7 @@ import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.bookshelf.world.gamerule.GameRule;
 import net.darkhax.gamestages.capabilities.DefaultStageData;
+import net.darkhax.gamestages.capabilities.FakePlayerData;
 import net.darkhax.gamestages.capabilities.GameStageStorage;
 import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
