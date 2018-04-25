@@ -4,6 +4,8 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
+
+import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.logging.log4j.Level;
@@ -13,7 +15,7 @@ import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class FakePlayerData implements PlayerDataHandler.IStageData {
+public class FakePlayerData implements IStageData {
     private static final Map<String, FakePlayerData> fakePlayerData = new HashMap<>();
     public static void reloadFromFile() {
         GameStages.LOG.getLogger().log(Level.INFO, "Clearing gamestages fakeplayers for reload");
@@ -38,7 +40,7 @@ public class FakePlayerData implements PlayerDataHandler.IStageData {
         GameStages.LOG.getLogger().log(Level.INFO, "Adding fakeplayer {} with gamestages {}", data.fakePlayerName, data.stages);
     }
 
-    public static PlayerDataHandler.IStageData getDataFor(final String fakePlayerName) {
+    public static IStageData getDataFor(final String fakePlayerName) {
         return fakePlayerData.getOrDefault(fakePlayerName, DEFAULT);
     }
 

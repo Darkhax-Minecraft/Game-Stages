@@ -2,8 +2,8 @@ package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStages;
+import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.packet.PacketStage;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

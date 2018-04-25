@@ -1,19 +1,14 @@
 package net.darkhax.gamestages;
 
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.reflect.TypeToken;
 import net.darkhax.bookshelf.BookshelfRegistry;
 import net.darkhax.bookshelf.command.CommandTree;
 import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.bookshelf.world.gamerule.GameRule;
+import net.darkhax.gamestages.capabilities.DefaultStageData;
+import net.darkhax.gamestages.capabilities.GameStageStorage;
+import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler.DefaultStageData;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler.Storage;
 import net.darkhax.gamestages.commands.CommandStageTree;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.darkhax.gamestages.packet.PacketStage;
@@ -25,11 +20,8 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Level;
 
 import java.io.File;
-import java.io.IOException;
 
 @Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.2.458,);", certificateFingerprint = "@FINGERPRINT@")
 public class GameStages {
@@ -50,7 +42,7 @@ public class GameStages {
         NETWORK.register(PacketSyncClient.class, Side.CLIENT);
         NETWORK.register(PacketRequestClientSync.class, Side.SERVER);
 
-        CapabilityManager.INSTANCE.register(IStageData.class, new Storage(), DefaultStageData::new);
+        CapabilityManager.INSTANCE.register(IStageData.class, new GameStageStorage(), DefaultStageData::new);
         MinecraftForge.EVENT_BUS.register(new PlayerDataHandler());
         BookshelfRegistry.addCommand(COMMAND);
         fakePlayerDataFile = new File(event.getModConfigurationDirectory(), "gameStagesFakePlayerData.json");

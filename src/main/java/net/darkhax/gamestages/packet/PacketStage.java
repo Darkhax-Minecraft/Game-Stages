@@ -2,8 +2,8 @@ package net.darkhax.gamestages.packet;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
+import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
