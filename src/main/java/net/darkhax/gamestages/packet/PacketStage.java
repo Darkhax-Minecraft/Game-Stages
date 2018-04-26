@@ -2,7 +2,7 @@ package net.darkhax.gamestages.packet;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.client.Minecraft;
@@ -62,7 +62,7 @@ public class PacketStage extends SerializableMessage {
         Minecraft.getMinecraft().addScheduledTask( () -> {
 
             final EntityPlayer player = PlayerUtils.getClientPlayer();
-            final IStageData info = PlayerDataHandler.getStageData(player);
+            final IStageData info = GameStageHelper.getPlayerData(player);
 
             System.out.println(this.stageName);
             if (this.unlock) {

@@ -1,8 +1,8 @@
 package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.packet.PacketStage;
 import net.minecraft.command.CommandException;
@@ -39,7 +39,7 @@ public class CommandStageClear extends Command {
         if (args.length == 1) {
 
             final EntityPlayer player = getPlayer(server, sender, args[0]);
-            final IStageData stageInfo = PlayerDataHandler.getStageData(player);
+            final IStageData stageInfo = GameStageHelper.getPlayerData(player);
             final int stageCount = stageInfo.getStages().size();
 
             for (final String stage : stageInfo.getStages()) {

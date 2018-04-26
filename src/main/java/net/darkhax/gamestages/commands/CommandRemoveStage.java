@@ -1,8 +1,8 @@
 package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.packet.PacketStage;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -40,7 +40,7 @@ public class CommandRemoveStage extends Command {
             final EntityPlayer player = getPlayer(server, sender, args[0]);
             final String stageName = args[1];
 
-            PlayerDataHandler.getStageData(player).removeStage(stageName);
+            GameStageHelper.removeStage(player, stageName);
 
             if (player instanceof EntityPlayerMP) {
                 GameStages.NETWORK.sendTo(new PacketStage(stageName, false), (EntityPlayerMP) player);

@@ -12,8 +12,6 @@ public class CommandStageTree extends CommandTree {
         this.addSubcommand(new CommandStageInfo());
         this.addSubcommand(new CommandCheckStage());
         this.addSubcommand(new CommandStageClear());
-        this.addSubcommand(new CommandMirrorStages());
-        this.addSubcommand(new CommandTransferStages());
         this.addSubcommand(new CommandReloadFakePlayers());
     }
 

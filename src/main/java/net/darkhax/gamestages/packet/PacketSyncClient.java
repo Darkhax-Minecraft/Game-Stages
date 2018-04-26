@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.StageDataEvent;
 import net.minecraft.client.Minecraft;
@@ -44,7 +44,7 @@ public class PacketSyncClient extends SerializableMessage {
         Minecraft.getMinecraft().addScheduledTask( () -> {
 
             final EntityPlayer player = PlayerUtils.getClientPlayer();
-            final IStageData info = PlayerDataHandler.getStageData(player);
+            final IStageData info = GameStageHelper.getPlayerData(player);
 
             GameStages.LOG.info("Syncing recived for " + player.getName());
 

@@ -1,28 +1,22 @@
 package net.darkhax.gamestages;
 
+import java.io.File;
+
 import net.darkhax.bookshelf.BookshelfRegistry;
 import net.darkhax.bookshelf.command.CommandTree;
 import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.bookshelf.world.gamerule.GameRule;
-import net.darkhax.gamestages.capabilities.GameStageStorage;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.commands.CommandStageTree;
-import net.darkhax.gamestages.data.StageData;
 import net.darkhax.gamestages.data.FakePlayerData;
-import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.darkhax.gamestages.packet.PacketStage;
 import net.darkhax.gamestages.packet.PacketSyncClient;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
-
-import java.io.File;
 
 @Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.2.458,);", certificateFingerprint = "@FINGERPRINT@")
 public class GameStages {
@@ -43,8 +37,6 @@ public class GameStages {
         NETWORK.register(PacketSyncClient.class, Side.CLIENT);
         NETWORK.register(PacketRequestClientSync.class, Side.SERVER);
 
-        CapabilityManager.INSTANCE.register(IStageData.class, new GameStageStorage(), StageData::new);
-        MinecraftForge.EVENT_BUS.register(new PlayerDataHandler());
         BookshelfRegistry.addCommand(COMMAND);
         fakePlayerDataFile = new File(event.getModConfigurationDirectory(), "gameStagesFakePlayerData.json");
         FakePlayerData.reloadFromFile();

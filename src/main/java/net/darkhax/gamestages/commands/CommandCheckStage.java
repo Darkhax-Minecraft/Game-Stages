@@ -1,7 +1,7 @@
 package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -36,7 +36,7 @@ public class CommandCheckStage extends Command {
             final EntityPlayer player = getPlayer(server, sender, args[0]);
             final String stage = args[1];
 
-            if (!PlayerDataHandler.getStageData(player).hasStage(stage)) {
+            if (!GameStageHelper.hasStage(player, stage)) {
                 throw new CommandException("commands.gamestage.check.failure", player.getDisplayName(), stage);
             }
 
