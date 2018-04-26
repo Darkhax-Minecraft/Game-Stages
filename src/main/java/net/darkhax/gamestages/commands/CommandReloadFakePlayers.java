@@ -1,7 +1,7 @@
 package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
-import net.darkhax.gamestages.data.FakePlayerData;
+import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -28,6 +28,6 @@ public class CommandReloadFakePlayers extends Command {
     @Override
     public void execute (final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
 
-        FakePlayerData.reloadFromFile();
+        GameStageSaveHandler.reloadFromFile();
     }
 }

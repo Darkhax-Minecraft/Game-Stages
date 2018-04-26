@@ -1,12 +1,24 @@
 package net.darkhax.gamestages.data;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+
+import org.apache.logging.log4j.Level;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+import com.google.gson.Gson;
 
 import net.darkhax.bookshelf.util.NBTUtils;
 import net.darkhax.gamestages.GameStageHelper;
@@ -142,5 +154,44 @@ public class GameStageSaveHandler {
             GameStages.LOG.error("Could not read main player data for {}.", mainDataFile.getName());
             GameStages.LOG.catching(e);
         }
+    }
+    
+    private static final Map<String, FakePlayerData> fakePlayerData = new HashMap<>();
+    private static final File fakePlayerDataFile = new File(new File("config"), "gameStagesFakePlayerData.json");
+    private static final FakePlayerData DEFAULT = new FakePlayerData("DEFAULT", Collections.emptySet());
+    private static final Gson gson = new Gson();
+
+    public static void reloadFromFile () {
+
+        GameStages.LOG.info("Reloading fakeplayers stage data from {}.", fakePlayerDataFile.getName());
+        
+        fakePlayerData.clear();
+        
+        if (!fakePlayerDataFile.exists()) {
+            return;
+        }
+
+        try (BufferedReader reader = Files.newReader(fakePlayerDataFile, Charsets.UTF_8)){
+            
+            final FakePlayerData[] fakePlayers = gson.fromJson(reader, FakePlayerData[].class);
+            Arrays.stream(fakePlayers).forEach(GameStageSaveHandler::addFakePlayer);
+        }
+        
+        catch (final IOException e) {
+            
+            GameStages.LOG.error("Could not read {}.", fakePlayerDataFile.getName());
+            GameStages.LOG.catching(e);
+        }
+    }
+
+    private static void addFakePlayer (FakePlayerData data) {
+
+        fakePlayerData.put(data.getFakePlayerName(), data);
+        GameStages.LOG.info("Adding fakeplayer {} with gamestages {}", data.getFakePlayerName(), data.getStages());
+    }
+
+    public static IStageData getFakeData (String fakePlayerName) {
+
+        return fakePlayerData.getOrDefault(fakePlayerName, DEFAULT);
     }
 }

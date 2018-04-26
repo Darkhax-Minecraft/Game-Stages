@@ -9,6 +9,7 @@ import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.bookshelf.world.gamerule.GameRule;
 import net.darkhax.gamestages.commands.CommandStageTree;
 import net.darkhax.gamestages.data.FakePlayerData;
+import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.packet.PacketSyncClient;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -22,7 +23,6 @@ public class GameStages {
     public static final LoggingHelper LOG = new LoggingHelper("gamestages");
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
     public static final CommandTree COMMAND = new CommandStageTree();
-    public static File fakePlayerDataFile;
 
     // Unimplemented
     public static final GameRule GAME_RULE_SHARE_STAGES = new GameRule("shareGameStages", false);
@@ -34,8 +34,7 @@ public class GameStages {
         NETWORK.register(PacketSyncClient.class, Side.CLIENT);
 
         BookshelfRegistry.addCommand(COMMAND);
-        fakePlayerDataFile = new File(event.getModConfigurationDirectory(), "gameStagesFakePlayerData.json");
-        FakePlayerData.reloadFromFile();
+        GameStageSaveHandler.reloadFromFile();
     }
 
     @EventHandler

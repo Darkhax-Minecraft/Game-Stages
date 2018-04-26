@@ -114,7 +114,7 @@ public class GameStageHelper {
 
         if (player instanceof FakePlayer) {
 
-            // TODO
+            return GameStageSaveHandler.getFakeData(player.getName());
         }
 
         return GameStageSaveHandler.getPlayerData(player.getPersistentID().toString());
