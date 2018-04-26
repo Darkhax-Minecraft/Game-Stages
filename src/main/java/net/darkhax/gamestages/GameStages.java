@@ -32,7 +32,7 @@ public class GameStages {
 
         // Packets
         NETWORK.register(PacketSyncClient.class, Side.CLIENT);
-        
+
         BookshelfRegistry.addCommand(COMMAND);
         fakePlayerDataFile = new File(event.getModConfigurationDirectory(), "gameStagesFakePlayerData.json");
         FakePlayerData.reloadFromFile();

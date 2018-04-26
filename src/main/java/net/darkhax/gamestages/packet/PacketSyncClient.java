@@ -45,7 +45,7 @@ public class PacketSyncClient extends SerializableMessage {
 
             // Re-add all stages
             for (final String stageName : this.stages) {
-                
+
                 GameStageSaveHandler.clientData.addStage(stageName);
             }
 

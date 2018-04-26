@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GameStageSaveHandler {
 
     private static final Map<String, IStageData> GLOBAL_STAGE_DATA = new HashMap<>();
-    
+
     @SideOnly(Side.CLIENT)
     public static IStageData clientData;
 
@@ -81,15 +81,15 @@ public class GameStageSaveHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
-        
+    public static void onPlayerLoggedIn (PlayerLoggedInEvent event) {
+
         // When a player connects to the server, sync their client data with the server's data.
-        if(event.player instanceof EntityPlayerMP) {
-            
+        if (event.player instanceof EntityPlayerMP) {
+
             GameStageHelper.syncPlayer((EntityPlayerMP) event.player);
         }
     }
-    
+
     public static IStageData getPlayerData (String uuid) {
 
         return GLOBAL_STAGE_DATA.computeIfAbsent(uuid, playerUUID -> new StageData());
