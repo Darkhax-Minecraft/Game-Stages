@@ -7,14 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.apache.logging.log4j.Level;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -37,11 +31,37 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @EventBusSubscriber
 public class GameStageSaveHandler {
 
+    /**
+     * A map of player uuid to stage data.
+     */
     private static final Map<String, IStageData> GLOBAL_STAGE_DATA = new HashMap<>();
 
+    /**
+     * A map of fake player names to fake stage data.
+     */
+    private static final Map<String, FakePlayerData> FAKE_STAGE_DATA = new HashMap<>();
+
+    /**
+     * The file to load fake player data from.
+     */
+    private static final File FAKE_PLAYER_STAGE_FILE = new File(new File("config"), "gameStagesFakePlayerData.json");
+
+    /**
+     * Reusable instance of Gson for reading and writing json files.
+     */
+    private static final Gson GSON = new Gson();
+
+    /**
+     * A reference to the client's current stage data. This will be overridden every time the
+     * player joins a save instance.
+     */
     @SideOnly(Side.CLIENT)
     public static IStageData clientData;
 
+    /**
+     * Hook for the player LoadFromFile event. Allows game stage data to be loaded when the
+     * player's data is loaded.
+     */
     @SubscribeEvent
     public static void onPlayerLoad (PlayerEvent.LoadFromFile event) {
 
@@ -68,6 +88,10 @@ public class GameStageSaveHandler {
         GLOBAL_STAGE_DATA.put(event.getPlayerUUID(), playerData);
     }
 
+    /**
+     * Hook for the player SaveToFile event. Allows game stage data to be saved when the
+     * player's data is saved.
+     */
     @SubscribeEvent
     public static void onPlayerSave (PlayerEvent.SaveToFile event) {
 
@@ -92,6 +116,10 @@ public class GameStageSaveHandler {
         }
     }
 
+    /**
+     * Hook for the PlayerLoggedInEvent. If the player is a valid server side player, their
+     * data will be synced to the client.
+     */
     @SubscribeEvent
     public static void onPlayerLoggedIn (PlayerLoggedInEvent event) {
 
@@ -102,11 +130,27 @@ public class GameStageSaveHandler {
         }
     }
 
+    /**
+     * Looks up a players stage data. This should only be used with real players, fake players
+     * use {@link #getFakeData(String)}. Alternatively, the
+     * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.EntityPlayer)} can be
+     * used to automatically resolve an EntityPlayer.
+     *
+     * @param uuid The uuid of the player to lookup.
+     * @return The stage data for the player. If one does not exist, it will be created.
+     */
     public static IStageData getPlayerData (String uuid) {
 
         return GLOBAL_STAGE_DATA.computeIfAbsent(uuid, playerUUID -> new StageData());
     }
 
+    /**
+     * Gets a gamestage save file for a player.
+     *
+     * @param playerDir The instance specific save folder for player data.
+     * @param uuid The uuid of the player to get a file for.
+     * @return The save file to use for the player.
+     */
     private static File getPlayerFile (File playerDir, String uuid) {
 
         final File saveDir = new File(playerDir, "gamestages");
@@ -119,6 +163,13 @@ public class GameStageSaveHandler {
         return new File(saveDir, uuid + ".dat");
     }
 
+    /**
+     * Handles legacy data from the previous capability system if the player has any.
+     *
+     * @param playerDir The instance specific player save directory.
+     * @param uuid The uuid of the player.
+     * @param modern The modern IStageData to populate with restored data.
+     */
     private static void handleLegacyData (File playerDir, String uuid, IStageData modern) {
 
         final File mainDataFile = new File(playerDir, uuid + ".dat");
@@ -155,43 +206,55 @@ public class GameStageSaveHandler {
             GameStages.LOG.catching(e);
         }
     }
-    
-    private static final Map<String, FakePlayerData> fakePlayerData = new HashMap<>();
-    private static final File fakePlayerDataFile = new File(new File("config"), "gameStagesFakePlayerData.json");
-    private static final FakePlayerData DEFAULT = new FakePlayerData("DEFAULT", Collections.emptySet());
-    private static final Gson gson = new Gson();
 
-    public static void reloadFromFile () {
+    /**
+     * Reloads fake player data from the fake player json file.
+     */
+    public static void reloadFakePlayers () {
 
-        GameStages.LOG.info("Reloading fakeplayers stage data from {}.", fakePlayerDataFile.getName());
-        
-        fakePlayerData.clear();
-        
-        if (!fakePlayerDataFile.exists()) {
+        GameStages.LOG.info("Reloading fakeplayers stage data from {}.", FAKE_PLAYER_STAGE_FILE.getName());
+
+        FAKE_STAGE_DATA.clear();
+
+        if (!FAKE_PLAYER_STAGE_FILE.exists()) {
             return;
         }
 
-        try (BufferedReader reader = Files.newReader(fakePlayerDataFile, Charsets.UTF_8)){
-            
-            final FakePlayerData[] fakePlayers = gson.fromJson(reader, FakePlayerData[].class);
+        try (BufferedReader reader = Files.newReader(FAKE_PLAYER_STAGE_FILE, Charsets.UTF_8)) {
+
+            final FakePlayerData[] fakePlayers = GSON.fromJson(reader, FakePlayerData[].class);
             Arrays.stream(fakePlayers).forEach(GameStageSaveHandler::addFakePlayer);
         }
-        
+
         catch (final IOException e) {
-            
-            GameStages.LOG.error("Could not read {}.", fakePlayerDataFile.getName());
+
+            GameStages.LOG.error("Could not read {}.", FAKE_PLAYER_STAGE_FILE.getName());
             GameStages.LOG.catching(e);
         }
     }
 
+    /**
+     * Adds fake player data to the fake stage map.
+     *
+     * @param data The fake player data to take into account.
+     */
     private static void addFakePlayer (FakePlayerData data) {
 
-        fakePlayerData.put(data.getFakePlayerName(), data);
+        FAKE_STAGE_DATA.put(data.getFakePlayerName(), data);
         GameStages.LOG.info("Adding fakeplayer {} with gamestages {}", data.getFakePlayerName(), data.getStages());
     }
 
+    /**
+     * Gets data for a fake player. Real players should use {@link #getPlayerData(String)}.
+     * Alternative
+     * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.EntityPlayer)} can be
+     * used to automaticaly resolve players.
+     *
+     * @param fakePlayerName The name of the fake player.
+     * @return The fake players stage data, or the default value if one does not exist.
+     */
     public static IStageData getFakeData (String fakePlayerName) {
 
-        return fakePlayerData.getOrDefault(fakePlayerName, DEFAULT);
+        return FAKE_STAGE_DATA.getOrDefault(fakePlayerName, FakePlayerData.DEFAULT);
     }
 }

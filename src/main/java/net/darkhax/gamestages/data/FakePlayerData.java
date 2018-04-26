@@ -1,6 +1,7 @@
 package net.darkhax.gamestages.data;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +10,11 @@ import javax.annotation.Nonnull;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class FakePlayerData implements IStageData {
+
+    /**
+     * The default fake player data.
+     */
+    public static final FakePlayerData DEFAULT = new FakePlayerData("DEFAULT", Collections.emptySet());
 
     private final Set<String> stages = new HashSet<>();
     private final String fakePlayerName;
@@ -63,7 +69,7 @@ public class FakePlayerData implements IStageData {
     }
 
     public String getFakePlayerName () {
-        
-        return fakePlayerName;
+
+        return this.fakePlayerName;
     }
 }

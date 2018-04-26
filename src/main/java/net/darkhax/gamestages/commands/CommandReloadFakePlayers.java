@@ -28,6 +28,6 @@ public class CommandReloadFakePlayers extends Command {
     @Override
     public void execute (final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
 
-        GameStageSaveHandler.reloadFromFile();
+        GameStageSaveHandler.reloadFakePlayers();
     }
 }

@@ -1,14 +1,11 @@
 package net.darkhax.gamestages;
 
-import java.io.File;
-
 import net.darkhax.bookshelf.BookshelfRegistry;
 import net.darkhax.bookshelf.command.CommandTree;
 import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.bookshelf.world.gamerule.GameRule;
 import net.darkhax.gamestages.commands.CommandStageTree;
-import net.darkhax.gamestages.data.FakePlayerData;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.packet.PacketSyncClient;
 import net.minecraftforge.fml.common.Mod;
@@ -34,7 +31,7 @@ public class GameStages {
         NETWORK.register(PacketSyncClient.class, Side.CLIENT);
 
         BookshelfRegistry.addCommand(COMMAND);
-        GameStageSaveHandler.reloadFromFile();
+        GameStageSaveHandler.reloadFakePlayers();
     }
 
     @EventHandler
