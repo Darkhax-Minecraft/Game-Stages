@@ -9,8 +9,6 @@ import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.bookshelf.world.gamerule.GameRule;
 import net.darkhax.gamestages.commands.CommandStageTree;
 import net.darkhax.gamestages.data.FakePlayerData;
-import net.darkhax.gamestages.packet.PacketRequestClientSync;
-import net.darkhax.gamestages.packet.PacketStage;
 import net.darkhax.gamestages.packet.PacketSyncClient;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -33,10 +31,8 @@ public class GameStages {
     public void preInit (FMLPreInitializationEvent event) {
 
         // Packets
-        NETWORK.register(PacketStage.class, Side.CLIENT);
         NETWORK.register(PacketSyncClient.class, Side.CLIENT);
-        NETWORK.register(PacketRequestClientSync.class, Side.SERVER);
-
+        
         BookshelfRegistry.addCommand(COMMAND);
         fakePlayerDataFile = new File(event.getModConfigurationDirectory(), "gameStagesFakePlayerData.json");
         FakePlayerData.reloadFromFile();

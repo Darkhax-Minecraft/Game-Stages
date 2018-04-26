@@ -30,17 +30,6 @@ public class GameStageEvent extends PlayerEvent {
     }
 
     /**
-     * Gets the player the event is for.
-     *
-     * @return The player that the event was fired for.
-     */
-    @Deprecated
-    public EntityPlayer getPlayer () {
-
-        return this.getEntityPlayer();
-    }
-
-    /**
      * Gets the stage name for the event. Note that other listeners can change this!
      *
      * @return The stage name for the event.
@@ -119,58 +108,25 @@ public class GameStageEvent extends PlayerEvent {
     /**
      * This event is fired every time a check for a stage is made. This event can be canceled,
      * which will make the check fail.
-     *
-     * Note: To ensure this event is reliable, all mods which add support for GameStages should
-     * make use of
-     * {@link net.darkhax.gamestages.legacy.LegacyDataHandler.IStageData#hasStage(String)}.
-     * Both
-     * {@link net.darkhax.gamestages.legacy.LegacyDataHandler.IStageData#hasUnlockedAnyOf(String...)}
-     * and
-     * {@link net.darkhax.gamestages.legacy.LegacyDataHandler.IStageData#hasUnlockedAll(String...)}
-     * make use of this method, which makes them acceptable.
      */
-    @Cancelable
     public static class Check extends GameStageEvent {
 
-        public Check (EntityPlayer player, String stageName) {
+        private boolean hasStage;
+
+        public Check (EntityPlayer player, String stageName, boolean hasStage) {
 
             super(player, stageName);
-        }
-    }
-
-    /**
-     * This event is fired every time there is a client side stage sync. It allows mods to hook
-     * into the syncing, and perform various client side updates. It can not be canceled, and
-     * {@link GameStageEvent#setStage(String)} has been disabled.
-     */
-    public static class ClientSync extends GameStageEvent {
-
-        /**
-         * Whether or not the stage is being unlocked. true = stage is added. false = stage is
-         * removed.
-         */
-        private final boolean isUnlocking;
-
-        public ClientSync (EntityPlayer player, String stageName, boolean isUnlocking) {
-
-            super(player, stageName);
-            this.isUnlocking = isUnlocking;
+            this.hasStage = hasStage;
         }
 
-        /**
-         * Checks if the stage is being unlocked (added/true) or locked (removed/false).
-         *
-         * @return Whether or not the stage is being unlocked.
-         */
-        public boolean isUnlocking () {
+        public boolean hasStage () {
 
-            return this.isUnlocking;
+            return this.hasStage;
         }
 
-        @Override
-        public void setStage (String stage) {
+        public void setHasStage (boolean hasStage) {
 
-            GameStages.LOG.warn("You can not change the stage during the ClientSync event! Stage:{}", this.getStageName());
+            this.hasStage = hasStage;
         }
     }
 }

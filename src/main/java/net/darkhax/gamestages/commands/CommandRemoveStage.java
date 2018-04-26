@@ -2,12 +2,9 @@ package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.packet.PacketStage;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -37,14 +34,11 @@ public class CommandRemoveStage extends Command {
 
         if (args.length == 2) {
 
-            final EntityPlayer player = getPlayer(server, sender, args[0]);
+            final EntityPlayerMP player = getPlayer(server, sender, args[0]);
             final String stageName = args[1];
 
             GameStageHelper.removeStage(player, stageName);
-
-            if (player instanceof EntityPlayerMP) {
-                GameStages.NETWORK.sendTo(new PacketStage(stageName, false), (EntityPlayerMP) player);
-            }
+            GameStageHelper.syncPlayer(player);
 
             player.sendMessage(new TextComponentTranslation("commands.gamestage.remove.target", stageName));
 

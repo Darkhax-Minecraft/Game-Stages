@@ -2,13 +2,10 @@ package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.data.IStageData;
-import net.darkhax.gamestages.packet.PacketStage;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -38,17 +35,12 @@ public class CommandStageClear extends Command {
 
         if (args.length == 1) {
 
-            final EntityPlayer player = getPlayer(server, sender, args[0]);
+            final EntityPlayerMP player = getPlayer(server, sender, args[0]);
             final IStageData stageInfo = GameStageHelper.getPlayerData(player);
             final int stageCount = stageInfo.getStages().size();
 
-            for (final String stage : stageInfo.getStages()) {
-                if (player instanceof EntityPlayerMP) {
-                    GameStages.NETWORK.sendTo(new PacketStage(stage, false), (EntityPlayerMP) player);
-                }
-            }
-
             stageInfo.clear();
+            GameStageHelper.syncPlayer(player);
 
             player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", stageCount));
 

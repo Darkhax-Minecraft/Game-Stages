@@ -9,20 +9,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.darkhax.bookshelf.util.NBTUtils;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants.NBT;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @EventBusSubscriber
 public class GameStageSaveHandler {
 
     private static final Map<String, IStageData> GLOBAL_STAGE_DATA = new HashMap<>();
+    
+    @SideOnly(Side.CLIENT)
+    public static IStageData clientData;
 
     @SubscribeEvent
     public static void onPlayerLoad (PlayerEvent.LoadFromFile event) {
@@ -74,6 +80,16 @@ public class GameStageSaveHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
+        
+        // When a player connects to the server, sync their client data with the server's data.
+        if(event.player instanceof EntityPlayerMP) {
+            
+            GameStageHelper.syncPlayer((EntityPlayerMP) event.player);
+        }
+    }
+    
     public static IStageData getPlayerData (String uuid) {
 
         return GLOBAL_STAGE_DATA.computeIfAbsent(uuid, playerUUID -> new StageData());
