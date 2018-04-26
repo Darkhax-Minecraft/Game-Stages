@@ -40,7 +40,7 @@ public class CommandAddStage extends Command {
             final EntityPlayer player = getPlayer(server, sender, args[0]);
             final String stageName = args[1];
 
-            PlayerDataHandler.getStageData(player).unlockStage(stageName);
+            PlayerDataHandler.getStageData(player).addStage(stageName);
 
             if (player instanceof EntityPlayerMP) {
                 GameStages.NETWORK.sendTo(new PacketStage(stageName, true), (EntityPlayerMP) player);

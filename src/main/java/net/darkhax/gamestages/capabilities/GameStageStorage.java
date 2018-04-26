@@ -1,5 +1,6 @@
 package net.darkhax.gamestages.capabilities;
 
+import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -24,7 +25,7 @@ public class GameStageStorage implements Capability.IStorage<IStageData> {
         
         final NBTTagList tagList = new NBTTagList();
         
-        for (final String string : instance.getUnlockedStages()) {
+        for (final String string : instance.getStages()) {
             tagList.appendTag(new NBTTagString(string));
         }
         
@@ -41,7 +42,7 @@ public class GameStageStorage implements Capability.IStorage<IStageData> {
         final NBTTagList tagList = tag.getTagList("UnlockedStages", NBT.TAG_STRING);
         
         for (int index = 0; index < tagList.tagCount(); index++) {
-            instance.unlockStage(tagList.getStringTagAt(index));
+            instance.addStage(tagList.getStringTagAt(index));
         }
     }
 }

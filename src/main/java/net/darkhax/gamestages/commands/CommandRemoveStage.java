@@ -40,7 +40,7 @@ public class CommandRemoveStage extends Command {
             final EntityPlayer player = getPlayer(server, sender, args[0]);
             final String stageName = args[1];
 
-            PlayerDataHandler.getStageData(player).lockStage(stageName);
+            PlayerDataHandler.getStageData(player).removeStage(stageName);
 
             if (player instanceof EntityPlayerMP) {
                 GameStages.NETWORK.sendTo(new PacketStage(stageName, false), (EntityPlayerMP) player);

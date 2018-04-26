@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.darkhax.gamestages.GameStages;
+import net.darkhax.gamestages.data.FakePlayerData;
+import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -62,7 +64,7 @@ public class PlayerDataHandler {
     public void attachCapabilities (AttachCapabilitiesEvent<Entity> event) {
 
         if ((event.getObject() instanceof EntityPlayer) && !(event.getObject() instanceof FakePlayer)) {
-            event.addCapability(new ResourceLocation("gamestages", "playerdata"), new GameStageCapProvider((EntityPlayer) event.getObject()));
+            event.addCapability(new ResourceLocation("gamestages", "playerdata"), new GameStageCapProvider());
         }
     }
 
@@ -91,9 +93,9 @@ public class PlayerDataHandler {
 
         if (original != null && clone != null) {
 
-            for (final String stage : original.getUnlockedStages()) {
+            for (final String stage : original.getStages()) {
 
-                clone.unlockStage(stage);
+                clone.addStage(stage);
             }
 
             GameStages.LOG.info("Preserving data for " + event.getOriginal().getName() + ". Took " + (System.currentTimeMillis() - time) + "ms.");

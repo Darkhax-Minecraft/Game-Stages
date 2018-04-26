@@ -5,12 +5,12 @@ import net.darkhax.bookshelf.command.CommandTree;
 import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.network.NetworkHandler;
 import net.darkhax.bookshelf.world.gamerule.GameRule;
-import net.darkhax.gamestages.capabilities.DefaultStageData;
-import net.darkhax.gamestages.capabilities.FakePlayerData;
 import net.darkhax.gamestages.capabilities.GameStageStorage;
-import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
 import net.darkhax.gamestages.commands.CommandStageTree;
+import net.darkhax.gamestages.data.StageData;
+import net.darkhax.gamestages.data.FakePlayerData;
+import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.packet.PacketRequestClientSync;
 import net.darkhax.gamestages.packet.PacketStage;
 import net.darkhax.gamestages.packet.PacketSyncClient;
@@ -43,7 +43,7 @@ public class GameStages {
         NETWORK.register(PacketSyncClient.class, Side.CLIENT);
         NETWORK.register(PacketRequestClientSync.class, Side.SERVER);
 
-        CapabilityManager.INSTANCE.register(IStageData.class, new GameStageStorage(), DefaultStageData::new);
+        CapabilityManager.INSTANCE.register(IStageData.class, new GameStageStorage(), StageData::new);
         MinecraftForge.EVENT_BUS.register(new PlayerDataHandler());
         BookshelfRegistry.addCommand(COMMAND);
         fakePlayerDataFile = new File(event.getModConfigurationDirectory(), "gameStagesFakePlayerData.json");

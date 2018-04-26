@@ -19,31 +19,31 @@ public class PlayerStageExpansion {
     public static boolean hasGameStage (IPlayer player, String stage) {
 
         final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
-        return PlayerDataHandler.getStageData(actualPlayer).hasUnlockedStage(stage);
+        return PlayerDataHandler.getStageData(actualPlayer).hasStage(stage);
     }
 
-    // Checks if the player has any of the passed stages. They only need one.
-    @ZenMethod
-    public static boolean hasAnyGameStages (IPlayer player, String... stages) {
-
-        final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
-        return PlayerDataHandler.getStageData(actualPlayer).hasUnlockedAnyOf(Arrays.asList(stages));
-    }
-
-    // Checks if the player has all of the passed stages.
-    @ZenMethod
-    public static boolean hasAllGameStages (IPlayer player, String... stages) {
-
-        final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
-        return PlayerDataHandler.getStageData(actualPlayer).hasUnlockedAll(Arrays.asList(stages));
-    }
+//    // Checks if the player has any of the passed stages. They only need one.
+//    @ZenMethod
+//    public static boolean hasAnyGameStages (IPlayer player, String... stages) {
+//
+//        final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
+//        return PlayerDataHandler.getStageData(actualPlayer).hasUnlockedAnyOf(Arrays.asList(stages));
+//    }
+//
+//    // Checks if the player has all of the passed stages.
+//    @ZenMethod
+//    public static boolean hasAllGameStages (IPlayer player, String... stages) {
+//
+//        final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
+//        return PlayerDataHandler.getStageData(actualPlayer).hasUnlockedAll(Arrays.asList(stages));
+//    }
 
     // Unlocks a stage for a player.
     @ZenMethod
     public static void addGameStage (IPlayer player, String stage) {
 
         final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
-        PlayerDataHandler.getStageData(actualPlayer).unlockStage(stage);
+        PlayerDataHandler.getStageData(actualPlayer).addStage(stage);
     }
 
     // Locks a stage for a player.
@@ -51,6 +51,6 @@ public class PlayerStageExpansion {
     public static void removeGameStage (IPlayer player, String stage) {
 
         final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
-        PlayerDataHandler.getStageData(actualPlayer).lockStage(stage);
+        PlayerDataHandler.getStageData(actualPlayer).removeStage(stage);
     }
 }

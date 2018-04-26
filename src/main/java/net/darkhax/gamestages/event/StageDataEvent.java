@@ -1,6 +1,6 @@
 package net.darkhax.gamestages.event;
 
-import net.darkhax.gamestages.capabilities.IStageData;
+import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;

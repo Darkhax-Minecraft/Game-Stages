@@ -1,4 +1,4 @@
-package net.darkhax.gamestages.capabilities;
+package net.darkhax.gamestages.data;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Sets;
@@ -6,11 +6,9 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 
 import net.darkhax.gamestages.GameStages;
-import net.minecraft.entity.player.EntityPlayer;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -54,58 +52,27 @@ public class FakePlayerData implements IStageData {
     }
 
     @Override
-    public Collection<String> getUnlockedStages() {
+    public Collection<String> getStages() {
         return stages;
     }
 
     @Override
-    public boolean hasUnlockedStage(@Nonnull final String stage) {
+    public boolean hasStage(@Nonnull final String stage) {
         return stages.contains(stage);
     }
 
     @Override
-    public boolean hasUnlockedAnyOf(final Collection<String> stages) {
-        return !Sets.intersection(this.stages, new HashSet<>(stages)).isEmpty();
-    }
-
-    @Override
-    public boolean hasUnlockedAll(final Collection<String> stages) {
-        return this.stages.containsAll(stages);
-    }
-
-    @Override
-    public void unlockStage(@Nonnull final String stage) {
+    public void addStage(@Nonnull final String stage) {
         // no op
     }
 
     @Override
-    public void lockStage(@Nonnull final String stage) {
-        // no op
-    }
-
-    @Override
-    public void setPlayer(@Nonnull final EntityPlayer player) {
+    public void removeStage(@Nonnull final String stage) {
         // no op
     }
 
     @Override
     public void clear() {
         // no op
-    }
-
-    @Override
-    public boolean hasBeenSynced() {
-        return true;
-    }
-
-    @Override
-    public void setSynced(final boolean synced) {
-        // no op
-    }
-
-    @Nullable
-    @Override
-    public EntityPlayer getPlayer() {
-        return null;
     }
 }

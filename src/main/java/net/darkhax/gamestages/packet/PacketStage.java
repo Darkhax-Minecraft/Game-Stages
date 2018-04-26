@@ -2,8 +2,8 @@ package net.darkhax.gamestages.packet;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
-import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,10 +66,10 @@ public class PacketStage extends SerializableMessage {
 
             System.out.println(this.stageName);
             if (this.unlock) {
-                info.unlockStage(this.stageName);
+                info.addStage(this.stageName);
             }
             else {
-                info.lockStage(this.stageName);
+                info.removeStage(this.stageName);
             }
 
             MinecraftForge.EVENT_BUS.post(new GameStageEvent.ClientSync(player, this.stageName, this.unlock));

@@ -2,8 +2,8 @@ package net.darkhax.gamestages.commands;
 
 import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.packet.PacketStage;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -41,10 +41,10 @@ public class CommandMirrorStages extends Command {
                 final IStageData secondData = PlayerDataHandler.getStageData(secondPlayer);
 
                 if (originalData != null && secondData != null) {
-                    for (final String stage : originalData.getUnlockedStages()) {
+                    for (final String stage : originalData.getStages()) {
 
                         // Transfers stages
-                        secondData.unlockStage(stage);
+                        secondData.addStage(stage);
 
                         // Sends stage changes to the client
                         GameStages.NETWORK.sendTo(new PacketStage(stage, false), (EntityPlayerMP) secondPlayer);

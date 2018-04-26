@@ -5,8 +5,8 @@ import java.util.Collection;
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.capabilities.IStageData;
 import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.StageDataEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,8 +46,6 @@ public class PacketSyncClient extends SerializableMessage {
             final EntityPlayer player = PlayerUtils.getClientPlayer();
             final IStageData info = PlayerDataHandler.getStageData(player);
 
-            info.setSynced(false);
-
             GameStages.LOG.info("Syncing recived for " + player.getName());
 
             // Remove all stages
@@ -55,10 +53,8 @@ public class PacketSyncClient extends SerializableMessage {
 
             // Re-add all stages
             for (final String stageName : this.stages) {
-                info.unlockStage(stageName);
+                info.addStage(stageName);
             }
-
-            info.setSynced(true);
             MinecraftForge.EVENT_BUS.post(new StageDataEvent.SyncRecieved(player, info));
         });
 

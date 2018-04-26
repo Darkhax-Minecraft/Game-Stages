@@ -1,5 +1,6 @@
 package net.darkhax.gamestages.capabilities;
 
+import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -9,11 +10,6 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 public class GameStageCapProvider implements ICapabilitySerializable<NBTTagCompound> {
     
     IStageData instance = PlayerDataHandler.CAPABILITY.getDefaultInstance();
-    
-    public GameStageCapProvider (EntityPlayer player) {
-        
-        this.instance.setPlayer(player);
-    }
     
     @Override
     public boolean hasCapability (Capability<?> capability, EnumFacing facing) {

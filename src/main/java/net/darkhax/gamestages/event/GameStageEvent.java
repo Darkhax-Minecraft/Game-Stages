@@ -122,7 +122,7 @@ public class GameStageEvent extends PlayerEvent {
      *
      * Note: To ensure this event is reliable, all mods which add support for GameStages should
      * make use of
-     * {@link net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData#hasUnlockedStage(String)}.
+     * {@link net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData#hasStage(String)}.
      * Both
      * {@link net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData#hasUnlockedAnyOf(String...)}
      * and
