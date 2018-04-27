@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -34,7 +35,7 @@ public class GameStageSaveHandler {
     /**
      * A map of player uuid to stage data.
      */
-    private static final Map<String, IStageData> GLOBAL_STAGE_DATA = new HashMap<>();
+    private static final Map<UUID, IStageData> GLOBAL_STAGE_DATA = new HashMap<>();
 
     /**
      * A map of fake player names to fake stage data.
@@ -85,7 +86,7 @@ public class GameStageSaveHandler {
 
         handleLegacyData(event.getPlayerDirectory(), event.getPlayerUUID(), playerData);
 
-        GLOBAL_STAGE_DATA.put(event.getPlayerUUID(), playerData);
+        GLOBAL_STAGE_DATA.put(event.getEntityPlayer().getPersistentID(), playerData);
     }
 
     /**
@@ -95,10 +96,12 @@ public class GameStageSaveHandler {
     @SubscribeEvent
     public static void onPlayerSave (PlayerEvent.SaveToFile event) {
 
-        if (GLOBAL_STAGE_DATA.containsKey(event.getPlayerUUID())) {
+        final UUID playerUUID = event.getEntityPlayer().getPersistentID();
+
+        if (GLOBAL_STAGE_DATA.containsKey(playerUUID)) {
 
             final File playerFile = getPlayerFile(event.getPlayerDirectory(), event.getPlayerUUID());
-            final NBTTagCompound tag = GLOBAL_STAGE_DATA.get(event.getPlayerUUID()).writeToNBT();
+            final NBTTagCompound tag = GLOBAL_STAGE_DATA.get(playerUUID).writeToNBT();
 
             if (tag != null) {
 
@@ -139,7 +142,7 @@ public class GameStageSaveHandler {
      * @param uuid The uuid of the player to lookup.
      * @return The stage data for the player. If one does not exist, it will be created.
      */
-    public static IStageData getPlayerData (String uuid) {
+    public static IStageData getPlayerData (UUID uuid) {
 
         return GLOBAL_STAGE_DATA.computeIfAbsent(uuid, playerUUID -> new StageData());
     }

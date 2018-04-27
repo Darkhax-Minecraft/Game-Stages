@@ -187,7 +187,7 @@ public class GameStageHelper {
             return GameStageSaveHandler.getFakeData(player.getName());
         }
 
-        return GameStageSaveHandler.getPlayerData(player.getPersistentID().toString());
+        return GameStageSaveHandler.getPlayerData(player.getPersistentID());
     }
 
     /**
