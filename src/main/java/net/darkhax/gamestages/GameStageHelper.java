@@ -36,7 +36,7 @@ public class GameStageHelper {
      * @param stage The stage to check for.
      * @return Whether or not the player has the stage.
      */
-    private static boolean hasStage (EntityPlayer player, IStageData data, String stage) {
+    public static boolean hasStage (EntityPlayer player, IStageData data, String stage) {
 
         final GameStageEvent.Check event = new GameStageEvent.Check(player, stage, data.hasStage(stage));
         MinecraftForge.EVENT_BUS.post(event);

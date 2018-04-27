@@ -11,10 +11,9 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 public class GameStageEvent extends PlayerEvent {
 
     /**
-     * The stage the event is for. This stage can be changed by other mods listening to the
-     * event!
+     * The stage the event is for.
      */
-    private String stageName;
+    private final String stageName;
 
     /**
      * The base constructor for all game stage events.
@@ -29,7 +28,7 @@ public class GameStageEvent extends PlayerEvent {
     }
 
     /**
-     * Gets the stage name for the event. Note that other listeners can change this!
+     * Gets the stage name for the event.
      *
      * @return The stage name for the event.
      */
@@ -39,20 +38,9 @@ public class GameStageEvent extends PlayerEvent {
     }
 
     /**
-     * Sets the stage for the event. This can be used to change or manipulate the stage name.
-     *
-     * @param stage The new name for the stage.
-     */
-    public void setStage (String stage) {
-
-        this.stageName = stage;
-    }
-
-    /**
-     * This event is fired every time a stage is going to be added to a player, or unlocked.
-     * This event is fired on both the client and the server. This event is still fired, even
-     * if the player has the stage. This event can be canceled, which will prevent it from
-     * being added.
+     * This event is fired every time a stage is added to the player via
+     * {@link net.darkhax.gamestages.GameStageHelper#addStage(EntityPlayer, String)}. Canceling
+     * this event will prevent the stage from being added.
      */
     @Cancelable
     public static class Add extends GameStageEvent {
@@ -64,9 +52,9 @@ public class GameStageEvent extends PlayerEvent {
     }
 
     /**
-     * This event is fired every time a stage is added to a player, or unlocked. This event is
-     * fired on both the client and the server. This event is still fired, even if the player
-     * has the stage. This event can not be canceled.
+     * This event is fired after a stage has been successfully added using
+     * {@link net.darkhax.gamestages.GameStageHelper#addStage(EntityPlayer, String)}. This can
+     * not be canceled.
      */
     public static class Added extends GameStageEvent {
 
@@ -77,10 +65,9 @@ public class GameStageEvent extends PlayerEvent {
     }
 
     /**
-     * This event is fired every time a stage is going to be removed from a player, or locked.
-     * This event is fired on both the client and the server. This event is still fired, even
-     * if the player does not have the stage being removed. This event can be canceled, which
-     * will prevent the stage from being removed.
+     * This event is fired when a stage is removed from a player via
+     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(EntityPlayer, String)}.
+     * Canceling this event will prevent it from being added.
      */
     @Cancelable
     public static class Remove extends GameStageEvent {
@@ -92,9 +79,9 @@ public class GameStageEvent extends PlayerEvent {
     }
 
     /**
-     * This event is fired every time a stage is removed from a player, or locked. This event
-     * is fired on both the client and the server. This event is still fired, even if the
-     * player does not have the stage being removed. This event can not be canceled.
+     * This event is fired after a stage has been successfully removed using
+     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(EntityPlayer, String)}. This
+     * can not be canceled.
      */
     public static class Removed extends GameStageEvent {
 
@@ -105,24 +92,53 @@ public class GameStageEvent extends PlayerEvent {
     }
 
     /**
-     * This event is fired every time a check for a stage is made. This event can be canceled,
-     * which will make the check fail.
+     * This event is fired when a stage check is done on a player using
+     * {@link net.darkhax.gamestages.GameStageHelper#hasStage(EntityPlayer, net.darkhax.gamestages.data.IStageData, String)}.
      */
     public static class Check extends GameStageEvent {
 
+        /**
+         * Whether or not the player originally had the stage.
+         */
+        private final boolean hasStageOriginal;
+
+        /**
+         * Whether or not the player has the stage.
+         */
         private boolean hasStage;
 
         public Check (EntityPlayer player, String stageName, boolean hasStage) {
 
             super(player, stageName);
+            this.hasStageOriginal = hasStage;
             this.hasStage = hasStage;
         }
 
+        /**
+         * Checks if the player originally had the stage.
+         *
+         * @return Whether or not the player originally had this stage.
+         */
+        public boolean hadStageOriginally () {
+
+            return this.hasStageOriginal;
+        }
+
+        /**
+         * Checks if the player has the stage according to the event.
+         *
+         * @return Whether or not the event says they have the stage.
+         */
         public boolean hasStage () {
 
             return this.hasStage;
         }
 
+        /**
+         * Sets the result of the event.
+         *
+         * @param hasStage Whether or not the player should have this event.
+         */
         public void setHasStage (boolean hasStage) {
 
             this.hasStage = hasStage;
