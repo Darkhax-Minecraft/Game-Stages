@@ -3,7 +3,7 @@ package net.darkhax.gamestages.commands;
 import java.util.stream.Collectors;
 
 import net.darkhax.bookshelf.command.Command;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +38,7 @@ public class CommandStageInfo extends Command {
 
         if (sender instanceof EntityPlayer) {
 
-            String stages = PlayerDataHandler.getStageData((EntityPlayer) sender).getUnlockedStages().stream().map(Object::toString).collect(Collectors.joining(", "));
+            String stages = GameStageHelper.getPlayerData((EntityPlayer) sender).getStages().stream().map(Object::toString).collect(Collectors.joining(", "));
 
             if (stages.isEmpty()) {
 

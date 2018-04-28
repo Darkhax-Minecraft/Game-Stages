@@ -4,12 +4,10 @@ import java.util.Collection;
 
 import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
-import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler.IStageData;
-import net.darkhax.gamestages.event.StageDataEvent;
+import net.darkhax.gamestages.data.GameStageSaveHandler;
+import net.darkhax.gamestages.data.StageData;
+import net.darkhax.gamestages.event.StagesSyncedEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -43,23 +41,15 @@ public class PacketSyncClient extends SerializableMessage {
 
         Minecraft.getMinecraft().addScheduledTask( () -> {
 
-            final EntityPlayer player = PlayerUtils.getClientPlayer();
-            final IStageData info = PlayerDataHandler.getStageData(player);
-
-            info.setSynced(false);
-
-            GameStages.LOG.info("Syncing recived for " + player.getName());
-
-            // Remove all stages
-            info.clear();
+            GameStageSaveHandler.clientData = new StageData();
 
             // Re-add all stages
             for (final String stageName : this.stages) {
-                info.unlockStage(stageName);
+
+                GameStageSaveHandler.clientData.addStage(stageName);
             }
 
-            info.setSynced(true);
-            MinecraftForge.EVENT_BUS.post(new StageDataEvent.SyncRecieved(player, info));
+            MinecraftForge.EVENT_BUS.post(new StagesSyncedEvent(GameStageSaveHandler.clientData, PlayerUtils.getClientPlayer()));
         });
 
         return null;
