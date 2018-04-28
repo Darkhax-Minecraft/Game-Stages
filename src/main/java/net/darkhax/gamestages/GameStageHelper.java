@@ -199,7 +199,7 @@ public class GameStageHelper {
     public static void syncPlayer (EntityPlayerMP player) {
 
         final IStageData info = GameStageHelper.getPlayerData(player);
-        GameStages.LOG.info("Syncing data for {}.", player.getName());
+        GameStages.LOG.info("Syncing {} stages for {}.", info.getStages().size(), player.getName());
         GameStages.NETWORK.sendTo(new PacketSyncClient(info.getStages()), player);
     }
 }

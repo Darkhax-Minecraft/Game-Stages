@@ -59,7 +59,7 @@ public class GameStageSaveHandler {
      */
     @SideOnly(Side.CLIENT)
     public static IStageData clientData;
-    
+
     /**
      * Hook for the player LoadFromFile event. Allows game stage data to be loaded when the
      * player's data is loaded.
@@ -76,11 +76,12 @@ public class GameStageSaveHandler {
 
                 final NBTTagCompound tag = CompressedStreamTools.read(playerFile);
                 playerData.readFromNBT(tag);
+                GameStages.LOG.info("Loaded {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
             }
 
             catch (final IOException e) {
 
-                GameStages.LOG.error("Could not read player data for {}.", playerFile.getName());
+                GameStages.LOG.error("Could not read player data for {}.", event.getEntityPlayer().getName());
                 GameStages.LOG.catching(e);
             }
         }
@@ -101,14 +102,16 @@ public class GameStageSaveHandler {
 
         if (GLOBAL_STAGE_DATA.containsKey(playerUUID)) {
 
+            final IStageData playerData = getPlayerData(playerUUID);
             final File playerFile = getPlayerFile(event.getPlayerDirectory(), event.getPlayerUUID());
-            final NBTTagCompound tag = GLOBAL_STAGE_DATA.get(playerUUID).writeToNBT();
+            final NBTTagCompound tag = playerData.writeToNBT();
 
             if (tag != null) {
 
                 try {
 
                     CompressedStreamTools.write(tag, playerFile);
+                    GameStages.LOG.info("Saved {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
                 }
 
                 catch (final IOException e) {
@@ -133,7 +136,7 @@ public class GameStageSaveHandler {
             GameStageHelper.syncPlayer((EntityPlayerMP) event.player);
         }
     }
-    
+
     /**
      * Hook for the PlayerLoggedInEvent. If the player is a valid server side player, their
      * data will be synced to the client.
@@ -264,7 +267,7 @@ public class GameStageSaveHandler {
 
     /**
      * Gets data for a fake player. Real players should use {@link #getPlayerData(String)}.
-     * Alternatively 
+     * Alternatively
      * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.EntityPlayer)} can be
      * used to automatically resolve players.
      *
