@@ -26,6 +26,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -58,7 +59,7 @@ public class GameStageSaveHandler {
      */
     @SideOnly(Side.CLIENT)
     public static IStageData clientData;
-
+    
     /**
      * Hook for the player LoadFromFile event. Allows game stage data to be loaded when the
      * player's data is loaded.
@@ -130,6 +131,20 @@ public class GameStageSaveHandler {
         if (event.player instanceof EntityPlayerMP) {
 
             GameStageHelper.syncPlayer((EntityPlayerMP) event.player);
+        }
+    }
+    
+    /**
+     * Hook for the PlayerLoggedInEvent. If the player is a valid server side player, their
+     * data will be synced to the client.
+     */
+    @SubscribeEvent
+    public static void onPlayerLoggedOut (PlayerLoggedOutEvent event) {
+
+        // When a player connects to the server, sync their client data with the server's data.
+        if (event.player instanceof EntityPlayerMP) {
+
+            GLOBAL_STAGE_DATA.remove(event.player.getPersistentID());
         }
     }
 
@@ -249,9 +264,9 @@ public class GameStageSaveHandler {
 
     /**
      * Gets data for a fake player. Real players should use {@link #getPlayerData(String)}.
-     * Alternative
+     * Alternatively 
      * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.EntityPlayer)} can be
-     * used to automaticaly resolve players.
+     * used to automatically resolve players.
      *
      * @param fakePlayerName The name of the fake player.
      * @return The fake players stage data, or the default value if one does not exist.
