@@ -1,6 +1,7 @@
 package net.darkhax.gamestages;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
@@ -44,6 +45,20 @@ public class GameStageHelper {
     }
 
     /**
+     * Checks if the client player has all of the passed stages. This will also fire the check
+     * event for each stage.
+     *
+     * @param player The player to check the stages of.
+     * @param stages The stages to look for.
+     * @return Whether or not the player has all of the passed stages.
+     */
+    @SideOnly(Side.CLIENT)
+    public static boolean clientHasAllOf (EntityPlayer player, Collection<String> stages) {
+
+        return stages.stream().allMatch(stage -> hasStage(player, GameStageSaveHandler.clientData, stage));
+    }
+
+    /**
      * Checks if the client player has any of the passed stages. This will also fire the check
      * event for each stage.
      *
@@ -53,6 +68,20 @@ public class GameStageHelper {
      */
     @SideOnly(Side.CLIENT)
     public static boolean clientHasAnyOf (EntityPlayer player, String... stages) {
+
+        return hasAnyOf(player, GameStageSaveHandler.clientData, stages);
+    }
+    
+    /**
+     * Checks if the client player has any of the passed stages. This will also fire the check
+     * event for each stage.
+     *
+     * @param player The player to check the stages of.
+     * @param stages The stages to look for.
+     * @return Whether or not the player has at least one of the stages.
+     */
+    @SideOnly(Side.CLIENT)
+    public static boolean clientHasAnyOf (EntityPlayer player, Collection<String> stages) {
 
         return hasAnyOf(player, GameStageSaveHandler.clientData, stages);
     }
@@ -111,6 +140,33 @@ public class GameStageHelper {
     }
 
     /**
+     * Checks if a player data has all of the passed stages. This will also fire the check
+     * event for each stage.
+     *
+     * @param player The player to check the stages of.
+     * @param playerData The player data to check.
+     * @param stages The stages to look for.
+     * @return Whether or not the player has all of the passed stages.
+     */
+    public static boolean hasAllOf (EntityPlayer player, IStageData playerData, Collection<String> stages) {
+
+        return stages.stream().allMatch(stage -> hasStage(player, playerData, stage));
+    }
+
+    /**
+     * Checks if a player data has any of the passed stages. This will also fire the check
+     * event for each stage.
+     *
+     * @param player The player to check the stages of.
+     * @param playerData The player data to check.
+     * @param stages The stages to look for.
+     * @return Whether or not the player has at least one of the stages.
+     */
+    public static boolean hasAnyOf (EntityPlayer player, IStageData playerData, Collection<String> stages) {
+
+        return stages.stream().anyMatch(stage -> hasStage(player, playerData, stage));
+    }
+    /**
      * Checks if a player data has any of the passed stages. This will also fire the check
      * event for each stage.
      *
@@ -136,9 +192,14 @@ public class GameStageHelper {
      */
     public static boolean hasStage (EntityPlayer player, IStageData data, String stage) {
 
-        final GameStageEvent.Check event = new GameStageEvent.Check(player, stage, data.hasStage(stage));
-        MinecraftForge.EVENT_BUS.post(event);
-        return event.hasStage();
+        if (data != null) {
+            
+            final GameStageEvent.Check event = new GameStageEvent.Check(player, stage, data.hasStage(stage));
+            MinecraftForge.EVENT_BUS.post(event);
+            return event.hasStage();
+        }
+        
+        return false;
     }
 
     /**
