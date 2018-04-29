@@ -9,25 +9,25 @@ import net.minecraft.server.MinecraftServer;
 public class CommandReloadFakePlayers extends Command {
     @Override
     public String getName () {
-
+        
         return "reloadfakes";
     }
-
+    
     @Override
     public int getRequiredPermissionLevel () {
-
+        
         return 2;
     }
-
+    
     @Override
     public String getUsage (final ICommandSender sender) {
-
+        
         return "/gamestage reloadfakes";
     }
-
+    
     @Override
     public void execute (final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
-
+        
         GameStageSaveHandler.reloadFakePlayers();
     }
 }

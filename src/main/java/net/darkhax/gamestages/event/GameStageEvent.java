@@ -9,12 +9,12 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
  * treated as an event.
  */
 public class GameStageEvent extends PlayerEvent {
-
+    
     /**
      * The stage the event is for.
      */
     private final String stageName;
-
+    
     /**
      * The base constructor for all game stage events.
      *
@@ -22,21 +22,21 @@ public class GameStageEvent extends PlayerEvent {
      * @param stageName The stage the event is for.
      */
     public GameStageEvent (EntityPlayer player, String stageName) {
-
+        
         super(player);
         this.stageName = stageName;
     }
-
+    
     /**
      * Gets the stage name for the event.
      *
      * @return The stage name for the event.
      */
     public String getStageName () {
-
+        
         return this.stageName;
     }
-
+    
     /**
      * This event is fired every time a stage is added to the player via
      * {@link net.darkhax.gamestages.GameStageHelper#addStage(EntityPlayer, String)}. Canceling
@@ -44,26 +44,26 @@ public class GameStageEvent extends PlayerEvent {
      */
     @Cancelable
     public static class Add extends GameStageEvent {
-
+        
         public Add (EntityPlayer player, String stageName) {
-
+            
             super(player, stageName);
         }
     }
-
+    
     /**
      * This event is fired after a stage has been successfully added using
      * {@link net.darkhax.gamestages.GameStageHelper#addStage(EntityPlayer, String)}. This can
      * not be canceled.
      */
     public static class Added extends GameStageEvent {
-
+        
         public Added (EntityPlayer player, String stageName) {
-
+            
             super(player, stageName);
         }
     }
-
+    
     /**
      * This event is fired when a stage is removed from a player via
      * {@link net.darkhax.gamestages.GameStageHelper#removeStage(EntityPlayer, String)}.
@@ -71,76 +71,76 @@ public class GameStageEvent extends PlayerEvent {
      */
     @Cancelable
     public static class Remove extends GameStageEvent {
-
+        
         public Remove (EntityPlayer player, String stageName) {
-
+            
             super(player, stageName);
         }
     }
-
+    
     /**
      * This event is fired after a stage has been successfully removed using
      * {@link net.darkhax.gamestages.GameStageHelper#removeStage(EntityPlayer, String)}. This
      * can not be canceled.
      */
     public static class Removed extends GameStageEvent {
-
+        
         public Removed (EntityPlayer player, String stageName) {
-
+            
             super(player, stageName);
         }
     }
-
+    
     /**
      * This event is fired when a stage check is done on a player using
      * {@link net.darkhax.gamestages.GameStageHelper#hasStage(EntityPlayer, net.darkhax.gamestages.data.IStageData, String)}.
      */
     public static class Check extends GameStageEvent {
-
+        
         /**
          * Whether or not the player originally had the stage.
          */
         private final boolean hasStageOriginal;
-
+        
         /**
          * Whether or not the player has the stage.
          */
         private boolean hasStage;
-
+        
         public Check (EntityPlayer player, String stageName, boolean hasStage) {
-
+            
             super(player, stageName);
             this.hasStageOriginal = hasStage;
             this.hasStage = hasStage;
         }
-
+        
         /**
          * Checks if the player originally had the stage.
          *
          * @return Whether or not the player originally had this stage.
          */
         public boolean hadStageOriginally () {
-
+            
             return this.hasStageOriginal;
         }
-
+        
         /**
          * Checks if the player has the stage according to the event.
          *
          * @return Whether or not the event says they have the stage.
          */
         public boolean hasStage () {
-
+            
             return this.hasStage;
         }
-
+        
         /**
          * Sets the result of the event.
          *
          * @param hasStage Whether or not the player should have this event.
          */
         public void setHasStage (boolean hasStage) {
-
+            
             this.hasStage = hasStage;
         }
     }

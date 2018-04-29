@@ -8,17 +8,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class StagesSyncedEvent extends PlayerEvent {
-
+    
     private final IStageData data;
-
+    
     public StagesSyncedEvent (IStageData data, EntityPlayer player) {
-
+        
         super(player);
         this.data = data;
     }
-
+    
     public IStageData getData () {
-
+        
         return this.data;
     }
 }

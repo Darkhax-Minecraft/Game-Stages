@@ -19,39 +19,39 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * be requested by having the client send a request packet.
  */
 public class PacketSyncClient extends SerializableMessage {
-
+    
     /**
      * An array of all the stage names.
      */
     public String[] stages;
-
+    
     public PacketSyncClient () {
-
+        
         // Empty constructor for forge's system
     }
-
+    
     public PacketSyncClient (Collection<String> stages) {
-
+        
         this.stages = stages.toArray(new String[0]);
     }
-
+    
     @Override
     @SideOnly(Side.CLIENT)
     public IMessage handleMessage (MessageContext context) {
-
+        
         Minecraft.getMinecraft().addScheduledTask( () -> {
-
+            
             GameStageSaveHandler.clientData = new StageData();
-
+            
             // Re-add all stages
             for (final String stageName : this.stages) {
-
+                
                 GameStageSaveHandler.clientData.addStage(stageName);
             }
-
+            
             MinecraftForge.EVENT_BUS.post(new StagesSyncedEvent(GameStageSaveHandler.clientData, PlayerUtils.getClientPlayer()));
         });
-
+        
         return null;
     }
 }
