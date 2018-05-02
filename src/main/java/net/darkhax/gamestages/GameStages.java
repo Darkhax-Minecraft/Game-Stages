@@ -10,7 +10,6 @@ import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.packet.PacketSyncClient;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -32,11 +31,5 @@ public class GameStages {
         
         BookshelfRegistry.addCommand(COMMAND);
         GameStageSaveHandler.reloadFakePlayers();
-    }
-    
-    @EventHandler
-    public void onFingerprintViolation (FMLFingerprintViolationEvent event) {
-        
-        LOG.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
 }
