@@ -84,9 +84,9 @@ public class GameStageSaveHandler {
                 GameStages.LOG.error("Could not read player data for {}.", event.getEntityPlayer().getName());
                 GameStages.LOG.catching(e);
             }
+            
+            handleLegacyData(event.getPlayerDirectory(), event.getPlayerUUID(), playerData);
         }
-        
-        handleLegacyData(event.getPlayerDirectory(), event.getPlayerUUID(), playerData);
         
         GLOBAL_STAGE_DATA.put(event.getEntityPlayer().getPersistentID(), playerData);
     }
