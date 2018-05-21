@@ -36,21 +36,37 @@ public class CommandStageInfo extends Command {
     @Override
     public void execute (MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         
-        if (sender instanceof EntityPlayer) {
+        final EntityPlayer target = args.length == 1 ? getPlayer(server, sender, args[0]) : sender instanceof EntityPlayer ? (EntityPlayer) sender : null;
+        
+        if (target != null) {
             
-            String stages = GameStageHelper.getPlayerData((EntityPlayer) sender).getStages().stream().map(Object::toString).collect(Collectors.joining(", "));
+            final String stages = getStages(target);
             
-            if (stages.isEmpty()) {
+            if (!stages.isEmpty()) {
+                
+                sender.sendMessage(new TextComponentString(stages));
+            }
+            
+            else {
                 
                 sender.sendMessage(new TextComponentTranslation("commands.gamestage.info.empty"));
-                return;
             }
-            
-            if (((EntityPlayer) sender).getUniqueID().toString().equalsIgnoreCase(BIRTHDAY_BOY_UUID)) {
-                stages += ", HAPPY BIRTHDAY!";
-            }
-            
-            sender.sendMessage(new TextComponentString(stages));
         }
+        
+        else {
+            
+            sender.sendMessage(new TextComponentTranslation("commands.gamestage.info.noplayer"));
+        }
+    }
+    
+    private static String getStages (EntityPlayer player) {
+        
+        String stages = GameStageHelper.getPlayerData(player).getStages().stream().map(Object::toString).collect(Collectors.joining(", "));
+        
+        if (player.getUniqueID().toString().equalsIgnoreCase(BIRTHDAY_BOY_UUID)) {
+            stages += ", HAPPY BIRTHDAY!";
+        }
+        
+        return stages;
     }
 }
