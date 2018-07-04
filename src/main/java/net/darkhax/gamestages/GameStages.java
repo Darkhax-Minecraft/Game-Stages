@@ -4,7 +4,6 @@ import net.darkhax.bookshelf.BookshelfRegistry;
 import net.darkhax.bookshelf.command.CommandTree;
 import net.darkhax.bookshelf.lib.LoggingHelper;
 import net.darkhax.bookshelf.network.NetworkHandler;
-import net.darkhax.bookshelf.world.gamerule.GameRule;
 import net.darkhax.gamestages.commands.CommandStageTree;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.packet.PacketSyncClient;
@@ -19,9 +18,6 @@ public class GameStages {
     public static final LoggingHelper LOG = new LoggingHelper("gamestages");
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
     public static final CommandTree COMMAND = new CommandStageTree();
-    
-    // Unimplemented
-    public static final GameRule GAME_RULE_SHARE_STAGES = new GameRule("shareGameStages", false);
     
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
