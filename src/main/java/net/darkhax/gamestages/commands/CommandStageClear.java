@@ -49,7 +49,7 @@ public class CommandStageClear extends Command {
             }
         }
         else {
-            throw new WrongUsageException("commands.gamestage.clear.usage");
+            throw new WrongUsageException(this.getUsage(sender));
         }
     }
     

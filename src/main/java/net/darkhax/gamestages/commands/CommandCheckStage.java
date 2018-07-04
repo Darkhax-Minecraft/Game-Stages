@@ -43,7 +43,7 @@ public class CommandCheckStage extends Command {
             notifyCommandListener(sender, this, "commands.gamestage.check.success", player.getDisplayName(), stage);
         }
         else {
-            throw new WrongUsageException("commands.gamestage.check.usage");
+            throw new WrongUsageException(this.getUsage(sender));
         }
     }
 }

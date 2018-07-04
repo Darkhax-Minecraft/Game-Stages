@@ -35,6 +35,7 @@ public class CommandAddStage extends Command {
         if (args.length == 2) {
             
             final EntityPlayerMP player = getPlayer(server, sender, args[0]);
+            
             final String stageName = args[1];
             
             GameStageHelper.addStage(player, stageName);
@@ -47,7 +48,7 @@ public class CommandAddStage extends Command {
             }
         }
         else {
-            throw new WrongUsageException("commands.gamestage.add.usage");
+            throw new WrongUsageException(this.getUsage(sender));
         }
     }
     

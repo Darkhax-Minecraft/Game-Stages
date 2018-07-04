@@ -14,3 +14,5 @@ commands.gamestage.info.noplayer=No player found!
 
 commands.gamestage.clear.sender=%d stages cleared from %s
 commands.gamestage.clear.target=You lost %d stages!
+
+commands.gamestage.playeronly=Sorry, players only!
