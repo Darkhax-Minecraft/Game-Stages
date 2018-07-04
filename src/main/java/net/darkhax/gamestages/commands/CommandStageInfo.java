@@ -30,7 +30,7 @@ public class CommandStageInfo extends Command {
     @Override
     public String getUsage (ICommandSender sender) {
         
-        return "commands.gamestage.info.usage";
+        return "/gamestage info [player]";
     }
     
     @Override

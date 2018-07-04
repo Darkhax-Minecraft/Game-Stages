@@ -26,7 +26,7 @@ public class CommandRemoveStage extends Command {
     @Override
     public String getUsage (ICommandSender sender) {
         
-        return "commands.gamestage.remove.usage";
+        return "/gamestage remove <player> <stage>";
     }
     
     @Override

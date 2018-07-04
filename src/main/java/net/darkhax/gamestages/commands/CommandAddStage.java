@@ -26,7 +26,7 @@ public class CommandAddStage extends Command {
     @Override
     public String getUsage (ICommandSender sender) {
         
-        return "commands.gamestage.add.usage";
+        return "/gamestage add <player> <stage>";
     }
     
     @Override

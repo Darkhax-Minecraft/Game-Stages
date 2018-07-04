@@ -30,6 +30,6 @@ public class CommandStageTree extends CommandTree {
     @Override
     public String getUsage (ICommandSender sender) {
         
-        return "commands.gamestage.usage";
+        return "/gamestage";
     }
 }

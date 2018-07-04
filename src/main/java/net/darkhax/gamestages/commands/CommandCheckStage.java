@@ -25,7 +25,7 @@ public class CommandCheckStage extends Command {
     @Override
     public String getUsage (ICommandSender sender) {
         
-        return "commands.gamestage.check.usage";
+        return "/gamestage check <player> <stage>";
     }
     
     @Override
