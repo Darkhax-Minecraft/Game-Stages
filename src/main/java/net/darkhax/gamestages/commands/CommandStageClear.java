@@ -4,7 +4,6 @@ import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
