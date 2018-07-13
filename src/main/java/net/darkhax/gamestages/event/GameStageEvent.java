@@ -1,5 +1,6 @@
 package net.darkhax.gamestages.event;
 
+import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
@@ -88,6 +89,23 @@ public class GameStageEvent extends PlayerEvent {
         public Removed (EntityPlayer player, String stageName) {
             
             super(player, stageName);
+        }
+    }
+
+    /**
+     * This event is fired after the stages have been cleared from a player.
+     */
+    public static class Cleared extends PlayerEvent {
+        private IStageData stageData;
+
+        public Cleared (EntityPlayer player, IStageData stageData) {
+            super(player);
+
+            this.stageData = stageData;
+        }
+
+        public IStageData getStageData() {
+            return stageData;
         }
     }
     

@@ -3,12 +3,14 @@ package net.darkhax.gamestages.commands;
 import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.IStageData;
+import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.MinecraftForge;
 
 public class CommandStageClear extends Command {
     
@@ -41,6 +43,8 @@ public class CommandStageClear extends Command {
             
             stageInfo.clear();
             GameStageHelper.syncPlayer(player);
+
+            MinecraftForge.EVENT_BUS.post(new GameStageEvent.Cleared(player, stageInfo));
             
             player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", stageCount));
             
