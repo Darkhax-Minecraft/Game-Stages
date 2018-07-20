@@ -3,6 +3,7 @@ package net.darkhax.gamestages;
 import java.util.Arrays;
 import java.util.Collection;
 
+import net.darkhax.gamestages.config.Configuration;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
@@ -287,7 +288,9 @@ public class GameStageHelper {
     public static void syncPlayer (EntityPlayerMP player) {
         
         final IStageData info = GameStageHelper.getPlayerData(player);
-        GameStages.LOG.info("Syncing {} stages for {}.", info.getStages().size(), player.getName());
+        if (Configuration.debug.logDebug) {
+            GameStages.LOG.info("Syncing {} stages for {}.", info.getStages().size(), player.getName());
+        }
         GameStages.NETWORK.sendTo(new PacketSyncClient(info.getStages()), player);
     }
 }
