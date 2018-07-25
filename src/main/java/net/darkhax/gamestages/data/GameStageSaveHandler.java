@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import net.darkhax.bookshelf.util.NBTUtils;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
+import net.darkhax.gamestages.config.Configuration;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -76,7 +77,9 @@ public class GameStageSaveHandler {
                 
                 final NBTTagCompound tag = CompressedStreamTools.read(playerFile);
                 playerData.readFromNBT(tag);
-                GameStages.LOG.info("Loaded {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
+                if (Configuration.debug.logDebug) {
+                    GameStages.LOG.info("Loaded {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
+                }
             }
             
             catch (final IOException e) {
@@ -111,7 +114,9 @@ public class GameStageSaveHandler {
                 try {
                     
                     CompressedStreamTools.write(tag, playerFile);
-                    GameStages.LOG.info("Saved {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
+                    if (Configuration.debug.logDebug) {
+                        GameStages.LOG.info("Saved {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
+                    }
                 }
                 
                 catch (final IOException e) {
@@ -232,8 +237,9 @@ public class GameStageSaveHandler {
      * Reloads fake player data from the fake player json file.
      */
     public static void reloadFakePlayers () {
-        
-        GameStages.LOG.info("Reloading fakeplayers stage data from {}.", FAKE_PLAYER_STAGE_FILE.getName());
+        if (Configuration.debug.logDebug) {
+            GameStages.LOG.info("Reloading fakeplayers stage data from {}.", FAKE_PLAYER_STAGE_FILE.getName());
+        }
         
         FAKE_STAGE_DATA.clear();
         
@@ -262,7 +268,9 @@ public class GameStageSaveHandler {
     private static void addFakePlayer (FakePlayerData data) {
         
         FAKE_STAGE_DATA.put(data.getFakePlayerName(), data);
-        GameStages.LOG.info("Adding fakeplayer {} with gamestages {}", data.getFakePlayerName(), data.getStages());
+        if (Configuration.debug.logDebug) {
+            GameStages.LOG.info("Adding fakeplayer {} with gamestages {}", data.getFakePlayerName(), data.getStages());
+        }
     }
     
     /**
