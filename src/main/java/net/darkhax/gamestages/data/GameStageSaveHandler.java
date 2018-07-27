@@ -237,6 +237,7 @@ public class GameStageSaveHandler {
      * Reloads fake player data from the fake player json file.
      */
     public static void reloadFakePlayers () {
+        
         if (Configuration.debug.logDebug) {
             GameStages.LOG.info("Reloading fakeplayers stage data from {}.", FAKE_PLAYER_STAGE_FILE.getName());
         }

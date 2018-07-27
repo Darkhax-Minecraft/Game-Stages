@@ -91,21 +91,23 @@ public class GameStageEvent extends PlayerEvent {
             super(player, stageName);
         }
     }
-
+    
     /**
      * This event is fired after the stages have been cleared from a player.
      */
     public static class Cleared extends PlayerEvent {
-        private IStageData stageData;
-
+        private final IStageData stageData;
+        
         public Cleared (EntityPlayer player, IStageData stageData) {
+            
             super(player);
-
+            
             this.stageData = stageData;
         }
-
-        public IStageData getStageData() {
-            return stageData;
+        
+        public IStageData getStageData () {
+            
+            return this.stageData;
         }
     }
     

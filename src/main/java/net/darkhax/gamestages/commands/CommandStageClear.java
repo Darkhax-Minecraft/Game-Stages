@@ -43,7 +43,7 @@ public class CommandStageClear extends Command {
             
             stageInfo.clear();
             GameStageHelper.syncPlayer(player);
-
+            
             MinecraftForge.EVENT_BUS.post(new GameStageEvent.Cleared(player, stageInfo));
             
             player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", stageCount));
