@@ -77,7 +77,9 @@ public class GameStageSaveHandler {
                 
                 final NBTTagCompound tag = CompressedStreamTools.read(playerFile);
                 playerData.readFromNBT(tag);
+                
                 if (Configuration.debug.logDebug) {
+                    
                     GameStages.LOG.info("Loaded {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
                 }
             }
@@ -87,6 +89,9 @@ public class GameStageSaveHandler {
                 GameStages.LOG.error("Could not read player data for {}.", event.getEntityPlayer().getName());
                 GameStages.LOG.catching(e);
             }
+        }
+        
+        else {
             
             handleLegacyData(event.getPlayerDirectory(), event.getPlayerUUID(), playerData);
         }
@@ -114,6 +119,7 @@ public class GameStageSaveHandler {
                 try {
                     
                     CompressedStreamTools.write(tag, playerFile);
+                    
                     if (Configuration.debug.logDebug) {
                         GameStages.LOG.info("Saved {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
                     }
@@ -200,36 +206,47 @@ public class GameStageSaveHandler {
         
         final File mainDataFile = new File(playerDir, uuid + ".dat");
         
-        try (FileInputStream mainDataStream = new FileInputStream(mainDataFile)) {
+        if (mainDataFile.exists()) {
             
-            final NBTTagCompound mainData = CompressedStreamTools.readCompressed(mainDataStream);
-            
-            if (mainData != null && mainData.hasKey("ForgeCaps")) {
+            try (FileInputStream mainDataStream = new FileInputStream(mainDataFile)) {
                 
-                final NBTTagCompound forgeCaps = mainData.getCompoundTag("ForgeCaps");
+                final NBTTagCompound mainData = CompressedStreamTools.readCompressed(mainDataStream);
                 
-                if (forgeCaps != null && forgeCaps.hasKey("gamestages:playerdata")) {
+                if (mainData != null && mainData.hasKey("ForgeCaps")) {
                     
-                    final NBTTagCompound legacyData = forgeCaps.getCompoundTag("gamestages:playerdata");
+                    final NBTTagCompound forgeCaps = mainData.getCompoundTag("ForgeCaps");
                     
-                    if (legacyData != null && legacyData.hasKey("UnlockedStages")) {
+                    if (forgeCaps != null && forgeCaps.hasKey("gamestages:playerdata")) {
                         
-                        final Collection<String> legacyStages = NBTUtils.readCollection(new ArrayList<>(), legacyData.getTagList("UnlockedStages", NBT.TAG_STRING), stage -> stage);
+                        final NBTTagCompound legacyData = forgeCaps.getCompoundTag("gamestages:playerdata");
                         
-                        for (final String stage : legacyStages) {
+                        if (legacyData != null && legacyData.hasKey("UnlockedStages")) {
                             
-                            GameStages.LOG.info("Restoring legacy stage {} for player {}.", stage, uuid);
-                            modern.addStage(stage);
+                            final Collection<String> legacyStages = NBTUtils.readCollection(new ArrayList<>(), legacyData.getTagList("UnlockedStages", NBT.TAG_STRING), stage -> stage);
+                            
+                            for (final String stage : legacyStages) {
+                                
+                                GameStages.LOG.info("Restoring legacy stage {} for player {}.", stage, uuid);
+                                modern.addStage(stage);
+                            }
                         }
                     }
                 }
             }
+            
+            catch (final IOException e) {
+                
+                GameStages.LOG.error("Could not read main player data for {}.", mainDataFile.getName());
+                GameStages.LOG.catching(e);
+            }
         }
         
-        catch (final IOException e) {
+        else {
             
-            GameStages.LOG.error("Could not read main player data for {}.", mainDataFile.getName());
-            GameStages.LOG.catching(e);
+            if (Configuration.debug.logDebug) {
+                
+                GameStages.LOG.info("Could not find legacy data for {}.", uuid);
+            }
         }
     }
     
