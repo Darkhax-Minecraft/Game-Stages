@@ -206,24 +206,30 @@ public class GameStageSaveHandler {
         
         final File mainDataFile = new File(playerDir, uuid + ".dat");
         
+        // Check if the vanilla player dat file exists
         if (mainDataFile.exists()) {
             
             try (FileInputStream mainDataStream = new FileInputStream(mainDataFile)) {
                 
+                // Read vanilla player dat file to nbt tag
                 final NBTTagCompound mainData = CompressedStreamTools.readCompressed(mainDataStream);
                 
+                // Look for forge caps tag
                 if (mainData != null && mainData.hasKey("ForgeCaps")) {
                     
                     final NBTTagCompound forgeCaps = mainData.getCompoundTag("ForgeCaps");
                     
+                    // Look for GameStage's cap tag
                     if (forgeCaps != null && forgeCaps.hasKey("gamestages:playerdata")) {
                         
                         final NBTTagCompound legacyData = forgeCaps.getCompoundTag("gamestages:playerdata");
                         
+                        // Look for unlocked stages
                         if (legacyData != null && legacyData.hasKey("UnlockedStages")) {
                             
                             final Collection<String> legacyStages = NBTUtils.readCollection(new ArrayList<>(), legacyData.getTagList("UnlockedStages", NBT.TAG_STRING), stage -> stage);
                             
+                            // Restore the stages
                             for (final String stage : legacyStages) {
                                 
                                 GameStages.LOG.info("Restoring legacy stage {} for player {}.", stage, uuid);
