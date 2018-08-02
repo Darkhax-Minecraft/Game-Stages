@@ -280,6 +280,20 @@ public class GameStageHelper {
     }
     
     /**
+     * A generic version of {@link #syncPlayer(EntityPlayerMP)}. It still only works for
+     * multiplayer, but allows some code to be cleaner.
+     * 
+     * @param player The player to sync.
+     */
+    public static void syncPlayer (EntityPlayer player) {
+        
+        if (player instanceof EntityPlayer) {
+            
+            syncPlayer((EntityPlayerMP) player);
+        }
+    }
+    
+    /**
      * Syncs a client's data with the data that is on the server. This can only be called
      * server side.
      *
