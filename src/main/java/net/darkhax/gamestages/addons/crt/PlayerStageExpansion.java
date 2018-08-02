@@ -42,6 +42,7 @@ public class PlayerStageExpansion {
         
         final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
         GameStageHelper.addStage(actualPlayer, stage);
+        GameStageHelper.syncPlayer(actualPlayer);
     }
     
     // Locks a stage for a player.
@@ -50,5 +51,6 @@ public class PlayerStageExpansion {
         
         final EntityPlayer actualPlayer = CraftTweakerMC.getPlayer(player);
         GameStageHelper.removeStage(actualPlayer, stage);
+        GameStageHelper.syncPlayer(actualPlayer);
     }
 }
