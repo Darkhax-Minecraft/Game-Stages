@@ -310,13 +310,13 @@ public class GameStageSaveHandler {
     /**
      * Removes fake player data to the fake stage map.
      *
-     * @param data The fake player data to take into account.
+     * @param fakePlayerName The fake player name to remove.
      */
-    public static void removeFakePlayer (FakePlayerData data) {
+    public static void removeFakePlayer (String fakePlayerName) {
 
-        FakePlayerData removedData = FAKE_STAGE_DATA.remove(data.getFakePlayerName());
+        FakePlayerData removedData = FAKE_STAGE_DATA.remove(fakePlayerName);
         if (removedData != null && Configuration.debug.logDebug) {
-            GameStages.LOG.info("Removing fakeplayer {} with gamestages {}", data.getFakePlayerName(), data.getStages());
+            GameStages.LOG.info("Removing fakeplayer {} with gamestages {}", fakePlayerName, removedData.getStages());
         }
     }
     
