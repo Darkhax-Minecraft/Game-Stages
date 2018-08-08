@@ -296,6 +296,19 @@ public class GameStageSaveHandler {
             GameStages.LOG.info("Adding fakeplayer {} with gamestages {}", data.getFakePlayerName(), data.getStages());
         }
     }
+
+    /**
+     * Removes fake player data to the fake stage map.
+     *
+     * @param data The fake player data to take into account.
+     */
+    public static void removeFakePlayer (FakePlayerData data) {
+
+        FakePlayerData removedData = FAKE_STAGE_DATA.remove(data.getFakePlayerName());
+        if (removedData != null && Configuration.debug.logDebug) {
+            GameStages.LOG.info("Removing fakeplayer {} with gamestages {}", data.getFakePlayerName(), data.getStages());
+        }
+    }
     
     /**
      * Gets data for a fake player. Real players should use {@link #getPlayerData(String)}.
