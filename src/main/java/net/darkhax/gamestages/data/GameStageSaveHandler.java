@@ -283,6 +283,16 @@ public class GameStageSaveHandler {
             GameStages.LOG.catching(e);
         }
     }
+
+    /**
+     * Checks if the fake player is in the fake stage map.
+     *
+     * @param fakePlayerName The fake player name to check for.
+     */
+    public static boolean hasFakePlayer(String fakePlayerName) {
+
+        return FAKE_STAGE_DATA.containsKey(fakePlayerName);
+    }
     
     /**
      * Adds fake player data to the fake stage map.
