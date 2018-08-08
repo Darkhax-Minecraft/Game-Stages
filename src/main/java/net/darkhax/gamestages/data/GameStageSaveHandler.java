@@ -289,7 +289,7 @@ public class GameStageSaveHandler {
      *
      * @param data The fake player data to take into account.
      */
-    private static void addFakePlayer (FakePlayerData data) {
+    public static void addFakePlayer (FakePlayerData data) {
         
         FAKE_STAGE_DATA.put(data.getFakePlayerName(), data);
         if (Configuration.debug.logDebug) {
