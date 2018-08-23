@@ -55,6 +55,12 @@ public class GameStageSaveHandler {
     private static final Gson GSON = new Gson();
     
     /**
+     * A constant reference to empty stage data. This is used internally to improve memory
+     * usage in some situations, and also to prevent null pointers and to keep code minimal.
+     */
+    public static final IStageData EMPTY_STAGE_DATA = new EmptyStageData();
+    
+    /**
      * A reference to the client's current stage data. This will be overridden every time the
      * player joins a save instance.
      */

@@ -201,12 +201,17 @@ public class GameStageHelper {
      */
     public static IStageData getPlayerData (EntityPlayer player) {
         
+        if (player == null) {
+            
+            return GameStageSaveHandler.EMPTY_STAGE_DATA;
+        }
+        
         if (player instanceof FakePlayer) {
             
             return GameStageSaveHandler.getFakeData(player.getName());
         }
         
-        return GameStageSaveHandler.getPlayerData(player.getPersistentID());
+        return GameStages.proxy.getPlayerData(player);
     }
     
     /**
