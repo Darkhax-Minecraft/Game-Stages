@@ -21,7 +21,7 @@ public class GameStages {
     public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
     public static final CommandTree COMMAND = new CommandStageTree();
     
-    public static final String CLIENT_PROXY_CLASS = "net.darkhax.gamestages.proxys.GameStagesClient";
+    public static final String CLIENT_PROXY_CLASS = "net.darkhax.gamestages.proxy.GameStagesClient";
     public static final String SERVER_PROXY_CLASS = "net.darkhax.gamestages.proxy.GameStagesServer";
     @SidedProxy(clientSide = GameStages.CLIENT_PROXY_CLASS, serverSide = GameStages.SERVER_PROXY_CLASS)
     public static GameStagesServer proxy;
