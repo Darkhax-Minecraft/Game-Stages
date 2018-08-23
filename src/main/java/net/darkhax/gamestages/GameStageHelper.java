@@ -18,76 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GameStageHelper {
     
     /**
-     * Checks if the client player has a stage. This will also fire the check event which can
-     * be used to change the result.
-     *
-     * @param player The player to check the stages of.
-     * @param stage The stage to look for.
-     * @return Whether or not the player has access to this stage.
-     */
-    @SideOnly(Side.CLIENT)
-    public static boolean clientHasStage (EntityPlayer player, String stage) {
-        
-        return hasStage(player, GameStageSaveHandler.clientData, stage);
-    }
-    
-    /**
-     * Checks if the client player has all of the passed stages. This will also fire the check
-     * event for each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has all of the passed stages.
-     */
-    @SideOnly(Side.CLIENT)
-    public static boolean clientHasAllOf (EntityPlayer player, String... stages) {
-        
-        return Arrays.stream(stages).allMatch(stage -> hasStage(player, GameStageSaveHandler.clientData, stage));
-    }
-    
-    /**
-     * Checks if the client player has all of the passed stages. This will also fire the check
-     * event for each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has all of the passed stages.
-     */
-    @SideOnly(Side.CLIENT)
-    public static boolean clientHasAllOf (EntityPlayer player, Collection<String> stages) {
-        
-        return stages.stream().allMatch(stage -> hasStage(player, GameStageSaveHandler.clientData, stage));
-    }
-    
-    /**
-     * Checks if the client player has any of the passed stages. This will also fire the check
-     * event for each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has at least one of the stages.
-     */
-    @SideOnly(Side.CLIENT)
-    public static boolean clientHasAnyOf (EntityPlayer player, String... stages) {
-        
-        return hasAnyOf(player, GameStageSaveHandler.clientData, stages);
-    }
-    
-    /**
-     * Checks if the client player has any of the passed stages. This will also fire the check
-     * event for each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has at least one of the stages.
-     */
-    @SideOnly(Side.CLIENT)
-    public static boolean clientHasAnyOf (EntityPlayer player, Collection<String> stages) {
-        
-        return hasAnyOf(player, GameStageSaveHandler.clientData, stages);
-    }
-    
-    /**
      * Checks if a player has a stage. This will also fire the check event which can be used to
      * change the result.
      *
@@ -309,5 +239,87 @@ public class GameStageHelper {
         }
         
         GameStages.NETWORK.sendTo(new PacketSyncClient(info.getStages()), player);
+    }
+    
+    /* To Remove in 1.13 */
+    
+    /**
+     * Checks if the client player has a stage. This will also fire the check event which can
+     * be used to change the result.
+     *
+     * @param player The player to check the stages of.
+     * @param stage The stage to look for.
+     * @return Whether or not the player has access to this stage.
+     * @deprecated Non-client methods should work. Will be removed in 1.13.
+     */
+    @SideOnly(Side.CLIENT)
+    @Deprecated
+    public static boolean clientHasStage (EntityPlayer player, String stage) {
+        
+        return hasStage(player, GameStageSaveHandler.clientData, stage);
+    }
+    
+    /**
+     * Checks if the client player has all of the passed stages. This will also fire the check
+     * event for each stage.
+     *
+     * @param player The player to check the stages of.
+     * @param stages The stages to look for.
+     * @return Whether or not the player has all of the passed stages.
+     * @deprecated Non-client methods should work. Will be removed in 1.13.
+     */
+    @SideOnly(Side.CLIENT)
+    @Deprecated
+    public static boolean clientHasAllOf (EntityPlayer player, String... stages) {
+        
+        return Arrays.stream(stages).allMatch(stage -> hasStage(player, GameStageSaveHandler.clientData, stage));
+    }
+    
+    /**
+     * Checks if the client player has all of the passed stages. This will also fire the check
+     * event for each stage.
+     *
+     * @param player The player to check the stages of.
+     * @param stages The stages to look for.
+     * @return Whether or not the player has all of the passed stages.
+     * @deprecated Non-client methods should work. Will be removed in 1.13.
+     */
+    @SideOnly(Side.CLIENT)
+    @Deprecated
+    public static boolean clientHasAllOf (EntityPlayer player, Collection<String> stages) {
+        
+        return stages.stream().allMatch(stage -> hasStage(player, GameStageSaveHandler.clientData, stage));
+    }
+    
+    /**
+     * Checks if the client player has any of the passed stages. This will also fire the check
+     * event for each stage.
+     *
+     * @param player The player to check the stages of.
+     * @param stages The stages to look for.
+     * @return Whether or not the player has at least one of the stages.
+     * @deprecated Non-client methods should work. Will be removed in 1.13.
+     */
+    @SideOnly(Side.CLIENT)
+    @Deprecated
+    public static boolean clientHasAnyOf (EntityPlayer player, String... stages) {
+        
+        return hasAnyOf(player, GameStageSaveHandler.clientData, stages);
+    }
+    
+    /**
+     * Checks if the client player has any of the passed stages. This will also fire the check
+     * event for each stage.
+     *
+     * @param player The player to check the stages of.
+     * @param stages The stages to look for.
+     * @return Whether or not the player has at least one of the stages.
+     * @deprecated Non-client methods should work. Will be removed in 1.13.
+     */
+    @SideOnly(Side.CLIENT)
+    @Deprecated
+    public static boolean clientHasAnyOf (EntityPlayer player, Collection<String> stages) {
+        
+        return hasAnyOf(player, GameStageSaveHandler.clientData, stages);
     }
 }
