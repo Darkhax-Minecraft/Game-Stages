@@ -283,17 +283,40 @@ public class GameStageSaveHandler {
             GameStages.LOG.catching(e);
         }
     }
+
+    /**
+     * Checks if the fake player is in the fake stage map.
+     *
+     * @param fakePlayerName The fake player name to check for.
+     */
+    public static boolean hasFakePlayer(String fakePlayerName) {
+
+        return FAKE_STAGE_DATA.containsKey(fakePlayerName);
+    }
     
     /**
      * Adds fake player data to the fake stage map.
      *
      * @param data The fake player data to take into account.
      */
-    private static void addFakePlayer (FakePlayerData data) {
+    public static void addFakePlayer (FakePlayerData data) {
         
         FAKE_STAGE_DATA.put(data.getFakePlayerName(), data);
         if (Configuration.debug.logDebug) {
             GameStages.LOG.info("Adding fakeplayer {} with gamestages {}", data.getFakePlayerName(), data.getStages());
+        }
+    }
+
+    /**
+     * Removes fake player data to the fake stage map.
+     *
+     * @param fakePlayerName The fake player name to remove.
+     */
+    public static void removeFakePlayer (String fakePlayerName) {
+
+        FakePlayerData removedData = FAKE_STAGE_DATA.remove(fakePlayerName);
+        if (removedData != null && Configuration.debug.logDebug) {
+            GameStages.LOG.info("Removing fakeplayer {} with gamestages {}", fakePlayerName, removedData.getStages());
         }
     }
     
