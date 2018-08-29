@@ -3,6 +3,7 @@ package net.darkhax.gamestages.proxy;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -13,7 +14,14 @@ public class GameStagesClient extends GameStagesServer {
     @Override
     public IStageData getPlayerData (EntityPlayer player) {
         
-        // If player is the client player return the client data. Otherwise give empty data.
-        return player == PlayerUtils.getClientPlayer() ? GameStageSaveHandler.clientData : GameStageSaveHandler.EMPTY_STAGE_DATA;
+        final EntityPlayerSP clientPlayer = PlayerUtils.getClientPlayerSP();
+        
+        if (clientPlayer != null && clientPlayer.getUniqueID().equals(player.getUniqueID())) {
+            
+            return GameStageSaveHandler.clientData;
+        }
+        
+        // A client can not have stage data for other players at this time.
+        return GameStageSaveHandler.EMPTY_STAGE_DATA;
     }
 }
