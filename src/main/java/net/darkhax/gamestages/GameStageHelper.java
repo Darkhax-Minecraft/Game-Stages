@@ -211,6 +211,12 @@ public class GameStageHelper {
             return GameStageSaveHandler.getFakeData(player.getName());
         }
         
+        // Forge proxies don't always work as expected. So this is a bandaid for now.
+        if (player.isServerWorld()) {
+            
+            return GameStageSaveHandler.getPlayerData(player.getPersistentID());
+        }
+        
         return GameStages.proxy.getPlayerData(player);
     }
     
@@ -222,7 +228,7 @@ public class GameStageHelper {
      */
     public static void syncPlayer (EntityPlayer player) {
         
-        if (player instanceof EntityPlayer) {
+        if (player instanceof EntityPlayerMP) {
             
             syncPlayer((EntityPlayerMP) player);
         }

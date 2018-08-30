@@ -23,6 +23,10 @@ public class GameStages {
     
     public static final String CLIENT_PROXY_CLASS = "net.darkhax.gamestages.proxy.GameStagesClient";
     public static final String SERVER_PROXY_CLASS = "net.darkhax.gamestages.proxy.GameStagesServer";
+    
+    /**
+     * If you're not me (Darkhax), don't make any calls to the proxy!!!
+     */
     @SidedProxy(clientSide = GameStages.CLIENT_PROXY_CLASS, serverSide = GameStages.SERVER_PROXY_CLASS)
     public static GameStagesServer proxy;
     
