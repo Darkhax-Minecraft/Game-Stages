@@ -19,7 +19,7 @@ public class PacketRequestClientSync extends SerializableMessage {
     @Override
     public IMessage handleMessage (MessageContext context) {
 
-        final EntityPlayer player = context.getServerHandler().playerEntity;
+        final EntityPlayer player = context.getServerHandler().player;
         final IStageData info = PlayerDataHandler.getStageData(player);
         return new PacketStageAll(info.getUnlockedStages());
     }
