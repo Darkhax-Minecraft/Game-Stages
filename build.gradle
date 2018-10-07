@@ -67,8 +67,8 @@ repositories {
 
 dependencies {
 
-    deobfCompile "net.darkhax.bookshelf:Bookshelf-1.12.2:${version_bookshelf}"
-    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${version_minetweaker}"
+    deobfProvided "net.darkhax.bookshelf:Bookshelf-1.12.2:${version_bookshelf}"
+    deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${version_minetweaker}"
 }
 
 processResources {
