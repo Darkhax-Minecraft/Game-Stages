@@ -206,13 +206,14 @@ public class GameStageHelper {
             return GameStageSaveHandler.EMPTY_STAGE_DATA;
         }
         
+        
         if (player instanceof FakePlayer) {
             
             return GameStageSaveHandler.getFakeData(player.getName());
         }
         
         // Forge proxies don't always work as expected. So this is a bandaid for now.
-        if (player.isServerWorld()) {
+        if (!player.world.isRemote) {
             
             return GameStageSaveHandler.getPlayerData(player.getPersistentID());
         }
