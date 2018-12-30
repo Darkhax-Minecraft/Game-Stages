@@ -10,11 +10,20 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandRemoveStage extends Command {
+      
+    private final String command;
+    private final boolean silent;
+       
+    public CommandRemoveStage (String command, boolean siletn) {
+        
+        this.command = command;
+        this.silent = siletn;
+    }
     
     @Override
     public String getName () {
         
-        return "remove";
+        return this.command;
     }
     
     @Override
@@ -26,7 +35,7 @@ public class CommandRemoveStage extends Command {
     @Override
     public String getUsage (ICommandSender sender) {
         
-        return "/gamestage remove <player> <stage>";
+        return "/gamestage " + this.command + " <player> <stage>";
     }
     
     @Override
@@ -40,10 +49,13 @@ public class CommandRemoveStage extends Command {
             GameStageHelper.removeStage(player, stageName);
             GameStageHelper.syncPlayer(player);
             
-            player.sendMessage(new TextComponentTranslation("commands.gamestage.remove.target", stageName));
-            
-            if (player != sender) {
-                sender.sendMessage(new TextComponentTranslation("commands.gamestage.remove.sender", stageName, player.getDisplayNameString()));
+            if (!this.silent) {
+                
+                player.sendMessage(new TextComponentTranslation("commands.gamestage.remove.target", stageName));
+                
+                if (player != sender) {
+                    sender.sendMessage(new TextComponentTranslation("commands.gamestage.remove.sender", stageName, player.getDisplayNameString()));
+                }
             }
         }
         else {

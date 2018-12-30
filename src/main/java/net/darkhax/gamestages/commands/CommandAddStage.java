@@ -11,10 +11,20 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandAddStage extends Command {
     
+    private final String command;
+    private final boolean silent;
+    
+    
+    public CommandAddStage (String command, boolean siletn) {
+        
+        this.command = command;
+        this.silent = siletn;
+    }
+
     @Override
     public String getName () {
         
-        return "add";
+        return this.command;
     }
     
     @Override
@@ -26,7 +36,7 @@ public class CommandAddStage extends Command {
     @Override
     public String getUsage (ICommandSender sender) {
         
-        return "/gamestage add <player> <stage>";
+        return "/gamestage " + this.command + " <player> <stage>";
     }
     
     @Override
@@ -41,10 +51,13 @@ public class CommandAddStage extends Command {
             GameStageHelper.addStage(player, stageName);
             GameStageHelper.syncPlayer(player);
             
-            player.sendMessage(new TextComponentTranslation("commands.gamestage.add.target", stageName));
-            
-            if (player != sender) {
-                sender.sendMessage(new TextComponentTranslation("commands.gamestage.add.sender", stageName, player.getDisplayNameString()));
+            if (!this.silent) {
+               
+                player.sendMessage(new TextComponentTranslation("commands.gamestage.add.target", stageName));
+                
+                if (player != sender) {
+                    sender.sendMessage(new TextComponentTranslation("commands.gamestage.add.sender", stageName, player.getDisplayNameString()));
+                }
             }
         }
         else {

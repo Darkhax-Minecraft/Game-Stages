@@ -7,8 +7,10 @@ public class CommandStageTree extends CommandTree {
     
     public CommandStageTree () {
         
-        this.addSubcommand(new CommandAddStage());
-        this.addSubcommand(new CommandRemoveStage());
+        this.addSubcommand(new CommandAddStage("add", false));
+        this.addSubcommand(new CommandAddStage("silentadd", true));
+        this.addSubcommand(new CommandRemoveStage("remove", false));
+        this.addSubcommand(new CommandRemoveStage("silentremove", true));
         this.addSubcommand(new CommandStageInfo());
         this.addSubcommand(new CommandCheckStage());
         this.addSubcommand(new CommandStageClear());
