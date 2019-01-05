@@ -45,6 +45,9 @@ This mod allows for fake players to be given default stages for your pack. Mods 
 ]
 ```
 
+## CraftTweaker Support
+This mod provides CraftTweaker scripts with the ability to check what stages a player has, and add/remove stages for the player. This allows for things like CraftTweaker events and functions to take advantage of the game stages mod. You can find more information about this feature [here](https://docs.blamejared.com/en/#Mods/GameStages/Player_Stages/)
+
 # Mod Support
 This section provides information about implementing GameStages into your mod. 
 
