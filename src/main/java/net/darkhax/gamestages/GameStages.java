@@ -8,6 +8,8 @@ import net.darkhax.gamestages.commands.CommandStageTree;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.packet.PacketSyncClient;
 import net.darkhax.gamestages.proxy.GameStagesServer;
+import net.darkhax.gamestages.world.storage.loot.conditions.LootConditionStaged;
+import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -38,5 +40,7 @@ public class GameStages {
         
         BookshelfRegistry.addCommand(COMMAND);
         GameStageSaveHandler.reloadFakePlayers();
+        
+        LootConditionManager.registerCondition(new LootConditionStaged.Serializer());
     }
 }
