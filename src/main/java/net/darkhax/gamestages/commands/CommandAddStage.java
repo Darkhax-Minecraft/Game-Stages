@@ -1,5 +1,7 @@
 package net.darkhax.gamestages.commands;
 
+import java.util.List;
+
 import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.command.CommandException;
@@ -14,13 +16,12 @@ public class CommandAddStage extends Command {
     private final String command;
     private final boolean silent;
     
-    
     public CommandAddStage (String command, boolean siletn) {
         
         this.command = command;
         this.silent = siletn;
     }
-
+    
     @Override
     public String getName () {
         
@@ -44,19 +45,22 @@ public class CommandAddStage extends Command {
         
         if (args.length == 2) {
             
-            final EntityPlayerMP player = getPlayer(server, sender, args[0]);
+            final List<EntityPlayerMP> players = getPlayers(server, sender, args[0]);
             
             final String stageName = args[1];
             
-            GameStageHelper.addStage(player, stageName);
-            GameStageHelper.syncPlayer(player);
-            
-            if (!this.silent) {
-               
-                player.sendMessage(new TextComponentTranslation("commands.gamestage.add.target", stageName));
+            for (final EntityPlayerMP player : players) {
                 
-                if (player != sender) {
-                    sender.sendMessage(new TextComponentTranslation("commands.gamestage.add.sender", stageName, player.getDisplayNameString()));
+                GameStageHelper.addStage(player, stageName);
+                GameStageHelper.syncPlayer(player);
+                
+                if (!this.silent) {
+                    
+                    player.sendMessage(new TextComponentTranslation("commands.gamestage.add.target", stageName));
+                    
+                    if (player != sender) {
+                        sender.sendMessage(new TextComponentTranslation("commands.gamestage.add.sender", stageName, player.getDisplayNameString()));
+                    }
                 }
             }
         }

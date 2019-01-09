@@ -1,5 +1,7 @@
 package net.darkhax.gamestages.commands;
 
+import java.util.List;
+
 import net.darkhax.bookshelf.command.Command;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.IStageData;
@@ -37,19 +39,23 @@ public class CommandStageClear extends Command {
         
         if (args.length == 1) {
             
-            final EntityPlayerMP player = getPlayer(server, sender, args[0]);
-            final IStageData stageInfo = GameStageHelper.getPlayerData(player);
-            final int stageCount = stageInfo.getStages().size();
+            final List<EntityPlayerMP> players = getPlayers(server, sender, args[0]);
             
-            stageInfo.clear();
-            GameStageHelper.syncPlayer(player);
-            
-            MinecraftForge.EVENT_BUS.post(new GameStageEvent.Cleared(player, stageInfo));
-            
-            player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", stageCount));
-            
-            if (player != sender) {
-                sender.sendMessage(new TextComponentTranslation("commands.gamestage.clear.sender", stageCount, player.getDisplayNameString()));
+            for (final EntityPlayerMP player : players) {
+                
+                final IStageData stageInfo = GameStageHelper.getPlayerData(player);
+                final int stageCount = stageInfo.getStages().size();
+                
+                stageInfo.clear();
+                GameStageHelper.syncPlayer(player);
+                
+                MinecraftForge.EVENT_BUS.post(new GameStageEvent.Cleared(player, stageInfo));
+                
+                player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", stageCount));
+                
+                if (player != sender) {
+                    sender.sendMessage(new TextComponentTranslation("commands.gamestage.clear.sender", stageCount, player.getDisplayNameString()));
+                }
             }
         }
         else {
