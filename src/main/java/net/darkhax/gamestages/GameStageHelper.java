@@ -206,7 +206,6 @@ public class GameStageHelper {
             return GameStageSaveHandler.EMPTY_STAGE_DATA;
         }
         
-        
         if (player instanceof FakePlayer) {
             
             return GameStageSaveHandler.getFakeData(player.getName());

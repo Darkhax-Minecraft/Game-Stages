@@ -3,6 +3,7 @@ package net.darkhax.gamestages.commands;
 import java.util.stream.Collectors;
 
 import net.darkhax.bookshelf.command.Command;
+import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -12,8 +13,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandStageInfo extends Command {
-    
-    private static final String BIRTHDAY_BOY_UUID = "10755ea6-9721-467a-8b5c-92adf689072c";
     
     @Override
     public String getName () {
@@ -63,7 +62,7 @@ public class CommandStageInfo extends Command {
         
         String stages = GameStageHelper.getPlayerData(player).getStages().stream().map(Object::toString).collect(Collectors.joining(", "));
         
-        if (player.getUniqueID().toString().equalsIgnoreCase(BIRTHDAY_BOY_UUID)) {
+        if (PlayerUtils.isPlayersBirthdate(player)) {
             stages += ", HAPPY BIRTHDAY!";
         }
         
