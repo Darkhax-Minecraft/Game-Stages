@@ -34,14 +34,23 @@ This mod provides a loot condition which can be used in loot tables to prevent a
 This mod allows for fake players to be given default stages for your pack. Mods will often use fake players to allow for certain things like auto-crafting or blocks that can kill mobs and get player-only drops. This is done by editing the `config/gameStagesFakePlayerData.json` file to include the name of the fake player and a list of stages to give them. Here are the contents of an example file.
 
 ```json
-[{
-		"fakePlayerName": "test123",
-		"stages": ["stage1", "stage2", "stage3"]
-	},
-	{
-		"fakePlayerName": "fake456",
-		"stages": ["fish", "pepper", "cheese"]
-	}
+[
+  {
+    "fakePlayerName": "test123",
+    "stages": [
+      "stage1",
+      "stage2",
+      "stage3"
+    ]
+  },
+  {
+    "fakePlayerName": "fake456",
+    "stages": [
+      "fish",
+      "pepper",
+      "cheese"
+    ]
+  }
 ]
 ```
 
