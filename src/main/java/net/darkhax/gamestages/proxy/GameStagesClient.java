@@ -16,7 +16,7 @@ public class GameStagesClient extends GameStagesServer {
         
         final EntityPlayerSP clientPlayer = PlayerUtils.getClientPlayerSP();
         
-        if (clientPlayer != null && clientPlayer.getUniqueID().equals(player.getUniqueID())) {
+        if (clientPlayer != null && clientPlayer.getUniqueID().equals(player.getUniqueID()) && GameStageSaveHandler.clientData != null) {
             
             return GameStageSaveHandler.clientData;
         }
