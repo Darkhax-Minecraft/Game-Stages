@@ -1,46 +1,29 @@
 package net.darkhax.gamestages;
 
-import net.darkhax.bookshelf.BookshelfRegistry;
-import net.darkhax.bookshelf.command.CommandTree;
-import net.darkhax.bookshelf.lib.LoggingHelper;
-import net.darkhax.bookshelf.network.NetworkHandler;
-import net.darkhax.gamestages.commands.CommandStageTree;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.darkhax.bookshelf.network.NetworkHelper;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.packet.PacketSyncClient;
-import net.darkhax.gamestages.proxy.GameStagesServer;
 import net.darkhax.gamestages.world.storage.loot.conditions.LootConditionStaged;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "gamestages", name = "Game Stages", version = "@VERSION@", dependencies = "required-after:bookshelf@[2.2.458,);", certificateFingerprint = "@FINGERPRINT@")
+@Mod("gamestages")
 public class GameStages {
-    
-    public static final LoggingHelper LOG = new LoggingHelper("gamestages");
-    public static final NetworkHandler NETWORK = new NetworkHandler("gamestages");
-    public static final CommandTree COMMAND = new CommandStageTree();
-    
-    public static final String CLIENT_PROXY_CLASS = "net.darkhax.gamestages.proxy.GameStagesClient";
-    public static final String SERVER_PROXY_CLASS = "net.darkhax.gamestages.proxy.GameStagesServer";
-    
-    /**
-     * If you're not me (Darkhax), don't make any calls to the proxy!!!
-     */
-    @SidedProxy(clientSide = GameStages.CLIENT_PROXY_CLASS, serverSide = GameStages.SERVER_PROXY_CLASS)
-    public static GameStagesServer proxy;
-    
-    @EventHandler
-    public void preInit (FMLPreInitializationEvent event) {
-        
+
+    public static final Logger LOG = LogManager.getLogger("Game Stages");
+    public static final NetworkHelper NETWORK = new NetworkHelper("gamestages:main", "3.0.x");
+
+    public GameStages () {
+
         // Packets
-        NETWORK.register(PacketSyncClient.class, Side.CLIENT);
-        
-        BookshelfRegistry.addCommand(COMMAND);
+        NETWORK.registerEnqueuedMessage(PacketSyncClient.class, PacketSyncClient::encodeMessage, PacketSyncClient::decodeMessage, PacketSyncClient::proccessMessage);
+
+        // BookshelfRegistry.addCommand(COMMAND);
         GameStageSaveHandler.reloadFakePlayers();
-        
+
         LootConditionManager.registerCondition(new LootConditionStaged.Serializer());
     }
 }

@@ -1,57 +1,67 @@
 package net.darkhax.gamestages.packet;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
-import net.darkhax.bookshelf.network.SerializableMessage;
 import net.darkhax.bookshelf.util.PlayerUtils;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
+import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.data.StageData;
 import net.darkhax.gamestages.event.StagesSyncedEvent;
-import net.minecraft.client.Minecraft;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 
-/**
- * This packet is used to sync all of the stages from the server to the client. It must first
- * be requested by having the client send a request packet.
- */
-public class PacketSyncClient extends SerializableMessage {
-    
-    /**
-     * An array of all the stage names.
-     */
-    public String[] stages;
-    
-    public PacketSyncClient () {
-        
-        // Empty constructor for forge's system
+public class PacketSyncClient {
+
+    private final String[] stages;
+
+    public PacketSyncClient (String... stages) {
+
+        this.stages = stages;
     }
-    
+
     public PacketSyncClient (Collection<String> stages) {
-        
-        this.stages = stages.toArray(new String[0]);
+
+        this(stages.toArray(new String[0]));
     }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IMessage handleMessage (MessageContext context) {
-        
-        Minecraft.getMinecraft().addScheduledTask( () -> {
-            
-            GameStageSaveHandler.clientData = new StageData();
-            
-            // Re-add all stages
-            for (final String stageName : this.stages) {
-                
-                GameStageSaveHandler.clientData.addStage(stageName);
-            }
-            
-            MinecraftForge.EVENT_BUS.post(new StagesSyncedEvent(GameStageSaveHandler.clientData, PlayerUtils.getClientPlayer()));
-        });
-        
-        return null;
+
+    public static void encodeMessage (PacketSyncClient packet, PacketBuffer buffer) {
+
+        buffer.writeInt(packet.stages.length);
+
+        for (final String stageName : packet.stages) {
+
+            buffer.writeString(stageName, 64);
+        }
+    }
+
+    public static PacketSyncClient decodeMessage (PacketBuffer buffer) {
+
+        final String[] stageNames = new String[buffer.readInt()];
+
+        for (int i = 0; i < stageNames.length; i++) {
+
+            stageNames[i] = buffer.readString(64);
+        }
+
+        return new PacketSyncClient(stageNames);
+    }
+
+    public static void proccessMessage (PacketSyncClient packet, Supplier<Context> context) {
+
+        // Reset the client data to a new object.
+        final IStageData clientData = new StageData();
+
+        // Re-add all stages
+        for (final String stageName : packet.stages) {
+
+            clientData.addStage(stageName);
+        }
+
+        GameStageSaveHandler.setClientData(clientData);
+
+        // Allert all the listeners.
+        MinecraftForge.EVENT_BUS.post(new StagesSyncedEvent(clientData, PlayerUtils.getClientPlayer()));
     }
 }
