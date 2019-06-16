@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import com.google.common.io.Files;
@@ -39,9 +41,20 @@ public class GameStageSaveHandler {
     private static final Map<String, FakePlayerData> FAKE_STAGE_DATA = new HashMap<>();
 
     /**
+     * A set of all the stages that are known to GameStages. This is used for things like
+     * validation, auto complete, and give all commands.
+     */
+    private static final Set<String> KNOWN_STAGES = new HashSet<>();
+
+    /**
      * The file to load fake player data from.
      */
     private static final File FAKE_PLAYER_STAGE_FILE = new File("config/gamestages/fake_players.json");
+
+    /**
+     * The file to load known stages from.
+     */
+    private static final File KNOWN_STAGES_FILE = new File("config/gamestages/known_stages.json");
 
     /**
      * Reusable instance of Gson for reading and writing json files.
@@ -193,10 +206,10 @@ public class GameStageSaveHandler {
         GameStages.LOG.debug("Reloading fakeplayers stage data from {}.", FAKE_PLAYER_STAGE_FILE.getName());
 
         if (!FAKE_PLAYER_STAGE_FILE.getParentFile().exists()) {
-            
+
             FAKE_PLAYER_STAGE_FILE.getParentFile().mkdirs();
         }
-        
+
         FAKE_STAGE_DATA.clear();
 
         if (FAKE_PLAYER_STAGE_FILE.exists()) {
@@ -210,6 +223,45 @@ public class GameStageSaveHandler {
             catch (final IOException e) {
 
                 GameStages.LOG.error("Could not read {}.", FAKE_PLAYER_STAGE_FILE.getName());
+                GameStages.LOG.catching(e);
+            }
+        }
+    }
+
+    public static void reloadKnownStages () {
+
+        GameStages.LOG.debug("Reloading known stages data from {}.", KNOWN_STAGES_FILE.getName());
+
+        if (!KNOWN_STAGES_FILE.getParentFile().exists()) {
+
+            KNOWN_STAGES_FILE.getParentFile().mkdirs();
+        }
+
+        KNOWN_STAGES.clear();
+
+        if (KNOWN_STAGES_FILE.exists()) {
+
+            try (BufferedReader reader = Files.newReader(KNOWN_STAGES_FILE, StandardCharsets.UTF_8)) {
+
+                for (final String stageName : GSON.fromJson(reader, String[].class)) {
+
+                    if (GameStageHelper.isValidStageName(stageName)) {
+
+                        KNOWN_STAGES.add(stageName);
+                    }
+
+                    else {
+
+                        GameStages.LOG.error("Rejected an invalid stage name of {}. It will not be usable. Stage names must be under 64 characters and may only include alphanumeric characters, underscores, and colons.", stageName);
+                    }
+                }
+
+                GameStages.LOG.debug("Loaded {} known stages.", KNOWN_STAGES.size());
+            }
+
+            catch (final IOException e) {
+
+                GameStages.LOG.error("Could not read {}.", KNOWN_STAGES_FILE.getName());
                 GameStages.LOG.catching(e);
             }
         }
@@ -268,6 +320,27 @@ public class GameStageSaveHandler {
     public static IStageData getFakeData (String fakePlayerName) {
 
         return FAKE_STAGE_DATA.getOrDefault(fakePlayerName, FakePlayerData.DEFAULT);
+    }
+
+    /**
+     * Gets all the stages that are known to GameStages.
+     *
+     * @return All the known stages.
+     */
+    public static Set<String> getKnownStages () {
+
+        return KNOWN_STAGES;
+    }
+
+    /**
+     * Checks if a stage is known to GameStages.
+     *
+     * @param stage The name of the stage to check.
+     * @return Whether or not the stage is known.
+     */
+    public static boolean isStageKnown (String stage) {
+
+        return KNOWN_STAGES.contains(stage);
     }
 
     /**

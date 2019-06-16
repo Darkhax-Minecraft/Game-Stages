@@ -2,6 +2,9 @@ package net.darkhax.gamestages;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
@@ -15,6 +18,43 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.DistExecutor;
 
 public class GameStageHelper {
+
+    /**
+     * A predicate that can be used to validate if a stage is valid.
+     */
+    private static final Predicate<String> STAGE_PATTERN = Pattern.compile("^[a-z0-9_:]*$").asPredicate();
+
+    /**
+     * Checks if a given string is valid as a stage name.
+     *
+     * @param stageName The name to test.
+     * @return Whether or not the name is valid.
+     */
+    public static boolean isValidStageName (String stageName) {
+
+        return stageName.length() <= 64 && STAGE_PATTERN.test(stageName);
+    }
+
+    /**
+     * Gets all the stages that are known to GameStages.
+     *
+     * @return All the known stages.
+     */
+    public static Set<String> getKnownStages () {
+
+        return GameStageSaveHandler.getKnownStages();
+    }
+
+    /**
+     * Checks if a stage is known to GameStages.
+     *
+     * @param stage The name of the stage to check.
+     * @return Whether or not the stage is known.
+     */
+    public static boolean isStageKnown (String stage) {
+
+        return GameStageSaveHandler.isStageKnown(stage);
+    }
 
     /**
      * Checks if a player has a stage. This will also fire the check event which can be used to

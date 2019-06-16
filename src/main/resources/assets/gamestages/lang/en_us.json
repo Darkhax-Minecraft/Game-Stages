@@ -16,5 +16,8 @@
 
     "commands.gamestage.playeronly": "Sorry, players only!",
 	
-	"commands.gamestage.reloadfakes.info": "Reloaded fake player stages."
+	"commands.gamestage.reloadfakes.info": "Reloaded fake player stages.",
+	"commands.gamestage.reloadknown.info": "Loaded %d known stages.",
+	"commands.gamestage.all.target": "You have unlocked all known stages!",
+	"commands.gamestage.all.sender": "%s has unlocked all known stages!"
 }
