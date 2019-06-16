@@ -6,9 +6,10 @@ import java.util.Collection;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
-import net.darkhax.gamestages.packet.PacketSyncClient;
+import net.darkhax.gamestages.packet.MessageStages;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.DistExecutor;
@@ -191,8 +192,24 @@ public class GameStageHelper {
     }
 
     /**
+     * Removes all stages that a player has unlocked.
+     *
+     * @param player The player to remove stages from.
+     * @return The amount of stages the player had before they were removed.
+     */
+    public static int clearStages (EntityPlayerMP player) {
+
+        final IStageData stageInfo = GameStageHelper.getPlayerData(player);
+        final int stageCount = stageInfo.getStages().size();
+        stageInfo.clear();
+        MinecraftForge.EVENT_BUS.post(new GameStageEvent.Cleared(player, stageInfo));
+        return stageCount;
+    }
+
+    /**
      * Gets the player data for an EntityPlayer. This will resolve fake players to their
-     * special data as well.
+     * special data as well. If called on the client you will get the client data for the
+     * player.
      *
      * @param player The player to get the data of.
      * @return The stage data for the player.
@@ -204,12 +221,17 @@ public class GameStageHelper {
             return GameStageSaveHandler.EMPTY_STAGE_DATA;
         }
 
-        if (player instanceof FakePlayer) {
+        else if (player instanceof FakePlayer) {
 
             return GameStageSaveHandler.getFakeData(player.getName().getString());
         }
 
-        return DistExecutor.runForDist( () -> GameStageSaveHandler::getClientData, () -> () -> GameStageSaveHandler.getPlayerData(player.getUniqueID()));
+        else if (player instanceof EntityPlayerMP) {
+
+            return GameStageSaveHandler.getPlayerData(player.getUniqueID());
+        }
+
+        return DistExecutor.callWhenOn(Dist.CLIENT, () -> GameStageSaveHandler::getClientData);
     }
 
     /**
@@ -239,7 +261,7 @@ public class GameStageHelper {
         if (info != null) {
 
             GameStages.LOG.debug("Syncing {} stages for {}.", info.getStages().size(), player.getName());
-            GameStages.NETWORK.sendToPlayer(player, new PacketSyncClient(info.getStages()));
+            GameStages.NETWORK.sendToPlayer(player, new MessageStages(info.getStages()));
         }
     }
 }

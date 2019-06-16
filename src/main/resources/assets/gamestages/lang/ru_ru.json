@@ -1,0 +1,20 @@
+{
+    "_comment": "Commands",
+
+    "commands.gamestage.add.sender": "Этап %s разблокирован для %s!",
+    "commands.gamestage.add.target": "Вы разблокировали этап %s!",
+
+    "commands.gamestage.remove.sender": "Этап %s был удалён у %s!",
+    "commands.gamestage.remove.target": "Вы потеряли доступ к этапу %s!",
+
+    "commands.gamestage.check.failure": "У %s нет этапа %s",
+    "commands.gamestage.check.success": "У %s есть этап %s",
+
+    "commands.gamestage.info.empty": "У Вас нет разблокированных этапов!",
+    "commands.gamestage.info.noplayer": "Не найдено ни одного игрока!",
+
+    "commands.gamestage.clear.sender": "%d этапов было удалено у %s",
+    "commands.gamestage.clear.target": "Вы потеряли %d этапов!",
+
+    "commands.gamestage.playeronly": "Извините, только для игроков!"
+}

@@ -32,7 +32,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 minecraft {
 
-    mappings channel: 'snapshot', version: "${version_mcp}".toString()
+    mappings channel: 'stable', version: "${version_mcp}".toString()
 	
     runs {
         client {
@@ -72,7 +72,11 @@ repositories {
 dependencies {
 
     minecraft "net.minecraftforge:forge:${version_forge}"
-	compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.13.2:${version_bookshelf}")
+    
+        
+    compile fg.deobf(project.dependencies.create("net.darkhax.bookshelf:Bookshelf-1.13.2:${version_bookshelf}") {
+        transitive = false
+    })
 }
 
 jar {
