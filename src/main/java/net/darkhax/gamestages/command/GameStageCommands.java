@@ -27,7 +27,7 @@ public class GameStageCommands {
         root.then(createSilentStageCommand("remove", 2, ctx -> changeStages(ctx, false, false), ctx -> changeStages(ctx, true, false)));
         root.then(createPlayerCommand("info", 0, ctx -> getStageInfo(ctx, true), ctx -> getStageInfo(ctx, false)));
         root.then(createPlayerCommand("clear", 2, ctx -> clearStages(ctx, true), ctx -> clearStages(ctx, false)));
-        root.then(Commands.literal("reloadfakes").executes(GameStageCommands::reloadFakePlayers));
+        root.then(Commands.literal("reloadfakes").requires(sender -> sender.hasPermissionLevel(2)).executes(GameStageCommands::reloadFakePlayers));
         root.then(createPlayerStageCommand("check", 2, ctx -> checkStage(ctx, true), ctx -> checkStage(ctx, false)));
         dispatcher.register(root);
     }
