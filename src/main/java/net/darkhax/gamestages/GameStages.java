@@ -12,6 +12,7 @@ import net.darkhax.gamestages.packet.NetworkHandlerServer;
 import net.darkhax.gamestages.world.storage.loot.conditions.LootConditionStaged;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
@@ -29,7 +30,8 @@ public class GameStages {
         MinecraftForge.EVENT_BUS.addListener(this::onServerStarting);
     }
 
-    private void onServerStarting (FMLServerStartingEvent event) {
+    @SubscribeEvent
+    public void onServerStarting (FMLServerStartingEvent event) {
 
         new GameStageCommands(event.getCommandDispatcher());
     }
