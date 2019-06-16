@@ -77,6 +77,8 @@ public class GameStageSaveHandler {
     /**
      * Hook for the player LoadFromFile event. Allows game stage data to be loaded when the
      * player's data is loaded.
+     *
+     * @param event The forge event.
      */
     @SubscribeEvent
     public static void onPlayerLoad (PlayerEvent.LoadFromFile event) {
@@ -106,6 +108,8 @@ public class GameStageSaveHandler {
     /**
      * Hook for the player SaveToFile event. Allows game stage data to be saved when the
      * player's data is saved.
+     *
+     * @param event The Forge event.
      */
     @SubscribeEvent
     public static void onPlayerSave (PlayerEvent.SaveToFile event) {
@@ -138,6 +142,8 @@ public class GameStageSaveHandler {
     /**
      * Hook for the PlayerLoggedInEvent. If the player is a valid server side player, their
      * data will be synced to the client.
+     *
+     * @param event The Forge event.
      */
     @SubscribeEvent
     public static void onPlayerLoggedIn (PlayerLoggedInEvent event) {
@@ -153,6 +159,8 @@ public class GameStageSaveHandler {
     /**
      * Hook for the PlayerLoggedInEvent. If the player is a valid server side player, their
      * data will be synced to the client.
+     *
+     * @param event The Forge event.
      */
     @SubscribeEvent
     public static void onPlayerLoggedOut (PlayerLoggedOutEvent event) {
@@ -228,6 +236,9 @@ public class GameStageSaveHandler {
         }
     }
 
+    /**
+     * Reloads all the known player data.
+     */
     public static void reloadKnownStages () {
 
         GameStages.LOG.debug("Reloading known stages data from {}.", KNOWN_STAGES_FILE.getName());
@@ -271,6 +282,7 @@ public class GameStageSaveHandler {
      * Checks if the fake player is in the fake stage map.
      *
      * @param fakePlayerName The fake player name to check for.
+     * @return Whether or not the fake player exists.
      */
     public static boolean hasFakePlayer (String fakePlayerName) {
 
@@ -309,7 +321,7 @@ public class GameStageSaveHandler {
     }
 
     /**
-     * Gets data for a fake player. Real players should use {@link #getPlayerData(String)}.
+     * Gets data for a fake player. Real players should use {@link #getPlayerData(UUID)}
      * Alternatively
      * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.EntityPlayer)} can be
      * used to automatically resolve players.
