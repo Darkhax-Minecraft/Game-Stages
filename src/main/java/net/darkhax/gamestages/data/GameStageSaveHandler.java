@@ -41,7 +41,7 @@ public class GameStageSaveHandler {
     /**
      * The file to load fake player data from.
      */
-    private static final File FAKE_PLAYER_STAGE_FILE = new File(new File("config"), "gameStagesFakePlayerData.json");
+    private static final File FAKE_PLAYER_STAGE_FILE = new File("config/gamestages/fake_players.json");
 
     /**
      * Reusable instance of Gson for reading and writing json files.
@@ -192,6 +192,11 @@ public class GameStageSaveHandler {
 
         GameStages.LOG.debug("Reloading fakeplayers stage data from {}.", FAKE_PLAYER_STAGE_FILE.getName());
 
+        if (!FAKE_PLAYER_STAGE_FILE.getParentFile().exists()) {
+            
+            FAKE_PLAYER_STAGE_FILE.getParentFile().mkdirs();
+        }
+        
         FAKE_STAGE_DATA.clear();
 
         if (FAKE_PLAYER_STAGE_FILE.exists()) {
