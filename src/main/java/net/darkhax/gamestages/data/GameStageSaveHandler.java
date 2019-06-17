@@ -176,8 +176,8 @@ public class GameStageSaveHandler {
     /**
      * Looks up a players stage data. This should only be used with real players, fake players
      * use {@link #getFakeData(String)}. Alternatively, the
-     * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.EntityPlayer)} can be
-     * used to automatically resolve an EntityPlayer.
+     * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.PlayerEntity)} can be
+     * used to automatically resolve a player.
      *
      * @param uuid The uuid of the player to lookup.
      * @return The stage data for the player. If one does not exist, it will be created.
@@ -323,7 +323,7 @@ public class GameStageSaveHandler {
     /**
      * Gets data for a fake player. Real players should use {@link #getPlayerData(UUID)}
      * Alternatively
-     * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.EntityPlayer)} can be
+     * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.PlayerEntity)} can be
      * used to automatically resolve players.
      *
      * @param fakePlayerName The name of the fake player.
