@@ -24,7 +24,7 @@ public class GameStages {
     
     public GameStages() {
         
-        NETWORK.registerMessage(MessageStages.class, NetworkHandlerServer::encodeStageMessage, t -> NetworkHandlerClient.decodeStageMessage(t), (t, u) -> NetworkHandlerClient.processSyncStagesMessage(t, u));
+        NETWORK.registerEnqueuedMessage(MessageStages.class, NetworkHandlerServer::encodeStageMessage, t -> NetworkHandlerClient.decodeStageMessage(t), (t, u) -> NetworkHandlerClient.processSyncStagesMessage(t, u));
         GameStageSaveHandler.reloadFakePlayers();
         GameStageSaveHandler.reloadKnownStages();
         LootConditionManager.registerCondition(new LootConditionStaged.Serializer());
