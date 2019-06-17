@@ -74,8 +74,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
     
         
-    compile fg.deobf(project.dependencies.create("net.darkhax.bookshelf:Bookshelf-1.13.2:${version_bookshelf}") {
-        transitive = false
+    compile fg.deobf(project.dependencies.create("net.darkhax.bookshelf:Bookshelf-1.14.2:${version_bookshelf}") {
+        transitive = true
     })
 }
 
@@ -118,7 +118,6 @@ processResources {
         }
         
         credits += patreonSupporters.join(', ')
-        println credits
         expand 'version': project.version, 'mod_id' : mod_id, 'mod_name': mod_name, 'mod_download': mod_download, 'mod_credits': credits, 'mod_authors': mod_authors, 'mod_description': mod_description
     }
 
