@@ -14,13 +14,13 @@ import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class GameStageCommands {
-
+    
     public static void initializeCommands (CommandDispatcher<CommandSource> dispatcher) {
-
+        
         final LiteralArgumentBuilder<CommandSource> root = Commands.literal("gamestage");
         root.then(createSilentStageCommand("add", 2, ctx -> changeStages(ctx, false, true), ctx -> changeStages(ctx, true, true)));
         root.then(createSilentStageCommand("remove", 2, ctx -> changeStages(ctx, false, false), ctx -> changeStages(ctx, true, false)));
@@ -31,182 +31,182 @@ public class GameStageCommands {
         root.then(createPlayerStageCommand("check", 2, ctx -> checkStage(ctx, true), ctx -> checkStage(ctx, false)));
         dispatcher.register(root);
     }
-
+    
     private static LiteralArgumentBuilder<CommandSource> createPlayerCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> commandNoPlayer) {
-
+        
         return Commands.literal(key).requires(sender -> sender.hasPermissionLevel(permissions)).executes(commandNoPlayer).then(Commands.argument("targets", EntityArgument.player()).executes(command));
     }
-
+    
     private static LiteralArgumentBuilder<CommandSource> createSilentStageCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> silent) {
-
+        
         return Commands.literal(key).requires(sender -> sender.hasPermissionLevel(permissions)).then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(command).then(Commands.argument("silent", BoolArgumentType.bool()).executes(silent))));
     }
-
+    
     private static LiteralArgumentBuilder<CommandSource> createPlayerStageCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> commandNoPlayer) {
-
+        
         return Commands.literal(key).requires(sender -> sender.hasPermissionLevel(permissions)).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(commandNoPlayer)).then(Commands.argument("targets", EntityArgument.player()).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(command)));
     }
-
+    
     private static int grantAll (CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
-
+        
         if (hasPlayer) {
-
-            for (final EntityPlayerMP player : EntityArgument.getPlayers(ctx, "targets")) {
-
+            
+            for (final ServerPlayerEntity player : EntityArgument.getPlayers(ctx, "targets")) {
+                
                 grantAll(ctx, player);
             }
         }
-
+        
         else {
-
+            
             grantAll(ctx, ctx.getSource().asPlayer());
         }
-
+        
         return 0;
     }
-
-    private static void grantAll (CommandContext<CommandSource> ctx, EntityPlayerMP player) {
-
+    
+    private static void grantAll (CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
+        
         for (final String knownStage : GameStageHelper.getKnownStages()) {
-
+            
             GameStageHelper.addStage(player, knownStage);
         }
-
-        player.sendMessage(new TextComponentTranslation("commands.gamestage.all.target"));
-
+        
+        player.sendMessage(new TranslationTextComponent("commands.gamestage.all.target"));
+        
         if (player != ctx.getSource().getEntity()) {
-
-            ctx.getSource().sendFeedback(new TextComponentTranslation("commands.gamestage.all.sender", player.getDisplayName()), true);
+            
+            ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.all.sender", player.getDisplayName()), true);
         }
     }
-
+    
     private static int clearStages (CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
-
+        
         if (hasPlayer) {
-
-            for (final EntityPlayerMP player : EntityArgument.getPlayers(ctx, "targets")) {
-
+            
+            for (final ServerPlayerEntity player : EntityArgument.getPlayers(ctx, "targets")) {
+                
                 clearStages(ctx, player);
             }
         }
-
+        
         else {
-
+            
             clearStages(ctx, ctx.getSource().asPlayer());
         }
-
+        
         return 0;
     }
-
-    private static void clearStages (CommandContext<CommandSource> ctx, EntityPlayerMP player) {
-
+    
+    private static void clearStages (CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
+        
         final int removedStages = GameStageHelper.clearStages(player);
-
-        player.sendMessage(new TextComponentTranslation("commands.gamestage.clear.target", removedStages));
-
+        
+        player.sendMessage(new TranslationTextComponent("commands.gamestage.clear.target", removedStages));
+        
         if (player != ctx.getSource().getEntity()) {
-            ctx.getSource().sendFeedback(new TextComponentTranslation("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
+            ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
         }
     }
-
+    
     private static int checkStage (CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
-
+        
         if (hasPlayer) {
-
-            for (final EntityPlayerMP player : EntityArgument.getPlayers(ctx, "targets")) {
-
+            
+            for (final ServerPlayerEntity player : EntityArgument.getPlayers(ctx, "targets")) {
+                
                 checkStage(ctx, player);
             }
         }
-
+        
         else {
-
+            
             checkStage(ctx, ctx.getSource().asPlayer());
         }
-
+        
         return 0;
     }
-
-    private static boolean checkStage (CommandContext<CommandSource> ctx, EntityPlayerMP player) {
-
+    
+    private static boolean checkStage (CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
+        
         final String stage = StageArgumentType.getStage(ctx, "stage");
         final boolean hasStage = GameStageHelper.hasStage(player, stage);
-        ctx.getSource().sendFeedback(new TextComponentTranslation(hasStage ? "commands.gamestage.check.success" : "commands.gamestage.check.failure", player.getDisplayName(), stage), false);
-
+        ctx.getSource().sendFeedback(new TranslationTextComponent(hasStage ? "commands.gamestage.check.success" : "commands.gamestage.check.failure", player.getDisplayName(), stage), false);
+        
         return hasStage;
     }
-
+    
     private static int reloadGameStages (CommandContext<CommandSource> ctx) {
-
+        
         GameStageSaveHandler.reloadFakePlayers();
-        ctx.getSource().sendFeedback(new TextComponentTranslation("commands.gamestage.reloadfakes.info"), true);
-
+        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.reloadfakes.info"), true);
+        
         GameStageSaveHandler.reloadKnownStages();
-        ctx.getSource().sendFeedback(new TextComponentTranslation("commands.gamestage.reloadknown.info", GameStageSaveHandler.getKnownStages().size()), true);
+        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.reloadknown.info", GameStageSaveHandler.getKnownStages().size()), true);
         return 0;
     }
-
+    
     private static int getStageInfo (CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
-
+        
         if (hasPlayer) {
-
-            for (final EntityPlayerMP player : EntityArgument.getPlayers(ctx, "targets")) {
-
+            
+            for (final ServerPlayerEntity player : EntityArgument.getPlayers(ctx, "targets")) {
+                
                 getStageInfo(ctx, player);
             }
         }
-
+        
         else {
-
+            
             getStageInfo(ctx, ctx.getSource().asPlayer());
         }
-
+        
         return 0;
     }
-
-    private static void getStageInfo (CommandContext<CommandSource> ctx, EntityPlayerMP player) {
-
+    
+    private static void getStageInfo (CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
+        
         final String stageInfo = GameStageHelper.getPlayerData(player).getStages().stream().map(Object::toString).collect(Collectors.joining(", "));
-
+        
         if (stageInfo.isEmpty()) {
-
-            ctx.getSource().sendFeedback(new TextComponentTranslation("commands.gamestage.info.empty", player.getDisplayName()), false);
+            
+            ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.info.empty", player.getDisplayName()), false);
         }
-
+        
         else {
-
-            ctx.getSource().sendFeedback(new TextComponentTranslation("commands.gamestage.info.stages", player.getDisplayName(), stageInfo), false);
+            
+            ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.info.stages", player.getDisplayName(), stageInfo), false);
         }
     }
-
+    
     private static int changeStages (CommandContext<CommandSource> ctx, boolean silent, boolean adding) throws CommandSyntaxException {
-
+        
         final String stageName = StageArgumentType.getStage(ctx, "stage");
-
-        for (final EntityPlayerMP player : EntityArgument.getPlayers(ctx, "targets")) {
-
+        
+        for (final ServerPlayerEntity player : EntityArgument.getPlayers(ctx, "targets")) {
+            
             if (adding) {
-
+                
                 GameStageHelper.addStage(player, stageName);
             }
-
+            
             else {
-
+                
                 GameStageHelper.removeStage(player, stageName);
             }
-
+            
             GameStageHelper.syncPlayer(player);
-
+            
             if (!silent || !BoolArgumentType.getBool(ctx, "silent")) {
-
-                player.sendMessage(new TextComponentTranslation(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName));
-
+                
+                player.sendMessage(new TranslationTextComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName));
+                
                 if (player != ctx.getSource().getEntity()) {
-                    ctx.getSource().sendFeedback(new TextComponentTranslation(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
+                    ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
                 }
             }
         }
-
+        
         return 0;
     }
 }
