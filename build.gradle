@@ -33,12 +33,12 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 minecraft {
 
     mappings channel: 'snapshot', version: "${version_mcp}".toString()
-	
+    
     runs {
         client {
-		
+        
             workingDirectory project.file('run')
-			taskName "${mod_name} Client"
+            taskName "${mod_name} Client"
 
             mods {
                 gamestages {
@@ -48,9 +48,9 @@ minecraft {
         }
 
         server {
-		
+        
             workingDirectory project.file('run')
-			taskName "${mod_name} Server"
+            taskName "${mod_name} Server"
 
             mods {
                 gamestages {
@@ -71,8 +71,8 @@ repositories {
 
 dependencies {
 
-    minecraft "net.minecraftforge:forge:${version_forge}"	
-	compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.14.2:${version_bookshelf}")
+    minecraft "net.minecraftforge:forge:${version_forge}"    
+    compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.14.2:${version_bookshelf}")
 }
 
 jar {
