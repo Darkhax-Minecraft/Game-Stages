@@ -1,0 +1,23 @@
+{
+    "commands.gamestage.add.sender": "%2$s 的游戏阶段 %1$s 已经解锁!",
+    "commands.gamestage.add.target": "你解锁了 %s 游戏阶段!",
+
+    "commands.gamestage.remove.sender": "%2$s 的游戏阶段 %1$s 已经移除!",
+    "commands.gamestage.remove.target": "你已不再处于 %s 游戏阶段!",
+
+    "commands.gamestage.check.failure": "%s不处于 %s 游戏阶段",
+    "commands.gamestage.check.success": "%s处于 %s 游戏阶段",
+
+    "commands.gamestage.info.empty": "%s 没有已解锁游戏阶段.",
+  	"commands.gamestage.info.stages": "%s 有以下几个游戏阶段. %s",
+
+    "commands.gamestage.clear.sender": "清除从 %s 开始%d个游戏阶段",
+    "commands.gamestage.clear.target": "你失去了%d个游戏阶段!",
+
+    "commands.gamestage.playeronly": "抱歉,仅限玩家!",
+	
+	"commands.gamestage.reloadfakes.info": "重载虚假玩家游戏阶段.",
+	"commands.gamestage.reloadknown.info": "已加载%d个已知游戏阶段.",
+	"commands.gamestage.all.target": "你解锁了所有已知的游戏阶段!",
+	"commands.gamestage.all.sender": "%s 解锁了所有已知的游戏阶段!"
+}
