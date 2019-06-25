@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/secrets.gradle'
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/markdown-git-changelog.gradle'
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/minecraft/artifacts.gradle'
-apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/minecraft/maven.gradle'
+apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/minecraft/maven_nomcp.gradle'
 apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/patreon.gradle'
 
 loadSecrets()
@@ -71,11 +71,8 @@ repositories {
 
 dependencies {
 
-    minecraft "net.minecraftforge:forge:${version_forge}"
-	
-	compile fg.deobf(project.dependencies.create("net.darkhax.bookshelf:Bookshelf-1.14.2:${version_bookshelf}") {
-        transitive = false
-    })
+    minecraft "net.minecraftforge:forge:${version_forge}"	
+	compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.14.2:${version_bookshelf}")
 }
 
 jar {
