@@ -37,13 +37,13 @@ public class LootConditionStaged implements ILootCondition {
         }
 
         @Override
-        public void func_186605_a (JsonObject json, LootConditionStaged value, JsonSerializationContext context) {
+        public void serialize (JsonObject json, LootConditionStaged value, JsonSerializationContext context) {
             
             json.addProperty("stage_name", Float.valueOf(value.stage));  
         }
 
         @Override
-        public LootConditionStaged func_186603_b (JsonObject json, JsonDeserializationContext context) {
+        public LootConditionStaged deserialize (JsonObject json, JsonDeserializationContext context) {
             
             return new LootConditionStaged(JSONUtils.getString(json, "stage_name"));
         }
