@@ -72,7 +72,7 @@ repositories {
 dependencies {
 
     minecraft "net.minecraftforge:forge:${version_forge}"
-    compile fg.deobf(group: 'net.darkhax.bookshelf', name: 'Bookshelf-1.14.3', version: "${version_bookshelf}")
+    compile fg.deobf(group: 'net.darkhax.bookshelf', name: 'Bookshelf-1.14.4', version: "${version_bookshelf}")
 }
 
 jar {
