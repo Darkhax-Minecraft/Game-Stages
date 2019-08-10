@@ -22,10 +22,10 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 @EventBusSubscriber(modid = "gamestages")
 public class GameStageSaveHandler {
@@ -92,17 +92,17 @@ public class GameStageSaveHandler {
                 
                 final CompoundNBT tag = CompressedStreamTools.read(playerFile);
                 playerData.readFromNBT(tag);
-                GameStages.LOG.debug("Loaded {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
+                GameStages.LOG.debug("Loaded {} stages for {}.", playerData.getStages().size(), event.getPlayer().getName());
             }
             
             catch (final IOException e) {
                 
-                GameStages.LOG.error("Could not read player data for {}.", event.getEntityPlayer().getName());
+                GameStages.LOG.error("Could not read player data for {}.", event.getPlayer().getName());
                 GameStages.LOG.catching(e);
             }
         }
         
-        GLOBAL_STAGE_DATA.put(event.getEntityPlayer().getUniqueID(), playerData);
+        GLOBAL_STAGE_DATA.put(event.getPlayer().getUniqueID(), playerData);
     }
     
     /**
@@ -114,7 +114,7 @@ public class GameStageSaveHandler {
     @SubscribeEvent
     public static void onPlayerSave (PlayerEvent.SaveToFile event) {
         
-        final UUID playerUUID = event.getEntityPlayer().getUniqueID();
+        final UUID playerUUID = event.getPlayer().getUniqueID();
         
         if (GLOBAL_STAGE_DATA.containsKey(playerUUID)) {
             
@@ -127,7 +127,7 @@ public class GameStageSaveHandler {
                 try {
                     
                     CompressedStreamTools.write(tag, playerFile);
-                    GameStages.LOG.debug("Saved {} stages for {}.", playerData.getStages().size(), event.getEntityPlayer().getName());
+                    GameStages.LOG.debug("Saved {} stages for {}.", playerData.getStages().size(), event.getPlayer().getName());
                 }
                 
                 catch (final IOException e) {
