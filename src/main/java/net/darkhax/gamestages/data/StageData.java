@@ -65,7 +65,7 @@ public class StageData implements IStageData {
         
         for (final String stage : this.unlockedStages) {
             
-            list.add(new StringNBT(stage));
+            list.add(StringNBT.valueOf(stage));
         }
         
         tag.put(TAG_STAGES, list);

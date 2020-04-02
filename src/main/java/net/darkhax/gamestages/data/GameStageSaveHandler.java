@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 
@@ -60,12 +62,6 @@ public class GameStageSaveHandler {
      * Reusable instance of Gson for reading and writing json files.
      */
     private static final Gson GSON = new Gson();
-    
-    /**
-     * A constant reference to empty stage data. This is used internally to improve memory
-     * usage in some situations, and also to prevent null pointers and to keep code minimal.
-     */
-    public static final IStageData EMPTY_STAGE_DATA = new EmptyStageData();
     
     /**
      * A reference to the client's current stage data. This will be overridden every time the
@@ -165,8 +161,7 @@ public class GameStageSaveHandler {
     @SubscribeEvent
     public static void onPlayerLoggedOut (PlayerLoggedOutEvent event) {
         
-        // When a player connects to the server, sync their client data with the
-        // server's data.
+        // Removes player's data when they log out.
         if (event.getPlayer() instanceof ServerPlayerEntity) {
             
             GLOBAL_STAGE_DATA.remove(event.getPlayer().getUniqueID());
@@ -182,9 +177,10 @@ public class GameStageSaveHandler {
      * @param uuid The uuid of the player to lookup.
      * @return The stage data for the player. If one does not exist, it will be created.
      */
+    @Nullable
     public static IStageData getPlayerData (UUID uuid) {
         
-        return GLOBAL_STAGE_DATA.computeIfAbsent(uuid, playerUUID -> new StageData());
+        return GLOBAL_STAGE_DATA.get(uuid);
     }
     
     /**

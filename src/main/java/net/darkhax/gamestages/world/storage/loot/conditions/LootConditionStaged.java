@@ -6,7 +6,7 @@ import com.google.gson.JsonSerializationContext;
 
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
@@ -26,7 +26,7 @@ public class LootConditionStaged implements ILootCondition {
     public boolean test (LootContext context) {
         
         final Entity entityPlayer = context.get(LootParameters.LAST_DAMAGE_PLAYER);
-        return entityPlayer instanceof PlayerEntity ? GameStageHelper.hasStage((PlayerEntity) entityPlayer, this.stage) : false;
+        return entityPlayer instanceof ServerPlayerEntity ? GameStageHelper.hasStage((ServerPlayerEntity) entityPlayer, this.stage) : false;
     }
     
     public static class Serializer extends ILootCondition.AbstractSerializer<LootConditionStaged> {
@@ -35,13 +35,13 @@ public class LootConditionStaged implements ILootCondition {
             
             super(new ResourceLocation("required_stage"), LootConditionStaged.class);
         }
-
+        
         @Override
         public void serialize (JsonObject json, LootConditionStaged value, JsonSerializationContext context) {
             
-            json.addProperty("stage_name", Float.valueOf(value.stage));  
+            json.addProperty("stage_name", Float.valueOf(value.stage));
         }
-
+        
         @Override
         public LootConditionStaged deserialize (JsonObject json, JsonDeserializationContext context) {
             

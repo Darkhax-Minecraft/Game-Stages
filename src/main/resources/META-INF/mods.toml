@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[28,)"
+loaderVersion="[31,)"
 issueTrackerURL="https://github.com/Darkhax-Minecraft/Game-Stages"
 
 [[mods]]
@@ -16,20 +16,20 @@ ${mod_description}
 [[dependencies.gamestages]]
     modId="forge"
     mandatory=true
-    versionRange="[28.0.45,)"
+    versionRange="[31,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.gamestages]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
 	
 [[dependencies.gamestages]]
     modId="bookshelf"
     mandatory=true
-    versionRange="[4.2,)"
+    versionRange="[4.3,)"
     ordering="NONE"
     side="BOTH"
