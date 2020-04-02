@@ -40,7 +40,7 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired every time a stage is added to the player via
-     * {@link net.darkhax.gamestages.GameStageHelper#addStage(PlayerEntity, String)}. Canceling
+     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayerEntity, String)}. Canceling
      * this event will prevent the stage from being added.
      */
     @Cancelable
@@ -54,7 +54,7 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired after a stage has been successfully added using
-     * {@link net.darkhax.gamestages.GameStageHelper#addStage(PlayerEntity, String)}. This can
+     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayerEntity, String)}. This can
      * not be canceled.
      */
     public static class Added extends GameStageEvent {
@@ -67,7 +67,7 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired when a stage is removed from a player via
-     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(PlayerEntity, String)}.
+     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(ServerPlayerEntity, String)}.
      * Canceling this event will prevent it from being added.
      */
     @Cancelable
@@ -81,7 +81,7 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired after a stage has been successfully removed using
-     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(PlayerEntity, String)}. This
+     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(ServerPlayerEntity, String)}. This
      * can not be canceled.
      */
     public static class Removed extends GameStageEvent {
@@ -113,7 +113,7 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired when a stage check is done on a player using
-     * {@link net.darkhax.gamestages.GameStageHelper#hasStage(PlayerEntity, net.darkhax.gamestages.data.IStageData, String)}.
+     * {@link net.darkhax.gamestages.GameStageHelper#hasStage(ServerPlayerEntity, net.darkhax.gamestages.data.IStageData, String)}.
      */
     public static class Check extends GameStageEvent {
         
