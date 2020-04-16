@@ -18,8 +18,8 @@ public class FakePlayerData implements IStageData {
      */
     public static final FakePlayerData DEFAULT = new FakePlayerData("DEFAULT", Collections.emptySet());
     
-    private final Set<String> stages = new HashSet<>();
-    private final String fakePlayerName;
+    private Set<String> stages = new HashSet<>();
+    private String fakePlayerName;
     
     public FakePlayerData (final String fakePlayerName, final Set<String> stages) {
         
