@@ -345,6 +345,13 @@ public class GameStageSaveHandler {
      */
     public static IStageData getFakeData (String fakePlayerName) {
         
+    	IStageData fakeData = FAKE_STAGE_DATA.getOrDefault(fakePlayerName, FakePlayerData.DEFAULT);
+    	
+    	if (Configuration.debug.logDebug && fakeData == FakePlayerData.DEFAULT ) {
+    		
+    		GameStages.LOG.info("Could not find stage data for {}. Using default data.", fakePlayerName);
+    	}
+    	
         return FAKE_STAGE_DATA.getOrDefault(fakePlayerName, FakePlayerData.DEFAULT);
     }
 }

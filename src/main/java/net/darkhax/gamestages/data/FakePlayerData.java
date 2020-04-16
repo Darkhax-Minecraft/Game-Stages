@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import net.darkhax.gamestages.GameStages;
+import net.darkhax.gamestages.config.Configuration;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class FakePlayerData implements IStageData {
@@ -34,7 +36,14 @@ public class FakePlayerData implements IStageData {
     @Override
     public boolean hasStage (@Nonnull final String stage) {
         
-        return this.stages.contains(stage);
+    	final boolean hasStage = this.stages.contains(stage);
+    	
+    	if (Configuration.debug.logDebug && !hasStage) {
+    		
+    		GameStages.LOG.info("Fake player {} does not have stage {}. Thay do have {}.", fakePlayerName, stage, this.stages);
+    	}
+    	
+        return hasStage;
     }
     
     @Override
