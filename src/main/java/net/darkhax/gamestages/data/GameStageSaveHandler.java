@@ -138,6 +138,11 @@ public class GameStageSaveHandler {
                 }
             }
         }
+        
+        else {
+        	
+        	GameStages.LOG.warn("Player {} did not have any data to save.", playerUUID);
+        }
     }
     
     /**
@@ -151,20 +156,6 @@ public class GameStageSaveHandler {
         if (event.player instanceof EntityPlayerMP) {
             
             GameStageHelper.syncPlayer((EntityPlayerMP) event.player);
-        }
-    }
-    
-    /**
-     * Hook for the PlayerLoggedInEvent. If the player is a valid server side player, their
-     * data will be synced to the client.
-     */
-    @SubscribeEvent
-    public static void onPlayerLoggedOut (PlayerLoggedOutEvent event) {
-        
-        // When a player connects to the server, sync their client data with the server's data.
-        if (event.player instanceof EntityPlayerMP) {
-            
-            GLOBAL_STAGE_DATA.remove(event.player.getPersistentID());
         }
     }
     
