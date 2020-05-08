@@ -241,9 +241,9 @@ task updateVersionTracker {
         def body = [
             'author': "${project.findProperty('mod_vendor')}",
             'projectName': "${project.findProperty('mod_name').toLowerCase()}",
-            'gameVersion': "${project.findProperty('minecraft_version')}",
+            'gameVersion': "${project.findProperty('version_minecraft')}",
             'projectVersion': "${version}",
-            'homepage': "${project.findProperty('mod_download')}",
+            'homepage': "${project.findProperty('curse_page')}",
             'uid': "${project.findProperty('versionTrackerKey')}"
         ]
     
