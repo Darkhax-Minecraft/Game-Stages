@@ -14,7 +14,6 @@ import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.command.impl.OpCommand;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -200,7 +199,7 @@ public class GameStageCommands {
             
             if (!silent || !BoolArgumentType.getBool(ctx, "silent")) {
                 
-            	ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
+                ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
                 
                 if (player != ctx.getSource().getEntity()) {
                     ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);

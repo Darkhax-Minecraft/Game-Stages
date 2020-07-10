@@ -2,6 +2,7 @@ package net.darkhax.gamestages.event;
 
 import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 
@@ -40,8 +41,8 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired every time a stage is added to the player via
-     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayerEntity, String)}. Canceling
-     * this event will prevent the stage from being added.
+     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayerEntity, String)}.
+     * Canceling this event will prevent the stage from being added.
      */
     @Cancelable
     public static class Add extends GameStageEvent {
@@ -54,8 +55,8 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired after a stage has been successfully added using
-     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayerEntity, String)}. This can
-     * not be canceled.
+     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayerEntity, String)}.
+     * This can not be canceled.
      */
     public static class Added extends GameStageEvent {
         
@@ -81,8 +82,8 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired after a stage has been successfully removed using
-     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(ServerPlayerEntity, String)}. This
-     * can not be canceled.
+     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(ServerPlayerEntity, String)}.
+     * This can not be canceled.
      */
     public static class Removed extends GameStageEvent {
         
