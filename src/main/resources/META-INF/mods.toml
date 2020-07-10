@@ -4,6 +4,7 @@ issueTrackerURL="https://github.com/Darkhax-Minecraft/Game-Stages"
 
 [[mods]]
 modId="gamestages"
+updateJSONURL="https://updates.blamejared.com/get?n=gamestages&gv=1.16.1"
 version="${version}"
 displayName="${mod_name}"
 displayURL="${mod_download}"
