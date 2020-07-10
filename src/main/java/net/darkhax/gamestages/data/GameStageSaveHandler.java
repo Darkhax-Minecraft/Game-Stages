@@ -25,7 +25,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -149,22 +148,6 @@ public class GameStageSaveHandler {
         if (event.getPlayer() instanceof ServerPlayerEntity) {
             
             GameStageHelper.syncPlayer((ServerPlayerEntity) event.getPlayer());
-        }
-    }
-    
-    /**
-     * Hook for the PlayerLoggedInEvent. If the player is a valid server side player, their
-     * data will be synced to the client.
-     *
-     * @param event The Forge event.
-     */
-    @SubscribeEvent
-    public static void onPlayerLoggedOut (PlayerLoggedOutEvent event) {
-        
-        // Removes player's data when they log out.
-        if (event.getPlayer() instanceof ServerPlayerEntity) {
-            
-            GLOBAL_STAGE_DATA.remove(event.getPlayer().getUniqueID());
         }
     }
     
