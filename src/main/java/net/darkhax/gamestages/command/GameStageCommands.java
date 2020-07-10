@@ -14,6 +14,7 @@ import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.command.impl.OpCommand;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -72,7 +73,7 @@ public class GameStageCommands {
             GameStageHelper.addStage(player, knownStage);
         }
         
-        player.sendMessage(new TranslationTextComponent("commands.gamestage.all.target"));
+        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.all.target"), true);
         
         if (player != ctx.getSource().getEntity()) {
             
@@ -102,7 +103,7 @@ public class GameStageCommands {
         
         final int removedStages = GameStageHelper.clearStages(player);
         
-        player.sendMessage(new TranslationTextComponent("commands.gamestage.clear.target", removedStages));
+        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.clear.target", removedStages), true);
         
         if (player != ctx.getSource().getEntity()) {
             ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
@@ -199,7 +200,7 @@ public class GameStageCommands {
             
             if (!silent || !BoolArgumentType.getBool(ctx, "silent")) {
                 
-                player.sendMessage(new TranslationTextComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName));
+            	ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
                 
                 if (player != ctx.getSource().getEntity()) {
                     ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
