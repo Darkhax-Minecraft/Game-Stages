@@ -23,19 +23,19 @@ import net.minecraftforge.fml.common.thread.EffectiveSide;
 public class GameStageHelper {
     
     /**
-     * A predicate that can be used to validate if a stage is valid.
+     * Predicate for matching the valid characters of a stage name.
      */
     private static final Predicate<String> STAGE_PATTERN = Pattern.compile("^[a-z0-9_:]*$").asPredicate();
     
     /**
-     * Checks if a given string is valid as a stage name.
-     *
-     * @param stageName The name to test.
-     * @return Whether or not the name is valid.
+     * Checks if a string is valid as a stage name. Compares against {@link #STAGE_PATTERN}.
+     * 
+     * @param stageName The potential name.
+     * @return Whether or not the name is valid as a stage name.
      */
     public static boolean isValidStageName (String stageName) {
         
-        return stageName.length() <= 64 && STAGE_PATTERN.test(stageName);
+        return STAGE_PATTERN.test(stageName);
     }
     
     /**
@@ -43,16 +43,22 @@ public class GameStageHelper {
      *
      * @return All the known stages.
      */
+    
+    /**
+     * Gets an immutable set of all the stages defined in the known stages json file.
+     * 
+     * @return An immutable set of all known stages.
+     */
     public static Set<String> getKnownStages () {
         
         return GameStageSaveHandler.getKnownStages();
     }
     
     /**
-     * Checks if a stage is known to GameStages.
-     *
-     * @param stage The name of the stage to check.
-     * @return Whether or not the stage is known.
+     * Checks if a stage has been defined in the known stages file.
+     * 
+     * @param stage The stage name to search for.
+     * @return Whether or not the stage name exists in the known stages.
      */
     public static boolean isStageKnown (String stage) {
         
@@ -60,137 +66,26 @@ public class GameStageHelper {
     }
     
     /**
-     * Checks if a player has a stage. This will also fire the check event which can be used to
-     * change the result.
-     *
-     * @param player The player to check the stages of.
+     * Checks if a player has a stage.
+     * 
+     * @param player The player to check.
      * @param stage The stage to look for.
-     * @return Whether or not the player has access to this stage.
+     * @return Whether or not they have the stage.
      */
-    public static boolean hasStage (ServerPlayerEntity player, String stage) {
+    public static boolean hasStage (PlayerEntity player, String stage) {
         
         return hasStage(player, getPlayerData(player), stage);
     }
     
     /**
-     * Checks if a player has any of the passed stages. This will also fire the check event for
-     * each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has at least one of the stages.
+     * Checks if a player has a stage.
+     * 
+     * @param player The player to check.
+     * @param data The player's stage data.
+     * @param stage The stage to look for.
+     * @return Whether or not they have the stage.
      */
-    public static boolean hasAnyOf (ServerPlayerEntity player, String... stages) {
-        
-        return hasAnyOf(player, getPlayerData(player), stages);
-    }
-    
-    /**
-     * Checks if a player has any of the passed stages. This will also fire the check event for
-     * each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has at least one of the stages.
-     */
-    public static boolean hasAnyOf (ServerPlayerEntity player, Collection<String> stages) {
-        
-        return hasAnyOf(player, getPlayerData(player), stages);
-    }
-    
-    /**
-     * Checks if a player data has any of the passed stages. This will also fire the check
-     * event for each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param playerData The player data to check.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has at least one of the stages.
-     */
-    public static boolean hasAnyOf (ServerPlayerEntity player, @Nullable IStageData playerData, Collection<String> stages) {
-        
-        return stages.stream().anyMatch(stage -> hasStage(player, playerData, stage));
-    }
-    
-    /**
-     * Checks if a player data has any of the passed stages. This will also fire the check
-     * event for each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param playerData The player data to check.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has at least one of the stages.
-     */
-    public static boolean hasAnyOf (ServerPlayerEntity player, @Nullable IStageData playerData, String... stages) {
-        
-        return Arrays.stream(stages).anyMatch(stage -> hasStage(player, playerData, stage));
-    }
-    
-    /**
-     * Checks if a player has all of the passed stages. This will also fire the check event for
-     * each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has all of the passed stages.
-     */
-    public static boolean hasAllOf (ServerPlayerEntity player, String... stages) {
-        
-        return hasAllOf(player, getPlayerData(player), stages);
-    }
-    
-    /**
-     * Checks if a player has all of the passed stages. This will also fire the check event for
-     * each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has all of the passed stages.
-     */
-    public static boolean hasAllOf (ServerPlayerEntity player, Collection<String> stages) {
-        
-        return hasAllOf(player, getPlayerData(player), stages);
-    }
-    
-    /**
-     * Checks if a player data has all of the passed stages. This will also fire the check
-     * event for each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param playerData The player data to check.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has all of the passed stages.
-     */
-    public static boolean hasAllOf (ServerPlayerEntity player, @Nullable IStageData playerData, Collection<String> stages) {
-        
-        return stages.stream().allMatch(stage -> hasStage(player, playerData, stage));
-    }
-    
-    /**
-     * Checks if a player data has all of the passed stages. This will also fire the check
-     * event for each stage.
-     *
-     * @param player The player to check the stages of.
-     * @param playerData The player data to check.
-     * @param stages The stages to look for.
-     * @return Whether or not the player has all of the passed stages.
-     */
-    public static boolean hasAllOf (ServerPlayerEntity player, @Nullable IStageData playerData, String... stages) {
-        
-        return Arrays.stream(stages).allMatch(stage -> hasStage(player, playerData, stage));
-    }
-    
-    /**
-     * Internal helper method to fire a stage check. It's used to reduce the total amount of
-     * code needed for the event firing, and improve performance for multiple stage lookups.
-     *
-     * @param player The player to check the stages of.
-     * @param data The player's stage data. This is to allow multiple stage checks to look this
-     *        up only once.
-     * @param stage The stage to check for.
-     * @return Whether or not the player has the stage.
-     */
-    public static boolean hasStage (ServerPlayerEntity player, @Nullable IStageData data, String stage) {
+    public static boolean hasStage (PlayerEntity player, @Nullable IStageData data, String stage) {
         
         if (data != null) {
             
@@ -203,11 +98,110 @@ public class GameStageHelper {
     }
     
     /**
-     * Adds a stage to a player. This will fire the add event which can be canceled, and the
-     * added event if the stage is added successfully.
-     *
-     * @param player The player to add the stage too.
-     * @param stage The stage to add.
+     * Checks if the player has at least one of many possible stages.
+     * 
+     * @param player The player to check.
+     * @param stages The stages to look for.
+     * @return Whether or not the player had at least one of the stages.
+     */
+    public static boolean hasAnyOf (PlayerEntity player, String... stages) {
+        
+        return hasAnyOf(player, getPlayerData(player), stages);
+    }
+    
+    /**
+     * Checks if the player has at least one of many possible stages.
+     * 
+     * @param player The player to check.
+     * @param stages The stages to look for.
+     * @return Whether or not the player had at least one of the stages.
+     */
+    public static boolean hasAnyOf (PlayerEntity player, Collection<String> stages) {
+        
+        return hasAnyOf(player, getPlayerData(player), stages);
+    }
+    
+    /**
+     * Checks if the player has at least one of many possible stages.
+     * 
+     * @param player The player to check.
+     * @param data The player's stage data.
+     * @param stages The stages to look for.
+     * @return Whether or not the player had at least one of the stages.
+     */
+    public static boolean hasAnyOf (PlayerEntity player, @Nullable IStageData data, Collection<String> stages) {
+        
+        return stages.stream().anyMatch(stage -> hasStage(player, data, stage));
+    }
+    
+    /**
+     * Checks if the player has at least one of many possible stages.
+     * 
+     * @param player The player to check.
+     * @param data The player's stage data.
+     * @param stages The stages to look for.
+     * @return Whether or not the player had at least one of the stages.
+     */
+    public static boolean hasAnyOf (PlayerEntity player, @Nullable IStageData data, String... stages) {
+        
+        return Arrays.stream(stages).anyMatch(stage -> hasStage(player, data, stage));
+    }
+    
+    /**
+     * Checks if the player has all of the stages.
+     * 
+     * @param player The player to check.
+     * @param stages The stages to look for.
+     * @return Whether or not the player had all the stages.
+     */
+    public static boolean hasAllOf (PlayerEntity player, String... stages) {
+        
+        return hasAllOf(player, getPlayerData(player), stages);
+    }
+    
+    /**
+     * Checks if the player has all of the stages.
+     * 
+     * @param player The player to check.
+     * @param stages The stages to look for.
+     * @return Whether or not the player had all the stages.
+     */
+    public static boolean hasAllOf (PlayerEntity player, Collection<String> stages) {
+        
+        return hasAllOf(player, getPlayerData(player), stages);
+    }
+    
+    /**
+     * Checks if the player has all of the stages.
+     * 
+     * @param player The player to check.
+     * @param data The player's stage data.
+     * @param stages The stages to look for.
+     * @return Whether or not the player had all the stages.
+     */
+    public static boolean hasAllOf (PlayerEntity player, @Nullable IStageData data, Collection<String> stages) {
+        
+        return stages.stream().allMatch(stage -> hasStage(player, data, stage));
+    }
+    
+    /**
+     * Checks if the player has all of the stages.
+     * 
+     * @param player The player to check.
+     * @param data The player's stage data.
+     * @param stages The stages to look for.
+     * @return Whether or not the player had all the stages.
+     */
+    public static boolean hasAllOf (PlayerEntity player, @Nullable IStageData data, String... stages) {
+        
+        return Arrays.stream(stages).allMatch(stage -> hasStage(player, data, stage));
+    }
+    
+    /**
+     * Attempts to give a player a stage. Events may cancel this.
+     * 
+     * @param player The player to give the stage.
+     * @param stage The stage to give.
      */
     public static void addStage (ServerPlayerEntity player, String stage) {
         
@@ -224,9 +218,8 @@ public class GameStageHelper {
     }
     
     /**
-     * Removes a stages from a player. This will fire the remove event which can be canceled,
-     * and the removed event if the stage is removed successfully.
-     *
+     * Attempts to remove a stage from a player. Events may cancel this.
+     * 
      * @param player The player to remove the stage from.
      * @param stage The stage to remove.
      */
@@ -245,10 +238,10 @@ public class GameStageHelper {
     }
     
     /**
-     * Removes all stages that a player has unlocked.
-     *
-     * @param player The player to remove stages from.
-     * @return The amount of stages the player had before they were removed.
+     * Removes all stages from a player.
+     * 
+     * @param player The player to clear the stages of.
+     * @return The amount of stages that were removed.
      */
     public static int clearStages (ServerPlayerEntity player) {
         
@@ -266,38 +259,12 @@ public class GameStageHelper {
     }
     
     /**
-     * Gets the stage data for the player. If this is a fake player it will use their fake
-     * player data.
+     * Attempts to resolve the stage data for a player. If it is a real server player it will
+     * lookup their data using UUID. If it's a FakePlayer it will check the fake player data
+     * file. If it's a client player it will use the client's synced data cache.
      * 
-     * @param player The server player to get stage data for.
-     * @return The players data. May be null if player is null or they have no matching data.
-     */
-    @Nullable
-    public static IStageData getPlayerData (@Nullable ServerPlayerEntity player) {
-        
-        if (player != null && !player.hasDisconnected()) {
-            
-            if (player instanceof FakePlayer) {
-                
-                return GameStageSaveHandler.getFakeData(player.getName().getString());
-            }
-            
-            else {
-                
-                return GameStageSaveHandler.getPlayerData(player.getUniqueID());
-            }
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Gets the stage data for the player. If this is a fake player it will use their fake
-     * player data. If it's a client player it will use the client data.
-     * 
-     * @param player The player to get stage data for.
-     * @return The players data. May be null if the player was null or there is no matching
-     *         data.
+     * @param player The player to resolve.
+     * @return The stage data that was found. Will be null if nothing could be found.
      */
     @Nullable
     public static IStageData getPlayerData (PlayerEntity player) {
@@ -306,12 +273,17 @@ public class GameStageHelper {
             
             if (player instanceof ServerPlayerEntity) {
                 
-                return getPlayerData((ServerPlayerEntity) player);
+                if (player instanceof FakePlayer) {
+                    
+                    return GameStageSaveHandler.getFakeData(player.getName().getString());
+                }
+                
+                return GameStageSaveHandler.getPlayerData(player.getUniqueID());
             }
             
             else if (EffectiveSide.get().isClient()) {
                 
-                return DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> GameStageSaveHandler.getClientData());
+                return DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> () -> GameStageSaveHandler.getClientData());
             }
         }
         
@@ -319,9 +291,8 @@ public class GameStageHelper {
     }
     
     /**
-     * Syncs a client's data with the data that is on the server. This can only be called
-     * server side.
-     *
+     * Syncs a player's stage data from the server to the client.
+     * 
      * @param player The player to sync.
      */
     public static void syncPlayer (ServerPlayerEntity player) {
