@@ -97,6 +97,7 @@ public class GameStageEvent extends PlayerEvent {
      * This event is fired after the stages have been cleared from a player.
      */
     public static class Cleared extends PlayerEvent {
+        
         private final IStageData stageData;
         
         public Cleared(PlayerEntity player, IStageData stageData) {
