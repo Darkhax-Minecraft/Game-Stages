@@ -115,7 +115,7 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired when a stage check is done on a player using
-     * {@link net.darkhax.gamestages.GameStageHelper#hasStage(ServerPlayerEntity, net.darkhax.gamestages.data.IStageData, String)}.
+     * {@link net.darkhax.gamestages.GameStageHelper#hasStage(PlayerEntity, net.darkhax.gamestages.data.IStageData, String)}.
      */
     public static class Check extends GameStageEvent {
         
