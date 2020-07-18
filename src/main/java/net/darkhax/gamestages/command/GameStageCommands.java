@@ -3,12 +3,12 @@ package net.darkhax.gamestages.command;
 import java.util.stream.Collectors;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import net.darkhax.bookshelf.registry.RegistryHelper;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.minecraft.command.CommandSource;
@@ -19,7 +19,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class GameStageCommands {
     
-    public static void initializeCommands (CommandDispatcher<CommandSource> dispatcher) {
+    public static void initializeCommands (RegistryHelper registry) {
         
         final LiteralArgumentBuilder<CommandSource> root = Commands.literal("gamestage");
         root.then(createSilentStageCommand("add", 2, ctx -> changeStages(ctx, false, true), ctx -> changeStages(ctx, true, true)));
@@ -29,7 +29,8 @@ public class GameStageCommands {
         root.then(createPlayerCommand("all", 2, ctx -> grantAll(ctx, true), ctx -> grantAll(ctx, false)));
         root.then(Commands.literal("reload").requires(sender -> sender.hasPermissionLevel(2)).executes(GameStageCommands::reloadGameStages));
         root.then(createPlayerStageCommand("check", 2, ctx -> checkStage(ctx, true), ctx -> checkStage(ctx, false)));
-        dispatcher.register(root);
+        
+        registry.commands.registerCommand(root);
     }
     
     private static LiteralArgumentBuilder<CommandSource> createPlayerCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> commandNoPlayer) {
