@@ -82,7 +82,7 @@ dependencies {
 
     minecraft "net.minecraftforge:forge:${forge_version}"
     
-    compile fg.deobf(project.dependencies.create("net.darkhax.bookshelf:Bookshelf-1.16.1:${bookshelf_version}"))
+    compile fg.deobf(project.dependencies.create("net.darkhax.bookshelf:Bookshelf-1.16.2:${bookshelf_version}"))
 }
 
 jar {
@@ -259,9 +259,4 @@ task updateVersionTracker {
         println "VersionCheck Status code: ${req.getResponseCode()}"
         println "VersionCheck Response: ${req.getInputStream().getText()}"
     }
-}
-
-task recompress(type:Exec, dependsOn: jar) {
-    
-    commandLine 'advzip', '-z', '-4', '-i 8', jar.archivePath.toString()
 }
