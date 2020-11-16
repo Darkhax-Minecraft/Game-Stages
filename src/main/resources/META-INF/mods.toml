@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[34,)"
+loaderVersion="[35,]"
 issueTrackerURL="https://github.com/Darkhax-Minecraft/Game-Stages"
 license="LGPL v2.1"
 
 [[mods]]
 modId="gamestages"
-updateJSONURL="https://updates.blamejared.com/get?n=gamestages&gv=1.16.3"
+updateJSONURL="https://updates.blamejared.com/get?n=gamestages&gv=1.16.4"
 version="${version}"
 displayName="${mod_name}"
 displayURL="${mod_download}"
@@ -14,24 +14,10 @@ authors="${mod_authors}"
 description='''
 ${mod_description}
 '''
-
-[[dependencies.gamestages]]
-    modId="forge"
-    mandatory=true
-    versionRange="[34,)"
-    ordering="NONE"
-    side="SERVER"
-
-[[dependencies.gamestages]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.16.3]"
-    ordering="NONE"
-    side="SERVER"
 	
 [[dependencies.gamestages]]
     modId="bookshelf"
     mandatory=true
-    versionRange="[8,)"
+    versionRange="[9,)"
     ordering="NONE"
     side="SERVER"
