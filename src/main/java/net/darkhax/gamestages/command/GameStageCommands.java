@@ -196,8 +196,6 @@ public class GameStageCommands {
                 GameStageHelper.removeStage(player, stageName);
             }
             
-            GameStageHelper.syncPlayer(player);
-            
             if (!silent || !BoolArgumentType.getBool(ctx, "silent")) {
                 
                 ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);

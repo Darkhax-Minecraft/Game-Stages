@@ -212,6 +212,7 @@ public class GameStageHelper {
             if (data != null) {
                 
                 data.addStage(stage);
+                syncPlayer(player);
                 MinecraftForge.EVENT_BUS.post(new GameStageEvent.Added(player, stage));
             }
         }
@@ -232,6 +233,7 @@ public class GameStageHelper {
             if (data != null) {
                 
                 data.removeStage(stage);
+                syncPlayer(player);
                 MinecraftForge.EVENT_BUS.post(new GameStageEvent.Removed(player, stage));
             }
         }
@@ -251,6 +253,7 @@ public class GameStageHelper {
             
             final int stageCount = stageInfo.getStages().size();
             stageInfo.clear();
+            syncPlayer(player);
             MinecraftForge.EVENT_BUS.post(new GameStageEvent.Cleared(player, stageInfo));
             return stageCount;
         }
