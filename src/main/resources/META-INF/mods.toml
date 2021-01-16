@@ -21,3 +21,10 @@ ${mod_description}
     versionRange="[9,)"
     ordering="NONE"
     side="SERVER"
+    
+[[dependencies.botanypots]]
+    modId="crafttweaker"
+    mandatory=false
+    versionRange="[7.1,)"
+    ordering="AFTER"
+    side="BOTH"
