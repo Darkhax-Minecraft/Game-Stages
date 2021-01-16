@@ -78,15 +78,14 @@ repositories {
 
     maven {
 
-        url "http://maven.mcmoddev.com"
+        url "https://maven.blamejared.com/"
     }
 }
 
 dependencies {
 
     minecraft "net.minecraftforge:forge:${forge_version}"
-    
-    compile fg.deobf(project.dependencies.create("net.darkhax.bookshelf:Bookshelf-1.16.4:${bookshelf_version}"))
+    compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.4:${bookshelf_version}")
 }
 
 jar {
