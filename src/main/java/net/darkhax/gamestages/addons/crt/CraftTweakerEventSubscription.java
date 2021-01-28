@@ -5,7 +5,6 @@ import com.blamejared.crafttweaker.impl.commands.script_examples.ExampleCollecti
 import net.darkhax.gamestages.GameStages;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 public class CraftTweakerEventSubscription {
     
