@@ -22,7 +22,7 @@ public class GameStages {
     
     public static final String MOD_ID = "gamestages";
     public static final Logger LOG = LogManager.getLogger("Game Stages");
-    public static final NetworkHelper NETWORK = new NetworkHelper("gamestages:main", "6.0.x");
+    public static final NetworkHelper NETWORK = new NetworkHelper("gamestages:main", "7.0.x");
     private static final RegistryHelper REGISTRY = new RegistryHelper("gamestages", LOG);
     
     public GameStages() {
