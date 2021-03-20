@@ -281,7 +281,7 @@ public class GameStageHelper {
                     return GameStageSaveHandler.getFakeData(player.getName().getString());
                 }
                 
-                return GameStageSaveHandler.getPlayerData(player.getUniqueID());
+                return GameStageSaveHandler.getPlayerData(player.getUUID());
             }
             
             else if (EffectiveSide.get().isClient()) {

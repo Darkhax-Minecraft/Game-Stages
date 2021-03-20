@@ -27,7 +27,7 @@ public class GameStageCommands {
         root.then(createPlayerCommand("info", 0, ctx -> getStageInfo(ctx, true), ctx -> getStageInfo(ctx, false)));
         root.then(createPlayerCommand("clear", 2, ctx -> clearStages(ctx, true), ctx -> clearStages(ctx, false)));
         root.then(createPlayerCommand("all", 2, ctx -> grantAll(ctx, true), ctx -> grantAll(ctx, false)));
-        root.then(Commands.literal("reload").requires(sender -> sender.hasPermissionLevel(2)).executes(GameStageCommands::reloadGameStages));
+        root.then(Commands.literal("reload").requires(sender -> sender.hasPermission(2)).executes(GameStageCommands::reloadGameStages));
         root.then(createPlayerStageCommand("check", 2, ctx -> checkStage(ctx, true), ctx -> checkStage(ctx, false)));
         
         registry.commands.registerCommand(root);
@@ -35,17 +35,17 @@ public class GameStageCommands {
     
     private static LiteralArgumentBuilder<CommandSource> createPlayerCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> commandNoPlayer) {
         
-        return Commands.literal(key).requires(sender -> sender.hasPermissionLevel(permissions)).executes(commandNoPlayer).then(Commands.argument("targets", EntityArgument.player()).executes(command));
+        return Commands.literal(key).requires(sender -> sender.hasPermission(permissions)).executes(commandNoPlayer).then(Commands.argument("targets", EntityArgument.player()).executes(command));
     }
     
     private static LiteralArgumentBuilder<CommandSource> createSilentStageCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> silent) {
         
-        return Commands.literal(key).requires(sender -> sender.hasPermissionLevel(permissions)).then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(command).then(Commands.argument("silent", BoolArgumentType.bool()).executes(silent))));
+        return Commands.literal(key).requires(sender -> sender.hasPermission(permissions)).then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(command).then(Commands.argument("silent", BoolArgumentType.bool()).executes(silent))));
     }
     
     private static LiteralArgumentBuilder<CommandSource> createPlayerStageCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> commandNoPlayer) {
         
-        return Commands.literal(key).requires(sender -> sender.hasPermissionLevel(permissions)).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(commandNoPlayer)).then(Commands.argument("targets", EntityArgument.player()).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(command)));
+        return Commands.literal(key).requires(sender -> sender.hasPermission(permissions)).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(commandNoPlayer)).then(Commands.argument("targets", EntityArgument.player()).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(command)));
     }
     
     private static int grantAll (CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
@@ -60,7 +60,7 @@ public class GameStageCommands {
         
         else {
             
-            grantAll(ctx, ctx.getSource().asPlayer());
+            grantAll(ctx, ctx.getSource().getPlayerOrException());
         }
         
         return 0;
@@ -73,11 +73,11 @@ public class GameStageCommands {
             GameStageHelper.addStage(player, knownStage);
         }
         
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.all.target"), true);
+        ctx.getSource().sendSuccess(new TranslationTextComponent("commands.gamestage.all.target"), true);
         
         if (player != ctx.getSource().getEntity()) {
             
-            ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.all.sender", player.getDisplayName()), true);
+            ctx.getSource().sendSuccess(new TranslationTextComponent("commands.gamestage.all.sender", player.getDisplayName()), true);
         }
     }
     
@@ -93,7 +93,7 @@ public class GameStageCommands {
         
         else {
             
-            clearStages(ctx, ctx.getSource().asPlayer());
+            clearStages(ctx, ctx.getSource().getPlayerOrException());
         }
         
         return 0;
@@ -103,10 +103,10 @@ public class GameStageCommands {
         
         final int removedStages = GameStageHelper.clearStages(player);
         
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.clear.target", removedStages), true);
+        ctx.getSource().sendSuccess(new TranslationTextComponent("commands.gamestage.clear.target", removedStages), true);
         
         if (player != ctx.getSource().getEntity()) {
-            ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
+            ctx.getSource().sendSuccess(new TranslationTextComponent("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
         }
     }
     
@@ -122,7 +122,7 @@ public class GameStageCommands {
         
         else {
             
-            checkStage(ctx, ctx.getSource().asPlayer());
+            checkStage(ctx, ctx.getSource().getPlayerOrException());
         }
         
         return 0;
@@ -132,7 +132,7 @@ public class GameStageCommands {
         
         final String stage = StageArgumentType.getStage(ctx, "stage");
         final boolean hasStage = GameStageHelper.hasStage(player, stage);
-        ctx.getSource().sendFeedback(new TranslationTextComponent(hasStage ? "commands.gamestage.check.success" : "commands.gamestage.check.failure", player.getDisplayName(), stage), false);
+        ctx.getSource().sendSuccess(new TranslationTextComponent(hasStage ? "commands.gamestage.check.success" : "commands.gamestage.check.failure", player.getDisplayName(), stage), false);
         
         return hasStage;
     }
@@ -140,10 +140,10 @@ public class GameStageCommands {
     private static int reloadGameStages (CommandContext<CommandSource> ctx) {
         
         GameStageSaveHandler.reloadFakePlayers();
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.reloadfakes.info"), true);
+        ctx.getSource().sendSuccess(new TranslationTextComponent("commands.gamestage.reloadfakes.info"), true);
         
         GameStageSaveHandler.reloadKnownStages();
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.reloadknown.info", GameStageSaveHandler.getKnownStages().size()), true);
+        ctx.getSource().sendSuccess(new TranslationTextComponent("commands.gamestage.reloadknown.info", GameStageSaveHandler.getKnownStages().size()), true);
         return 0;
     }
     
@@ -159,7 +159,7 @@ public class GameStageCommands {
         
         else {
             
-            getStageInfo(ctx, ctx.getSource().asPlayer());
+            getStageInfo(ctx, ctx.getSource().getPlayerOrException());
         }
         
         return 0;
@@ -171,12 +171,12 @@ public class GameStageCommands {
         
         if (stageInfo.isEmpty()) {
             
-            ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.info.empty", player.getDisplayName()), false);
+            ctx.getSource().sendSuccess(new TranslationTextComponent("commands.gamestage.info.empty", player.getDisplayName()), false);
         }
         
         else {
             
-            ctx.getSource().sendFeedback(new TranslationTextComponent("commands.gamestage.info.stages", player.getDisplayName(), stageInfo), false);
+            ctx.getSource().sendSuccess(new TranslationTextComponent("commands.gamestage.info.stages", player.getDisplayName(), stageInfo), false);
         }
     }
     
@@ -198,10 +198,10 @@ public class GameStageCommands {
             
             if (!silent || !BoolArgumentType.getBool(ctx, "silent")) {
                 
-                ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
+                ctx.getSource().sendSuccess(new TranslationTextComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
                 
                 if (player != ctx.getSource().getEntity()) {
-                    ctx.getSource().sendFeedback(new TranslationTextComponent(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
+                    ctx.getSource().sendSuccess(new TranslationTextComponent(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
                 }
             }
         }

@@ -97,7 +97,7 @@ public class GameStageSaveHandler {
             }
         }
         
-        GLOBAL_STAGE_DATA.put(event.getPlayer().getUniqueID(), playerData);
+        GLOBAL_STAGE_DATA.put(event.getPlayer().getUUID(), playerData);
     }
     
     /**
@@ -109,7 +109,7 @@ public class GameStageSaveHandler {
     @SubscribeEvent
     public static void onPlayerSave (PlayerEvent.SaveToFile event) {
         
-        final UUID playerUUID = event.getPlayer().getUniqueID();
+        final UUID playerUUID = event.getPlayer().getUUID();
         
         if (GLOBAL_STAGE_DATA.containsKey(playerUUID)) {
             

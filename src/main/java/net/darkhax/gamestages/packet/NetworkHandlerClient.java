@@ -18,7 +18,7 @@ public class NetworkHandlerClient {
         
         for (int i = 0; i < stageNames.length; i++) {
             
-            stageNames[i] = buffer.readString(64);
+            stageNames[i] = buffer.readUtf(64);
         }
         
         return new MessageStages(stageNames);

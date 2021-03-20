@@ -10,7 +10,7 @@ public class NetworkHandlerServer {
         
         for (final String stageName : packet.getStages()) {
             
-            buffer.writeString(stageName, 64);
+            buffer.writeUtf(stageName, 64);
         }
     }
 }
