@@ -29,8 +29,8 @@ repositories {
 
 dependencies {
 
-    // Example: compile "net.darkhax.gamestages:GameStages-1.16.4:6.0.4"
-    compile "net.darkhax.gamestages:GameStages-MCVERSION:PUT_FILE_VERSION_HERE"
+    // compile fg.deobf("net.darkhax.gamestages:GameStages-1.16.5:7.1.2")
+    compile fg.deobf("net.darkhax.gamestages:GameStages-MCVERSION:PUT_FILE_VERSION_HERE")
 }
 ```
 
