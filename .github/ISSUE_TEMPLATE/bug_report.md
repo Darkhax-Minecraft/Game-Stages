@@ -1,17 +1,17 @@
 ---
 name: Bug report
 about: 'For bugs, crashes, and incompatibilities. '
-title: "[BUG]"
+title: ''
 labels: bug
 assignees: ''
 
 ---
 
-<--  BEFORE YOU POST                                                    -->
-<--  Do you have the latest version of the mod for your game version?   -->
-<--  Has anyone else reported a similar issue recently?                 -->
-<--  Did you install all the dependencies?                              -->
-<--  The issue tracker is not for port requests or update requests.     -->
+<!--  BEFORE YOU POST  -->
+<!--  Do you have the latest version of the mod for your game version?  -->
+<!--  Has anyone else reported a similar issue recently?  -->
+<!--  Did you install all the dependencies?  -->
+<!--  The issue tracker is not for port requests or update requests.  -->
 
 ## Environment Details
 **Mod Version:** x.y.z
