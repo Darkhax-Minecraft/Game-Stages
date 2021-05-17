@@ -21,6 +21,8 @@ public class GameStageCommands {
     
     public static void initializeCommands (RegistryHelper registry) {
         
+        registry.commands.registerCommandArgument("stagename", StageArgumentType.class, StageArgumentType.SERIALIZERS);
+        
         final LiteralArgumentBuilder<CommandSource> root = Commands.literal("gamestage");
         root.then(createSilentStageCommand("add", 2, ctx -> changeStages(ctx, false, true), ctx -> changeStages(ctx, true, true)));
         root.then(createSilentStageCommand("remove", 2, ctx -> changeStages(ctx, false, false), ctx -> changeStages(ctx, true, false)));
@@ -40,12 +42,12 @@ public class GameStageCommands {
     
     private static LiteralArgumentBuilder<CommandSource> createSilentStageCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> silent) {
         
-        return Commands.literal(key).requires(sender -> sender.hasPermission(permissions)).then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(command).then(Commands.argument("silent", BoolArgumentType.bool()).executes(silent))));
+        return Commands.literal(key).requires(sender -> sender.hasPermission(permissions)).then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("stage", new StageArgumentType()).executes(command).then(Commands.argument("silent", BoolArgumentType.bool()).executes(silent))));
     }
     
     private static LiteralArgumentBuilder<CommandSource> createPlayerStageCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> commandNoPlayer) {
         
-        return Commands.literal(key).requires(sender -> sender.hasPermission(permissions)).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(commandNoPlayer)).then(Commands.argument("targets", EntityArgument.player()).then(Commands.argument("stage", StageArgumentType.INSTACE).executes(command)));
+        return Commands.literal(key).requires(sender -> sender.hasPermission(permissions)).then(Commands.argument("stage", new StageArgumentType()).executes(commandNoPlayer)).then(Commands.argument("targets", EntityArgument.player()).then(Commands.argument("stage", new StageArgumentType()).executes(command)));
     }
     
     private static int grantAll (CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {

@@ -3,6 +3,7 @@ package net.darkhax.gamestages.command;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import com.mojang.brigadier.StringReader;
@@ -12,8 +13,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
+import net.darkhax.bookshelf.serialization.Serializers;
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.command.arguments.ArgumentSerializer;
+import net.minecraft.network.PacketBuffer;
 
 /**
  * A command argument type that represents a stage string. Has built in suggestions for all the
@@ -22,14 +26,21 @@ import net.minecraft.command.ISuggestionProvider;
 public class StageArgumentType implements ArgumentType<String> {
     
     /**
-     * An instance of this argument type.
+     * Serializer for this argument type.
      */
-    public static final StageArgumentType INSTACE = new StageArgumentType();
+    public static final ArgumentSerializer<StageArgumentType> SERIALIZERS = new Serializer();
     
     /**
      * A list of examples used for this type.
      */
     private static final List<String> examples = Arrays.asList("stage", "stage_name", "example:stage");
+    
+    private Set<String> knownStages;
+    
+    public StageArgumentType() {
+        
+        this.knownStages = GameStageHelper.getKnownStages();
+    }
     
     /**
      * Gets a stage name from a command context.
@@ -52,7 +63,7 @@ public class StageArgumentType implements ArgumentType<String> {
     @Override
     public String toString () {
         
-        return "string()";
+        return "stagename";
     }
     
     @Override
@@ -64,7 +75,28 @@ public class StageArgumentType implements ArgumentType<String> {
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions (CommandContext<S> context, SuggestionsBuilder builder) {
         
-        return ISuggestionProvider.suggest(GameStageHelper.getKnownStages(), builder);
+        return ISuggestionProvider.suggest(this.knownStages, builder);
     }
     
+    static class Serializer extends ArgumentSerializer<StageArgumentType> {
+
+        private Serializer() {
+            
+            super(StageArgumentType::new);
+        }
+
+        @Override
+        public void serializeToNetwork (StageArgumentType arg, PacketBuffer buffer) {
+            
+            Serializers.STRING.writeSet(buffer, arg.knownStages);
+        }
+
+        @Override
+        public StageArgumentType deserializeFromNetwork (PacketBuffer buffer) {
+            
+            final StageArgumentType argType = super.deserializeFromNetwork(buffer);
+            argType.knownStages = Serializers.STRING.readSet(buffer);
+            return argType;
+        }     
+    }
 }
