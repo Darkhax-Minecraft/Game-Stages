@@ -72,10 +72,10 @@ public class FakePlayerData implements IStageData {
         
         return this.fakePlayerName;
     }
-
-	@Override
-	public String toString() {
-		
-		return "FakePlayerData [stages=" + stages + ", fakePlayerName=" + fakePlayerName + "]";
-	}
+    
+    @Override
+    public String toString () {
+        
+        return "FakePlayerData [stages=" + this.stages + ", fakePlayerName=" + this.fakePlayerName + "]";
+    }
 }

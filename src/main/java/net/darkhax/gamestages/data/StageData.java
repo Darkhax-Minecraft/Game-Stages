@@ -74,8 +74,8 @@ public class StageData implements IStageData {
     }
     
     @Override
-	public String toString() {
-    	
-		return "StageData [unlockedStages=" + unlockedStages + "]";
-	}
+    public String toString () {
+        
+        return "StageData [unlockedStages=" + this.unlockedStages + "]";
+    }
 }
