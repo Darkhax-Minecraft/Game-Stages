@@ -14,10 +14,8 @@ import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.gamestages.packet.MessageStages;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 
 public class GameStageHelper {
@@ -286,7 +284,7 @@ public class GameStageHelper {
             
             else if (EffectiveSide.get().isClient()) {
                 
-                return DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> () -> GameStageSaveHandler.getClientData());
+                return GameStageSaveHandler.getClientData();
             }
         }
         
