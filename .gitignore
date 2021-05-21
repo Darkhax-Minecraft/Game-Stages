@@ -1,21 +1,18 @@
-#IntelliJ IDEA
-*.class
-*.iml
-*.ipr
-*.iws
-*.launch
-out/
-
-#ForgeGradle
-build/
+# Gradle
 .gradle/
-run/
-logs/
+bin/
+build/
 
 #Eclipse
-.classpath
-.metadata/
-.project
-.settings/
-/bin/
-/.idea/
+*.classpath
+*.project
+*.prefs
+*.launch
+
+# General
+run/
+
+# Annotation Processing
+/.apt_generated_tests/
+/Users/
+.factorypath

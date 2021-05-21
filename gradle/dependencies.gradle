@@ -1,0 +1,15 @@
+apply from: 'gradle/property_helper.gradle'
+
+repositories {
+  
+    maven {
+
+        url 'https://maven.blamejared.com'
+    }
+}
+
+dependencies {
+
+    implementation fg.deobf(group: 'net.darkhax.bookshelf', name: 'Bookshelf-1.16.5', version: getProperty('bookshelf_version'))
+    implementation fg.deobf(group: 'com.blamejared.crafttweaker', name: 'CraftTweaker-1.16.5', version: getProperty('crafttweaker_version'))
+}

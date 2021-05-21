@@ -1,28 +1,45 @@
 modLoader="javafml"
-loaderVersion="[35,]"
+loaderVersion="[36,]"
 issueTrackerURL="https://github.com/Darkhax-Minecraft/Game-Stages"
 license="LGPL v2.1"
+logoFile="mod_logo.png"
+logoBlur=false
 
 [[mods]]
 modId="gamestages"
-updateJSONURL="https://updates.blamejared.com/get?n=gamestages&gv=1.16.4"
+updateJSONURL="https://updates.blamejared.com/get?n=gamestages&gv=1.16.5"
 version="${version}"
-displayName="${mod_name}"
-displayURL="${mod_download}"
-credits="${mod_credits}"
-authors="${mod_authors}"
+displayName="${modName}"
+displayURL="${modHomepage}"
+credits="${modCredits}"
+authors="${modAuthor}"
 description='''
-${mod_description}
+${modDescription}
 '''
-	
+itemIcon="minecraft:name_tag"
+
+[[dependencies.gamestages]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.gamestages]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5]"
+    ordering="NONE"
+    side="BOTH"
+
 [[dependencies.gamestages]]
     modId="bookshelf"
     mandatory=true
-    versionRange="[9,)"
+    versionRange="[10,)"
     ordering="NONE"
-    side="SERVER"
+    side="BOTH"
     
-[[dependencies.botanypots]]
+[[dependencies.gamestages]]
     modId="crafttweaker"
     mandatory=false
     versionRange="[7.1,)"
