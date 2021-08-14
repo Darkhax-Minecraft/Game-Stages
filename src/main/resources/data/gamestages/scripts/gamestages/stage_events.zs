@@ -1,0 +1,60 @@
+// GameStages adds several new events that allow scripts to listen to GameStage
+// state changes. For example you can run a part of your script every time a 
+// player unlocks a specific stage.
+
+// To use the event system you need to import CraftTweaker's event manager. You
+// should also import every event you plan on using. All GameStage events are
+// listed below.
+import crafttweaker.api.events.CTEventManager;
+import mods.gamestages.events.GameStageAdded;
+import mods.gamestages.events.GameStageRemoved;
+import mods.gamestages.events.GameStageCleared;
+
+// Registers a listener for when a game stage is added to a player.
+CTEventManager.register<GameStageAdded>((event) => {
+
+    // The code in here will be ran every time a player is granted a stage.
+    // You are given access to the player who unlocked the stage and the name
+    // of the unlocked stage through the event context.
+    
+    // You can get the stage being added using event.stage. In this case we
+    // check if the stage being added is event_example_one. 
+    if (event.stage == "event_example_one") {
+    
+        // This code is only ran if the above condition is met. In this case
+        // we send them a message and give them some diamonds.
+        event.player.sendMessage("You unlocked event_example_one! Have diamonds.");
+        event.player.give(<item:minecraft:diamond> * 4);
+    }
+});
+
+// Registers a listener for when a game stage is removed from a player.
+CTEventManager.register<GameStageRemoved>((event) => {
+    
+    // The code in here will be ran every time a player loses a game stage.
+    // You are given access to the player who lost the stage and the name of 
+    // the stage that was lost through event context.
+    
+    // You can get the stage being removed using event.stage. In this case we
+    // check if the stage lost was event_example_two.
+    if (event.stage == "event_example_two") {
+    
+        // This code is only ran if the above condition is met. In this case
+        // we send them a message and give them some sticks.
+        event.player.sendMessage("You lost event_example_two! You get sticks.");
+        event.player.give(<item:minecraft:stick> * 7);
+    }
+});
+
+// Registers a listener for when a player has all their stages cleared.
+CTEventManager.register<GameStageCleared>((event) => {
+    
+    // The code in here will be ran every time a player has their game stages
+    // cleared. You are given access to the player being cleared through the 
+    // event context.
+    
+    // We get the player who lost their stages using event.player and then we 
+    // give them a chat message and some sugar.
+    event.player.sendMessage("You lost all your stages!");
+    event.player.give(<item:minecraft:sugar> * 2);
+});
