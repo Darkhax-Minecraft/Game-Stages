@@ -79,24 +79,24 @@ public class StageArgumentType implements ArgumentType<String> {
     }
     
     static class Serializer extends ArgumentSerializer<StageArgumentType> {
-
+        
         private Serializer() {
             
             super(StageArgumentType::new);
         }
-
+        
         @Override
         public void serializeToNetwork (StageArgumentType arg, PacketBuffer buffer) {
             
             Serializers.STRING.writeSet(buffer, arg.knownStages);
         }
-
+        
         @Override
         public StageArgumentType deserializeFromNetwork (PacketBuffer buffer) {
             
             final StageArgumentType argType = super.deserializeFromNetwork(buffer);
             argType.knownStages = Serializers.STRING.readSet(buffer);
             return argType;
-        }     
+        }
     }
 }
