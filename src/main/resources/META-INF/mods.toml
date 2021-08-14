@@ -8,7 +8,7 @@ logoBlur=false
 [[mods]]
 modId="gamestages"
 updateJSONURL="https://updates.blamejared.com/get?n=gamestages&gv=1.16.5"
-version="${version}"
+version="${file.jarVersion}"
 displayName="${modName}"
 displayURL="${modHomepage}"
 credits="${modCredits}"
