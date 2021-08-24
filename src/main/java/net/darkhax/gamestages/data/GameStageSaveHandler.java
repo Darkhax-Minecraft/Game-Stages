@@ -204,10 +204,19 @@ public class GameStageSaveHandler {
             try (BufferedReader reader = Files.newReader(FAKE_PLAYER_STAGE_FILE, StandardCharsets.UTF_8)) {
                 
                 final FakePlayerData[] fakePlayers = GSON.fromJson(reader, FakePlayerData[].class);
-                Arrays.stream(fakePlayers).forEach(GameStageSaveHandler::addFakePlayer);
+                
+                if (fakePlayers != null) {
+                    
+                    Arrays.stream(fakePlayers).forEach(GameStageSaveHandler::addFakePlayer);
+                }
+                
+                else {
+                    
+                    GameStages.LOG.error("Your fake player stages file is incorrect. Expected an array of fake player entries.");
+                }
             }
             
-            catch (final IOException e) {
+            catch (final Exception e) {
                 
                 GameStages.LOG.error("Could not read {}.", FAKE_PLAYER_STAGE_FILE.getName());
                 GameStages.LOG.catching(e);
@@ -233,23 +242,33 @@ public class GameStageSaveHandler {
             
             try (BufferedReader reader = Files.newReader(KNOWN_STAGES_FILE, StandardCharsets.UTF_8)) {
                 
-                for (final String stageName : GSON.fromJson(reader, String[].class)) {
+                final String[] knownStages = GSON.fromJson(reader, String[].class);
+                
+                if (knownStages != null) {
                     
-                    if (GameStageHelper.isValidStageName(stageName)) {
+                    for (final String stageName : knownStages) {
                         
-                        KNOWN_STAGES.add(stageName);
+                        if (GameStageHelper.isValidStageName(stageName)) {
+                            
+                            KNOWN_STAGES.add(stageName);
+                        }
+                        
+                        else {
+                            
+                            GameStages.LOG.error("Rejected an invalid stage name of {}. It will not be usable. Stage names must be under 64 characters and may only include alphanumeric characters, underscores, and colons.", stageName);
+                        }
                     }
+                }
+                
+                else {
                     
-                    else {
-                        
-                        GameStages.LOG.error("Rejected an invalid stage name of {}. It will not be usable. Stage names must be under 64 characters and may only include alphanumeric characters, underscores, and colons.", stageName);
-                    }
+                    GameStages.LOG.error("Your known stages file is incorrect! The file must be a string array!");
                 }
                 
                 GameStages.LOG.debug("Loaded {} known stages.", KNOWN_STAGES.size());
             }
             
-            catch (final IOException e) {
+            catch (final Exception e) {
                 
                 GameStages.LOG.error("Could not read {}.", KNOWN_STAGES_FILE.getName());
                 GameStages.LOG.catching(e);
