@@ -16,6 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
@@ -37,6 +38,13 @@ public class GameStages {
             
             MinecraftForge.EVENT_BUS.addListener(this::onF3Text);
         }
+        
+        MinecraftForge.EVENT_BUS.addListener(this::registerReloadListeners);
+    }
+    
+    private void registerReloadListeners(AddReloadListenerEvent event) {
+        
+        event.addListener(new GameStageReloader());
     }
     
     @OnlyIn(Dist.CLIENT)
