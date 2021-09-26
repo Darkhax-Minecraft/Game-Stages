@@ -1,5 +1,6 @@
 package net.darkhax.gamestages.command;
 
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.mojang.brigadier.Command;
@@ -13,15 +14,26 @@ import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.command.arguments.IArgumentSerializer;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class GameStageCommands {
     
-    public static void initializeCommands (RegistryHelper registry) {
+    public static void initializeCommands () {
         
-        registry.commands.registerCommandArgument("stagename", StageArgumentType.class, StageArgumentType.SERIALIZERS);
+        MinecraftForge.EVENT_BUS.addListener(GameStageCommands::registerCommands);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(GameStageCommands::registerArguments);
+    }
+    
+    private static void registerCommands (RegisterCommandsEvent event) {
         
         final LiteralArgumentBuilder<CommandSource> root = Commands.literal("gamestage");
         root.then(createSilentStageCommand("add", 2, ctx -> changeStages(ctx, false, true), ctx -> changeStages(ctx, true, true)));
@@ -32,7 +44,12 @@ public class GameStageCommands {
         root.then(Commands.literal("reload").requires(sender -> sender.hasPermission(2)).executes(GameStageCommands::reloadGameStages));
         root.then(createPlayerStageCommand("check", 2, ctx -> checkStage(ctx, true), ctx -> checkStage(ctx, false)));
         
-        registry.commands.registerCommand(root);
+        event.getDispatcher().register(root);
+    }
+    
+    private static void registerArguments(FMLCommonSetupEvent event) {
+        
+        ArgumentTypes.register("stagename", StageArgumentType.class, StageArgumentType.SERIALIZERS);
     }
     
     private static LiteralArgumentBuilder<CommandSource> createPlayerCommand (String key, int permissions, Command<CommandSource> command, Command<CommandSource> commandNoPlayer) {
