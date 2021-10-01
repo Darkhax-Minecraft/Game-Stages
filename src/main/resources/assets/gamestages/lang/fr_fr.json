@@ -1,0 +1,23 @@
+{
+    "commands.gamestage.add.sender": "Stage %s débloqué pour %s !",
+    "commands.gamestage.add.target": "Vous avez débloqué le stage %s !",
+
+    "commands.gamestage.remove.sender": "Stage %s supprimé pour %s !",
+    "commands.gamestage.remove.target": "Vous avez perdu l'accès au stage %s !",
+
+    "commands.gamestage.check.failure": "%s n'a pas le stage %s",
+    "commands.gamestage.check.success": "%s a le stage %s",
+
+    "commands.gamestage.info.empty": "%s n'a pas débloqué de stages.",
+    "commands.gamestage.info.stages": "%s a les stages suivants. %s",
+
+    "commands.gamestage.clear.sender": "%d stages retirés de %s",
+    "commands.gamestage.clear.target": "Vous avez perdu %d stages !",
+
+    "commands.gamestage.playeronly": "Désolé, seulement pour les joueurs !",
+    
+    "commands.gamestage.reloadfakes.info": "Stages pour les faux joueurs rechargés.",
+    "commands.gamestage.reloadknown.info": "%d stages connus chargés.",
+    "commands.gamestage.all.target": "Vous avez débloqué tous les stages connus !",
+    "commands.gamestage.all.sender": "%s a débloqué tous les stages connus !"
+}
