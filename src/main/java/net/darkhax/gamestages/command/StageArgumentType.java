@@ -13,11 +13,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import net.darkhax.bookshelf.serialization.Serializers;
+import net.darkhax.bookshelf.api.serialization.SerializerString;
 import net.darkhax.gamestages.GameStageHelper;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.ArgumentSerializer;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.network.FriendlyByteBuf;
 
 /**
  * A command argument type that represents a stage string. Has built in suggestions for all the
@@ -75,10 +76,10 @@ public class StageArgumentType implements ArgumentType<String> {
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions (CommandContext<S> context, SuggestionsBuilder builder) {
         
-        return ISuggestionProvider.suggest(this.knownStages, builder);
+        return SharedSuggestionProvider.suggest(this.knownStages, builder);
     }
     
-    static class Serializer extends ArgumentSerializer<StageArgumentType> {
+    static class Serializer extends EmptyArgumentSerializer<StageArgumentType> {
         
         private Serializer() {
             
@@ -86,16 +87,16 @@ public class StageArgumentType implements ArgumentType<String> {
         }
         
         @Override
-        public void serializeToNetwork (StageArgumentType arg, PacketBuffer buffer) {
-            
-            Serializers.STRING.writeSet(buffer, arg.knownStages);
+        public void serializeToNetwork (StageArgumentType arg, FriendlyByteBuf buffer) {
+
+            SerializerString.SERIALIZER.writeByteBufSet(buffer, arg.knownStages);
         }
         
         @Override
-        public StageArgumentType deserializeFromNetwork (PacketBuffer buffer) {
+        public StageArgumentType deserializeFromNetwork (FriendlyByteBuf buffer) {
             
             final StageArgumentType argType = super.deserializeFromNetwork(buffer);
-            argType.knownStages = Serializers.STRING.readSet(buffer);
+            argType.knownStages = SerializerString.SERIALIZER.readByteBufSet(buffer);
             return argType;
         }
     }

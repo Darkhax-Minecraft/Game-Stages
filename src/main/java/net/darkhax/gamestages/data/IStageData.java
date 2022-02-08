@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public interface IStageData {
     
@@ -42,7 +42,7 @@ public interface IStageData {
      */
     void clear ();
     
-    void readFromNBT (CompoundNBT tag);
+    void readFromNBT (CompoundTag tag);
     
-    CompoundNBT writeToNBT ();
+    CompoundTag writeToNBT ();
 }

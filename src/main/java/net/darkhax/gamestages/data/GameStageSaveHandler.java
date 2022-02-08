@@ -18,9 +18,9 @@ import com.google.gson.Gson;
 
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -85,7 +85,7 @@ public class GameStageSaveHandler {
             
             try {
                 
-                final CompoundNBT tag = CompressedStreamTools.read(playerFile);
+                final CompoundTag tag = NbtIo.read(playerFile);
                 playerData.readFromNBT(tag);
                 GameStages.LOG.debug("Loaded {} stages for {}.", playerData.getStages().size(), event.getPlayer().getName());
             }
@@ -115,13 +115,13 @@ public class GameStageSaveHandler {
             
             final IStageData playerData = getPlayerData(playerUUID);
             final File playerFile = getPlayerFile(event.getPlayerDirectory(), event.getPlayerUUID());
-            final CompoundNBT tag = playerData.writeToNBT();
+            final CompoundTag tag = playerData.writeToNBT();
             
             if (tag != null) {
                 
                 try {
                     
-                    CompressedStreamTools.write(tag, playerFile);
+                    NbtIo.write(tag, playerFile);
                     GameStages.LOG.debug("Saved {} stages for {}.", playerData.getStages().size(), event.getPlayer().getName());
                 }
                 
@@ -145,16 +145,16 @@ public class GameStageSaveHandler {
         
         // When a player connects to the server, sync their client data with the
         // server's data.
-        if (event.getPlayer() instanceof ServerPlayerEntity) {
+        if (event.getPlayer() instanceof ServerPlayer) {
             
-            GameStageHelper.syncPlayer((ServerPlayerEntity) event.getPlayer());
+            GameStageHelper.syncPlayer((ServerPlayer) event.getPlayer());
         }
     }
     
     /**
      * Looks up a players stage data. This should only be used with real players, fake players
      * use {@link #getFakeData(String)}. Alternatively, the
-     * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.PlayerEntity)} can be
+     * {@link GameStageHelper#getPlayerData(net.minecraft.world.entity.player.Player)} can be
      * used to automatically resolve a player.
      *
      * @param uuid The uuid of the player to lookup.
@@ -321,7 +321,7 @@ public class GameStageSaveHandler {
     /**
      * Gets data for a fake player. Real players should use {@link #getPlayerData(UUID)}
      * Alternatively
-     * {@link GameStageHelper#getPlayerData(net.minecraft.entity.player.PlayerEntity)} can be
+     * {@link GameStageHelper#getPlayerData(net.minecraft.world.entity.player.Player)} can be
      * used to automatically resolve players.
      *
      * @param fakePlayerName The name of the fake player.

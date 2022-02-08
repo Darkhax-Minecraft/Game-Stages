@@ -6,13 +6,13 @@ import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.data.StageData;
 import net.darkhax.gamestages.event.StagesSyncedEvent;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraftforge.network.NetworkEvent;
 
 public class NetworkHandlerClient {
     
-    public static MessageStages decodeStageMessage (PacketBuffer buffer) {
+    public static MessageStages decodeStageMessage (FriendlyByteBuf buffer) {
         
         final String[] stageNames = new String[buffer.readInt()];
         
@@ -24,7 +24,7 @@ public class NetworkHandlerClient {
         return new MessageStages(stageNames);
     }
     
-    public static void processSyncStagesMessage (MessageStages message, Supplier<Context> context) {
+    public static void processSyncStagesMessage (MessageStages message, Supplier<NetworkEvent.Context> context) {
         
         // Reset the client data to a new object.
         final IStageData clientData = new StageData();

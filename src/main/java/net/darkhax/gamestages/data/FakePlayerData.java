@@ -7,7 +7,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public class FakePlayerData implements IStageData {
     
@@ -56,13 +56,13 @@ public class FakePlayerData implements IStageData {
     }
     
     @Override
-    public void readFromNBT (CompoundNBT tag) {
+    public void readFromNBT (CompoundTag tag) {
         
         // unsupported
     }
     
     @Override
-    public CompoundNBT writeToNBT () {
+    public CompoundTag writeToNBT () {
         
         // unsupported
         return null;

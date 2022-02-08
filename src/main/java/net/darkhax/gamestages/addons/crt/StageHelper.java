@@ -10,26 +10,26 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.blamejared.crafttweaker.api.event.CTEventManager;
+import com.blamejared.crafttweaker.api.item.MCItemStack;
+import com.blamejared.crafttweaker.api.tag.MCTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.openzen.zencode.java.ZenCodeType;
 
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.item.IIngredient;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
-import com.blamejared.crafttweaker.impl.entity.MCEntityType;
-import com.blamejared.crafttweaker.impl.events.CTEventManager;
-import com.blamejared.crafttweaker.impl.item.MCItemStack;
-import com.blamejared.crafttweaker.impl.tag.MCTag;
 
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.addons.crt.util.DimensionCondition;
 import net.darkhax.gamestages.addons.crt.util.DimensionHook;
 import net.darkhax.gamestages.data.IStageData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -41,12 +41,12 @@ public class StageHelper {
     
     @ZenCodeType.Method
     public static void grantStageOnKill (MCEntityType type, String... stages) {
-        
+
         grantStageOnKill(type, null, stages);
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnKill (MCEntityType type, @Nullable BiConsumer<PlayerEntity, LivingEntity> hook, String... stages) {
+    public static void grantStageOnKill (MCEntityType type, @Nullable BiConsumer<Player, LivingEntity> hook, String... stages) {
         
         grantStageOnKill( (p, t) -> type.getInternal() == t.getType(), hook, stages);
     }
@@ -59,19 +59,18 @@ public class StageHelper {
     
     @ZenCodeType.Method
     @SuppressWarnings("unchecked")
-    public static void grantStageOnKill (MCTag<MCEntityType> tag, @Nullable BiConsumer<PlayerEntity, LivingEntity> hook, String... stages) {
-        
+    public static void grantStageOnKill (MCTag<MCEntityType> tag, @Nullable BiConsumer<Player, LivingEntity> hook, String... stages) {
         grantStageOnKill( (p, t) -> tag.getInternalRaw().contains(t.getType()), hook, stages);
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnKill (@Nullable BiPredicate<PlayerEntity, LivingEntity> condition, String... stages) {
+    public static void grantStageOnKill (@Nullable BiPredicate<Player, LivingEntity> condition, String... stages) {
         
         grantStageOnKill(condition, null, stages);
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnKill (@Nullable BiPredicate<PlayerEntity, LivingEntity> condition, @Nullable BiConsumer<PlayerEntity, LivingEntity> hook, String... stages) {
+    public static void grantStageOnKill (@Nullable BiPredicate<Player, LivingEntity> condition, @Nullable BiConsumer<Player, LivingEntity> hook, String... stages) {
         
         CTEventManager.register(LivingDeathEvent.class, event -> {
             
@@ -82,9 +81,9 @@ public class StageHelper {
                 final Entity killer = source.getEntity();
                 final LivingEntity target = event.getEntityLiving();
                 
-                if (killer instanceof ServerPlayerEntity && target != null) {
+                if (killer instanceof ServerPlayer && target != null) {
                     
-                    final ServerPlayerEntity player = (ServerPlayerEntity) killer;
+                    final ServerPlayer player = (ServerPlayer) killer;
                     
                     if (condition == null || condition.test(player, target)) {
                         
@@ -136,9 +135,9 @@ public class StageHelper {
             final ResourceLocation toDim = event.getTo().location();
             final ResourceLocation fromDim = event.getFrom().location();
             
-            if (event.getPlayer() instanceof ServerPlayerEntity && (condition == null || condition.test(event.getPlayer(), toDim, fromDim))) {
+            if (event.getPlayer() instanceof ServerPlayer && (condition == null || condition.test(event.getPlayer(), toDim, fromDim))) {
                 
-                final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+                final ServerPlayer player = (ServerPlayer) event.getPlayer();
                 
                 if (grantStages(player, stages) && hook != null) {
                     
@@ -155,25 +154,25 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnJoinWithCondition (@Nullable Predicate<PlayerEntity> condition, String... stages) {
+    public static void grantStageOnJoinWithCondition (@Nullable Predicate<Player> condition, String... stages) {
         
         StageHelper.grantStageOnJoin(condition, null, stages);
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnJoinWithHook (@Nullable Consumer<PlayerEntity> hook, String... stages) {
+    public static void grantStageOnJoinWithHook (@Nullable Consumer<Player> hook, String... stages) {
         
         StageHelper.grantStageOnJoin(null, hook, stages);
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnJoin (@Nullable Predicate<PlayerEntity> condition, @Nullable Consumer<PlayerEntity> hook, String... stages) {
+    public static void grantStageOnJoin (@Nullable Predicate<Player> condition, @Nullable Consumer<Player> hook, String... stages) {
         
         CTEventManager.register(PlayerEvent.PlayerLoggedInEvent.class, event -> {
             
-            if (event.getPlayer() instanceof ServerPlayerEntity && (condition == null || condition.test(event.getPlayer()))) {
+            if (event.getPlayer() instanceof ServerPlayer && (condition == null || condition.test(event.getPlayer()))) {
                 
-                final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+                final ServerPlayer player = (ServerPlayer) event.getPlayer();
                 
                 if (grantStages(player, stages) && hook != null) {
                     
@@ -190,7 +189,7 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnExactLevel (int level, @Nullable ObjIntConsumer<PlayerEntity> hook, String... stages) {
+    public static void grantStageOnExactLevel (int level, @Nullable ObjIntConsumer<Player> hook, String... stages) {
         
         StageHelper.grantStageOnLevel(l -> l == level, hook, stages);
     }
@@ -202,7 +201,7 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnLevel (int level, @Nullable ObjIntConsumer<PlayerEntity> hook, String... stages) {
+    public static void grantStageOnLevel (int level, @Nullable ObjIntConsumer<Player> hook, String... stages) {
         
         StageHelper.grantStageOnLevel(l -> l >= level, hook, stages);
     }
@@ -214,15 +213,15 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnLevel (IntPredicate levelCondition, @Nullable ObjIntConsumer<PlayerEntity> hook, String... stages) {
+    public static void grantStageOnLevel (IntPredicate levelCondition, @Nullable ObjIntConsumer<Player> hook, String... stages) {
         
         CTEventManager.register(LevelChange.class, event -> {
             
             final int currentPlayerLevel = event.getPlayer().experienceLevel + event.getLevels();
             
-            if (event.getPlayer() instanceof ServerPlayerEntity && levelCondition.test(currentPlayerLevel)) {
+            if (event.getPlayer() instanceof ServerPlayer && levelCondition.test(currentPlayerLevel)) {
                 
-                final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+                final ServerPlayer player = (ServerPlayer) event.getPlayer();
                 
                 if (grantStages(player, stages) && hook != null) {
                     
@@ -239,7 +238,7 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnAdvancement (String targetId, @Nullable BiConsumer<PlayerEntity, ResourceLocation> hook, String... stages) {
+    public static void grantStageOnAdvancement (String targetId, @Nullable BiConsumer<Player, ResourceLocation> hook, String... stages) {
         
         grantStageOnAdvancement(adv -> targetId.equalsIgnoreCase(adv.toString()), hook, stages);
     }
@@ -251,7 +250,7 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnAdvancement (String[] targetIds, @Nullable BiConsumer<PlayerEntity, ResourceLocation> hook, String... stages) {
+    public static void grantStageOnAdvancement (String[] targetIds, @Nullable BiConsumer<Player, ResourceLocation> hook, String... stages) {
         
         grantStageOnAdvancement(adv -> Arrays.stream(targetIds).anyMatch(target -> target.equalsIgnoreCase(adv.toString())), hook, stages);
     }
@@ -263,13 +262,13 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageOnAdvancement (Predicate<ResourceLocation> predicate, @Nullable BiConsumer<PlayerEntity, ResourceLocation> hook, String... stages) {
+    public static void grantStageOnAdvancement (Predicate<ResourceLocation> predicate, @Nullable BiConsumer<Player, ResourceLocation> hook, String... stages) {
         
         CTEventManager.register(AdvancementEvent.class, event -> {
             
-            if (event.getPlayer() instanceof ServerPlayerEntity && predicate.test(event.getAdvancement().getId())) {
+            if (event.getPlayer() instanceof ServerPlayer && predicate.test(event.getAdvancement().getId())) {
                 
-                final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+                final ServerPlayer player = (ServerPlayer) event.getPlayer();
                 
                 if (grantStages(player, stages) && hook != null) {
                     
@@ -286,7 +285,7 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageWhenCrafting (IIngredient stack, @Nullable BiConsumer<PlayerEntity, IItemStack> hook, String... stages) {
+    public static void grantStageWhenCrafting (IIngredient stack, @Nullable BiConsumer<Player, IItemStack> hook, String... stages) {
         
         grantStageWhenCrafting(stack::matches, hook, stages);
     }
@@ -298,15 +297,15 @@ public class StageHelper {
     }
     
     @ZenCodeType.Method
-    public static void grantStageWhenCrafting (Predicate<IItemStack> predicate, @Nullable BiConsumer<PlayerEntity, IItemStack> hook, String... stages) {
+    public static void grantStageWhenCrafting (Predicate<IItemStack> predicate, @Nullable BiConsumer<Player, IItemStack> hook, String... stages) {
         
         CTEventManager.register(PlayerEvent.ItemCraftedEvent.class, event -> {
             
             final MCItemStack output = new MCItemStack(event.getCrafting());
             
-            if (event.getPlayer() instanceof ServerPlayerEntity && predicate.test(output)) {
+            if (event.getPlayer() instanceof ServerPlayer && predicate.test(output)) {
                 
-                final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+                final ServerPlayer player = (ServerPlayer) event.getPlayer();
                 
                 if (grantStages(player, stages) && hook != null) {
                     
@@ -316,7 +315,7 @@ public class StageHelper {
         });
     }
     
-    private static boolean grantStages (ServerPlayerEntity player, String... stages) {
+    private static boolean grantStages (ServerPlayer player, String... stages) {
         
         boolean result = false;
         final IStageData data = GameStageHelper.getPlayerData(player);

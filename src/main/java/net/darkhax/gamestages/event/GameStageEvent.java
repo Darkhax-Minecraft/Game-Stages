@@ -1,8 +1,8 @@
 package net.darkhax.gamestages.event;
 
 import net.darkhax.gamestages.data.IStageData;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 
@@ -23,7 +23,7 @@ public class GameStageEvent extends PlayerEvent {
      * @param player The player the event is for.
      * @param stageName The stage the event is for.
      */
-    public GameStageEvent(PlayerEntity player, String stageName) {
+    public GameStageEvent(Player player, String stageName) {
         
         super(player);
         this.stageName = stageName;
@@ -41,13 +41,13 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired every time a stage is added to the player via
-     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayerEntity, String)}.
+     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayer, String)}.
      * Canceling this event will prevent the stage from being added.
      */
     @Cancelable
     public static class Add extends GameStageEvent {
         
-        public Add(PlayerEntity player, String stageName) {
+        public Add(Player player, String stageName) {
             
             super(player, stageName);
         }
@@ -55,12 +55,12 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired after a stage has been successfully added using
-     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayerEntity, String)}.
+     * {@link net.darkhax.gamestages.GameStageHelper#addStage(ServerPlayer, String)}.
      * This can not be canceled.
      */
     public static class Added extends GameStageEvent {
         
-        public Added(PlayerEntity player, String stageName) {
+        public Added(Player player, String stageName) {
             
             super(player, stageName);
         }
@@ -68,13 +68,13 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired when a stage is removed from a player via
-     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(ServerPlayerEntity, String)}.
+     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(ServerPlayer, String)}.
      * Canceling this event will prevent it from being added.
      */
     @Cancelable
     public static class Remove extends GameStageEvent {
         
-        public Remove(PlayerEntity player, String stageName) {
+        public Remove(Player player, String stageName) {
             
             super(player, stageName);
         }
@@ -82,12 +82,12 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired after a stage has been successfully removed using
-     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(ServerPlayerEntity, String)}.
+     * {@link net.darkhax.gamestages.GameStageHelper#removeStage(ServerPlayer, String)}.
      * This can not be canceled.
      */
     public static class Removed extends GameStageEvent {
         
-        public Removed(PlayerEntity player, String stageName) {
+        public Removed(Player player, String stageName) {
             
             super(player, stageName);
         }
@@ -100,7 +100,7 @@ public class GameStageEvent extends PlayerEvent {
         
         private final IStageData stageData;
         
-        public Cleared(PlayerEntity player, IStageData stageData) {
+        public Cleared(Player player, IStageData stageData) {
             
             super(player);
             
@@ -115,7 +115,7 @@ public class GameStageEvent extends PlayerEvent {
     
     /**
      * This event is fired when a stage check is done on a player using
-     * {@link net.darkhax.gamestages.GameStageHelper#hasStage(PlayerEntity, net.darkhax.gamestages.data.IStageData, String)}.
+     * {@link net.darkhax.gamestages.GameStageHelper#hasStage(Player, net.darkhax.gamestages.data.IStageData, String)}.
      */
     public static class Check extends GameStageEvent {
         
@@ -129,7 +129,7 @@ public class GameStageEvent extends PlayerEvent {
          */
         private boolean hasStage;
         
-        public Check(PlayerEntity player, String stageName, boolean hasStage) {
+        public Check(Player player, String stageName, boolean hasStage) {
             
             super(player, stageName);
             this.hasStageOriginal = hasStage;

@@ -12,11 +12,11 @@ import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.darkhax.gamestages.packet.MessageStages;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
+import net.minecraftforge.fml.util.thread.EffectiveSide;
 
 public class GameStageHelper {
     
@@ -70,7 +70,7 @@ public class GameStageHelper {
      * @param stage The stage to look for.
      * @return Whether or not they have the stage.
      */
-    public static boolean hasStage (PlayerEntity player, String stage) {
+    public static boolean hasStage (Player player, String stage) {
         
         return hasStage(player, getPlayerData(player), stage);
     }
@@ -83,7 +83,7 @@ public class GameStageHelper {
      * @param stage The stage to look for.
      * @return Whether or not they have the stage.
      */
-    public static boolean hasStage (PlayerEntity player, @Nullable IStageData data, String stage) {
+    public static boolean hasStage (Player player, @Nullable IStageData data, String stage) {
         
         if (data != null) {
             
@@ -102,7 +102,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had at least one of the stages.
      */
-    public static boolean hasAnyOf (PlayerEntity player, String... stages) {
+    public static boolean hasAnyOf (Player player, String... stages) {
         
         return hasAnyOf(player, getPlayerData(player), stages);
     }
@@ -114,7 +114,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had at least one of the stages.
      */
-    public static boolean hasAnyOf (PlayerEntity player, Collection<String> stages) {
+    public static boolean hasAnyOf (Player player, Collection<String> stages) {
         
         return hasAnyOf(player, getPlayerData(player), stages);
     }
@@ -127,7 +127,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had at least one of the stages.
      */
-    public static boolean hasAnyOf (PlayerEntity player, @Nullable IStageData data, Collection<String> stages) {
+    public static boolean hasAnyOf (Player player, @Nullable IStageData data, Collection<String> stages) {
         
         return stages.stream().anyMatch(stage -> hasStage(player, data, stage));
     }
@@ -140,7 +140,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had at least one of the stages.
      */
-    public static boolean hasAnyOf (PlayerEntity player, @Nullable IStageData data, String... stages) {
+    public static boolean hasAnyOf (Player player, @Nullable IStageData data, String... stages) {
         
         return Arrays.stream(stages).anyMatch(stage -> hasStage(player, data, stage));
     }
@@ -152,7 +152,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had all the stages.
      */
-    public static boolean hasAllOf (PlayerEntity player, String... stages) {
+    public static boolean hasAllOf (Player player, String... stages) {
         
         return hasAllOf(player, getPlayerData(player), stages);
     }
@@ -164,7 +164,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had all the stages.
      */
-    public static boolean hasAllOf (PlayerEntity player, Collection<String> stages) {
+    public static boolean hasAllOf (Player player, Collection<String> stages) {
         
         return hasAllOf(player, getPlayerData(player), stages);
     }
@@ -177,7 +177,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had all the stages.
      */
-    public static boolean hasAllOf (PlayerEntity player, @Nullable IStageData data, Collection<String> stages) {
+    public static boolean hasAllOf (Player player, @Nullable IStageData data, Collection<String> stages) {
         
         return stages.stream().allMatch(stage -> hasStage(player, data, stage));
     }
@@ -190,7 +190,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had all the stages.
      */
-    public static boolean hasAllOf (PlayerEntity player, @Nullable IStageData data, String... stages) {
+    public static boolean hasAllOf (Player player, @Nullable IStageData data, String... stages) {
         
         return Arrays.stream(stages).allMatch(stage -> hasStage(player, data, stage));
     }
@@ -201,7 +201,7 @@ public class GameStageHelper {
      * @param player The player to give the stage.
      * @param stage The stage to give.
      */
-    public static void addStage (ServerPlayerEntity player, String stage) {
+    public static void addStage (ServerPlayer player, String stage) {
         
         if (!MinecraftForge.EVENT_BUS.post(new GameStageEvent.Add(player, stage))) {
             
@@ -222,7 +222,7 @@ public class GameStageHelper {
      * @param player The player to remove the stage from.
      * @param stage The stage to remove.
      */
-    public static void removeStage (ServerPlayerEntity player, String stage) {
+    public static void removeStage (ServerPlayer player, String stage) {
         
         if (!MinecraftForge.EVENT_BUS.post(new GameStageEvent.Remove(player, stage))) {
             
@@ -243,7 +243,7 @@ public class GameStageHelper {
      * @param player The player to clear the stages of.
      * @return The amount of stages that were removed.
      */
-    public static int clearStages (ServerPlayerEntity player) {
+    public static int clearStages (ServerPlayer player) {
         
         final IStageData stageInfo = GameStageHelper.getPlayerData(player);
         
@@ -268,11 +268,11 @@ public class GameStageHelper {
      * @return The stage data that was found. Will be null if nothing could be found.
      */
     @Nullable
-    public static IStageData getPlayerData (PlayerEntity player) {
+    public static IStageData getPlayerData (Player player) {
         
         if (player != null) {
             
-            if (player instanceof ServerPlayerEntity) {
+            if (player instanceof ServerPlayer) {
                 
                 if (player instanceof FakePlayer) {
                     
@@ -296,7 +296,7 @@ public class GameStageHelper {
      * 
      * @param player The player to sync.
      */
-    public static void syncPlayer (ServerPlayerEntity player) {
+    public static void syncPlayer (ServerPlayer player) {
         
         final IStageData info = GameStageHelper.getPlayerData(player);
         
