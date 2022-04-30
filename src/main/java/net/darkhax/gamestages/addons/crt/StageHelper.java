@@ -11,9 +11,11 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.blamejared.crafttweaker.api.entity.CTEntityIngredient;
 import com.blamejared.crafttweaker.impl.helper.CraftTweakerHelper;
 import net.darkhax.gamestages.addons.crt.util.DimensionCondition;
 import net.darkhax.gamestages.addons.crt.util.FishingHook;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.GlassBottleItem;
 import net.minecraft.potion.Effect;
@@ -21,6 +23,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import org.openzen.zencode.java.ZenCodeType;
 
@@ -489,6 +492,53 @@ public class StageHelper {
                 if (grantStages(player, stages) && hook != null) {
 
                     hook.accept(player, event.getOriginalEntity());
+                }
+            }
+        });
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageOnCrit(MCEntityType condition, String... stages) {
+
+        grantStageOnCrit(condition, null, stages);
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageOnCrit(MCEntityType condition, @Nullable BiConsumer<PlayerEntity, Entity> hook, String... stages) {
+
+        grantStageOnCrit((player, target) -> target.getType() == condition.getInternal(), hook, stages);
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageOnCrit(MCTag<MCEntityType> condition, String... stages) {
+
+        grantStageOnCrit(condition, null, stages);
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageOnCrit(MCTag<MCEntityType> condition, @Nullable BiConsumer<PlayerEntity, Entity> hook, String... stages) {
+
+        grantStageOnCrit((player, target) -> condition.getInternalRaw().contains(target.getType()), hook, stages);
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageOnCrit(BiPredicate<PlayerEntity, Entity> predicate, String... stages) {
+
+        grantStageOnCrit(predicate, null, stages);
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageOnCrit(BiPredicate<PlayerEntity, Entity> predicate, @Nullable BiConsumer<PlayerEntity, Entity> hook, String... stages) {
+
+        CTEventManager.register(CriticalHitEvent.class, event -> {
+
+            if (event.getPlayer() instanceof ServerPlayerEntity && predicate.test(event.getPlayer(), event.getTarget())) {
+
+                final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+
+                if (grantStages(player, stages) && hook != null) {
+
+                    hook.accept(player, event.getTarget());
                 }
             }
         });
