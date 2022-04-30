@@ -14,6 +14,8 @@ import javax.annotation.Nullable;
 import com.blamejared.crafttweaker.impl.helper.CraftTweakerHelper;
 import net.darkhax.gamestages.addons.crt.util.DimensionCondition;
 import net.darkhax.gamestages.addons.crt.util.FishingHook;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.GlassBottleItem;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
@@ -450,6 +452,43 @@ public class StageHelper {
                 if (grantStages(player, stages) && hook != null) {
 
                     hook.accept(player, event.getHookEntity(), output);
+                }
+            }
+        });
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageWhenPickedUp(IIngredient ingredient, String... stages) {
+
+        grantStageWhenPickedUp(ingredient, null, stages);
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageWhenPickedUp(IIngredient ingredient, @Nullable BiConsumer<PlayerEntity, ItemEntity> hook, String... stages) {
+
+        grantStageWhenPickedUp((player, stack) -> ingredient.matches(stack), hook, stages);
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageWhenPickedUp(BiPredicate<PlayerEntity, IItemStack> predicate, String... stages) {
+
+        grantStageWhenPickedUp(predicate, null, stages);
+    }
+
+    @ZenCodeType.Method
+    public static void grantStageWhenPickedUp(BiPredicate<PlayerEntity, IItemStack> predicate, @Nullable BiConsumer<PlayerEntity, ItemEntity> hook, String... stages) {
+
+        CTEventManager.register(PlayerEvent.ItemPickupEvent.class, event -> {
+
+            final IItemStack output = new MCItemStack(event.getStack());
+
+            if (event.getPlayer() instanceof ServerPlayerEntity && predicate.test(event.getPlayer(), output)) {
+
+                final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+
+                if (grantStages(player, stages) && hook != null) {
+
+                    hook.accept(player, event.getOriginalEntity());
                 }
             }
         });
