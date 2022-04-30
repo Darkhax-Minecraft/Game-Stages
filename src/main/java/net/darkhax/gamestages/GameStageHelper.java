@@ -36,11 +36,7 @@ public class GameStageHelper {
         return STAGE_PATTERN.test(stageName);
     }
     
-    /**
-     * Gets all the stages that are known to GameStages.
-     *
-     * @return All the known stages.
-     */
+
     
     /**
      * Gets an immutable set of all the stages defined in the known stages json file.
