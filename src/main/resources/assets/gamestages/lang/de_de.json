@@ -1,0 +1,23 @@
+{
+    "commands.gamestage.add.sender": "Stufe %s wurde für %s freigeschaltet!",
+    "commands.gamestage.add.target": "Du hast Stufe %s freigeschaltet!",
+
+    "commands.gamestage.remove.sender": "Stufe %s wurde von %s entfernt!",
+    "commands.gamestage.remove.target": "Du hast den Zugriff zu Stufe %s verloren!",
+
+    "commands.gamestage.check.failure": "%s hat Stufe %s nicht",
+    "commands.gamestage.check.success": "%s hat Stufe %s",
+
+    "commands.gamestage.info.empty": "%s hat keine Stufen freigeschaltet.",
+	"commands.gamestage.info.stages": "%s hat die folgenden Stufen. %s",
+
+    "commands.gamestage.clear.sender": "%d Stufen wurden von %s entfernt",
+    "commands.gamestage.clear.target": "Du hast %d verloren!",
+
+    "commands.gamestage.playeronly": "Entschuldige, dies nur für Spieler!",
+
+	"commands.gamestage.reloadfakes.info": "Gefälschte Stufen wurden neugeladen.",
+	"commands.gamestage.reloadknown.info": "%d bekannte Stufen wurden geladen.",
+	"commands.gamestage.all.target": "Du hast alle bekannten Stufen freigeschaltet!",
+	"commands.gamestage.all.sender": "%s hat alle bekannten Stufen freigeschaltet!"
+}
