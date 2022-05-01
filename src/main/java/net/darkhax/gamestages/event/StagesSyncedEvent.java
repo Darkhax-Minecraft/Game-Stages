@@ -2,7 +2,7 @@ package net.darkhax.gamestages.event;
 
 import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -17,7 +17,7 @@ public class StagesSyncedEvent extends PlayerEvent {
         this(data, Minecraft.getInstance().player);
     }
     
-    public StagesSyncedEvent(IStageData data, PlayerEntity player) {
+    public StagesSyncedEvent(IStageData data, Player player) {
         
         super(player);
         this.data = data;

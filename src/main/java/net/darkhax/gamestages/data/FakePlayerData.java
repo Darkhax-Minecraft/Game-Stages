@@ -1,13 +1,13 @@
 package net.darkhax.gamestages.data;
 
+import net.minecraft.nbt.CompoundTag;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.nbt.CompoundNBT;
 
 public class FakePlayerData implements IStageData {
     
@@ -56,13 +56,13 @@ public class FakePlayerData implements IStageData {
     }
     
     @Override
-    public void readFromNBT (CompoundNBT tag) {
+    public void readFromNBT (CompoundTag tag) {
         
         // unsupported
     }
     
     @Override
-    public CompoundNBT writeToNBT () {
+    public CompoundTag writeToNBT () {
         
         // unsupported
         return null;

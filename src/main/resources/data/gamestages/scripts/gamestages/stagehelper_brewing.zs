@@ -31,12 +31,12 @@ StageHelper.grantStageWhenBrewing(<potion:minecraft:long_leaping>, (player, brew
 
 // Grants a stage when the player brews any potion that gives night vision when
 // consumed by the player.
-StageHelper.grantStageWhenBrewing(<effect:minecraft:night_vision>, "brew_night_vision");
+StageHelper.grantStageWhenBrewing(<mobeffect:minecraft:night_vision>, "brew_night_vision");
 
 // Grants a stage when the player brews a potion that gives poison when
 // consumed by the player. If the player hasn't unlocked the stages yet the
 // code inside will be executed.
-StageHelper.grantStageWhenBrewing(<effect:minecraft:poison>, (player, brewed) => {
+StageHelper.grantStageWhenBrewing(<mobeffect:minecraft:poison>, (player, brewed) => {
     player.sendMessage("You brewed a poison potion!");
     player.give(<item:minecraft:stick>.withDisplayName("Milk Bucket"));
 }, "brew_poison");

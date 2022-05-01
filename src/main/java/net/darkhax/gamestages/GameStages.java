@@ -1,17 +1,14 @@
 package net.darkhax.gamestages;
 
+import net.darkhax.gamestages.packet.GameStagesPacketHandler;
+import net.minecraft.ChatFormatting;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.darkhax.bookshelf.network.NetworkHelper;
 import net.darkhax.gamestages.command.GameStageCommands;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
-import net.darkhax.gamestages.packet.MessageStages;
-import net.darkhax.gamestages.packet.NetworkHandlerClient;
-import net.darkhax.gamestages.packet.NetworkHandlerServer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -25,11 +22,10 @@ public class GameStages {
     
     public static final String MOD_ID = "gamestages";
     public static final Logger LOG = LogManager.getLogger("Game Stages");
-    public static final NetworkHelper NETWORK = new NetworkHelper("gamestages:main", "7.0.x");
+    public static final GameStagesPacketHandler NETWORK = new GameStagesPacketHandler();
     
     public GameStages() {
-        
-        NETWORK.registerEnqueuedMessage(MessageStages.class, NetworkHandlerServer::encodeStageMessage, t -> NetworkHandlerClient.decodeStageMessage(t), (t, u) -> NetworkHandlerClient.processSyncStagesMessage(t, u));
+
         GameStageSaveHandler.reloadFakePlayers();
         GameStageSaveHandler.reloadKnownStages();
         GameStageCommands.initializeCommands();
@@ -60,7 +56,7 @@ public class GameStages {
                 
                 if (data != null) {
                     
-                    event.getRight().add(TextFormatting.GOLD + TextFormatting.UNDERLINE.toString() + "GameStages");
+                    event.getRight().add(ChatFormatting.GOLD + ChatFormatting.UNDERLINE.toString() + "GameStages");
                     event.getRight().add("Count: " + data.getStages().size());
                     event.getRight().add("Type: " + data.getClass().getName());
                     event.getRight().add("Stages: " + data.getStages().toString());
@@ -69,7 +65,7 @@ public class GameStages {
             
             else {
                 
-                event.getRight().add(TextFormatting.GOLD + TextFormatting.UNDERLINE.toString() + "GameStages [Shift]");
+                event.getRight().add(ChatFormatting.GOLD + ChatFormatting.UNDERLINE.toString() + "GameStages [Shift]");
             }
         }
     }

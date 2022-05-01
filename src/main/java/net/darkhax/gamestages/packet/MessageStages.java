@@ -1,22 +1,19 @@
 package net.darkhax.gamestages.packet;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class MessageStages {
     
-    private final String[] stages;
-    
-    public MessageStages(String... stages) {
-        
-        this.stages = stages;
-    }
+    private final List<String> stages;
     
     public MessageStages(Collection<String> stages) {
         
-        this(stages.toArray(new String[0]));
+        this.stages = new ArrayList<>(stages);
     }
     
-    public String[] getStages () {
+    public List<String> getStages () {
         
         return this.stages;
     }

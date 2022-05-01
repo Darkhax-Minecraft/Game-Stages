@@ -20,11 +20,11 @@ StageHelper.grantStageOnKill(<entitytype:minecraft:creeper>, "kill_example_one")
 
 // Grants a stage to a player when they kill a mob in a tag. In this case we 
 // grant the stage whenever they kill any type of skeleton.
-StageHelper.grantStageOnKill(<tag:entity_types:minecraft:raiders>, "kill_example_two");
+//StageHelper.grantStageOnKill(<tag:entity_types:minecraft:raiders>, "kill_example_two");
 
 // Grants a stage to a player when they kill a mob that matches an custom
 // condition. In this case we check if the mob killed was added by Minecraft.
-StageHelper.grantStageOnKill((player, target) => target.type.registryName.namespace == "minecraft", "kill_example_three");
+StageHelper.grantStageOnKill((player, target) => target.getType().registryName.namespace == "minecraft", "kill_example_three");
 
 // Each of these methods can support an optional hook as the second argument.
 // This allows you to chain additional logic on when the stages are granted.

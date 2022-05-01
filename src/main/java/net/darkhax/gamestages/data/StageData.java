@@ -1,14 +1,14 @@
 package net.darkhax.gamestages.data;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraftforge.common.util.Constants.NBT;
 
 public class StageData implements IStageData {
     
@@ -46,9 +46,9 @@ public class StageData implements IStageData {
     }
     
     @Override
-    public void readFromNBT (CompoundNBT tag) {
+    public void readFromNBT (CompoundTag tag) {
         
-        final ListNBT list = tag.getList(TAG_STAGES, NBT.TAG_STRING);
+        final ListTag list = tag.getList(TAG_STAGES, Tag.TAG_STRING);
         
         for (int tagIndex = 0; tagIndex < list.size(); tagIndex++) {
             
@@ -57,15 +57,15 @@ public class StageData implements IStageData {
     }
     
     @Override
-    public CompoundNBT writeToNBT () {
+    public CompoundTag writeToNBT () {
         
-        final CompoundNBT tag = new CompoundNBT();
+        final CompoundTag tag = new CompoundTag();
         
-        final ListNBT list = new ListNBT();
+        final ListTag list = new ListTag();
         
         for (final String stage : this.unlockedStages) {
             
-            list.add(StringNBT.valueOf(stage));
+            list.add(StringTag.valueOf(stage));
         }
         
         tag.put(TAG_STAGES, list);

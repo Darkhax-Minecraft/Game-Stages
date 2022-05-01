@@ -11,8 +11,8 @@
 // from trading with villagers until they have crafted a chest.
 
 import crafttweaker.api.events.CTEventManager;
-import crafttweaker.api.event.entity.player.interact.MCEntityInteractEvent;
-import crafttweaker.api.util.MCHand;
+import crafttweaker.api.event.entity.player.interact.EntityInteractEvent;
+import crafttweaker.api.util.InteractionHand;
 import mods.gamestages.StageHelper;
 
 // The StageHelper class provides many helper methods for quickly giving stages
@@ -21,14 +21,14 @@ StageHelper.grantStageWhenCrafting(<item:minecraft:chest>, "crafted_chest");
 
 // Registers an event listener with CraftTweaker. The code inside here will be 
 // ran every time the player interacts with another entity.
-CTEventManager.register<MCEntityInteractEvent>((event) => {
+CTEventManager.register<EntityInteractEvent>((event) => {
 
     // The first bit makes sure the code is running on the server/logic thread.
     // The second part makes sure we are listening to mainhand clicks.
-    if (!event.player.world.remote && event.hand == MCHand.MAIN_HAND) {
+    if (!event.player.level.isClientSide() && event.hand == InteractionHand.MAIN_HAND) {
     
         // Checks if the entity being interracted with is a villager.
-        if (event.target.type == <entitytype:minecraft:villager>) {
+        if (event.target.getType() == <entitytype:minecraft:villager>) {
         
             // Checks if the player does NOT have the crafted_chest stage.
             if (!event.player.hasGameStage("crafted_chest")) {

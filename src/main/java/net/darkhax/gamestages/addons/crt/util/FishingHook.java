@@ -1,13 +1,9 @@
 package net.darkhax.gamestages.addons.crt.util;
 
-import com.blamejared.crafttweaker.api.item.IItemStack;
-import net.minecraft.entity.projectile.FishingBobberEntity;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.openzen.zencode.java.ZenCodeType;
-
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
@@ -17,5 +13,5 @@ import java.util.List;
 public interface FishingHook {
 
     @ZenCodeType.Method
-    void accept (PlayerEntity player, FishingBobberEntity bobber, List<IItemStack> items);
+    void accept(Player player, net.minecraft.world.entity.projectile.FishingHook bobber, List<ItemStack> items);
 }

@@ -1,4 +1,5 @@
-// StageHelper is a collection of optional helper functions that make simple 
+#debug
+// StageHelper is a collection of optional helper functions that make simple
 // tasks like granting stages much easier. While it can be very beneficial to 
 // use these helpers they are designed with simple use cases in mind and using
 // them limits your ability to fine tune. Fortunately every helper is optional
@@ -20,11 +21,11 @@ StageHelper.grantStageOnCrit(<entitytype:minecraft:creeper>, "crit_creeper");
 
 // Grants a stage to a player when they crit a mob that belongs to a specific
 // entity tag.
-StageHelper.grantStageOnCrit(<tag:entity_types:minecraft:raiders>, "crit_raider");
+//StageHelper.grantStageOnCrit(<tag:entity_types:minecraft:raiders>, "crit_raider");
 
 // Grants a stage to a player when they crit a mob and a special condition is
 // met. In this case we check if the mob being critted was added by Minecraft.
-StageHelper.grantStageOnCrit((player, target) => target.type.registryName.namespace == "minecraft", "crit_minecraft");
+StageHelper.grantStageOnCrit((player, target) => target.getType().registryName.namespace == "minecraft", "crit_minecraft");
 
 // Grants a stage to a player when they crit a mob and a special condition is 
 // met. The inner code will then be executed after the player receives their

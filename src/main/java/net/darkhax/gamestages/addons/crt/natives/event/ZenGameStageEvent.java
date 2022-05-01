@@ -2,9 +2,9 @@ package net.darkhax.gamestages.addons.crt.natives.event;
 
 import javax.annotation.Nonnull;
 
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import org.openzen.zencode.java.ZenCodeType;
 
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
 import com.blamejared.crafttweaker_annotations.annotations.NativeTypeRegistration;
 
 import net.darkhax.gamestages.event.GameStageEvent;
