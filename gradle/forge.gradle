@@ -146,14 +146,6 @@ dependencies {
         
     // Sets Minecraft and Forge as a dependency for the project.
     minecraft "net.minecraftforge:forge:${project.ext.mcVersion}-${forgeVersion}"
-    
-    // Loads mixin dependencies when needed.
-    if (project.hasProperty('mixin_id')) {
-    
-        // Gradle 5.0+ no longer auto-loads annotation processors. Mixin relies
-        // on these to generate the refmap file.
-        annotationProcessor 'org.spongepowered:mixin:0.8:processor'
-    }
 }
 
 processResources {

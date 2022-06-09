@@ -7,27 +7,38 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.darkhax.bookshelf.Constants;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegisterEvent;
 
 public class GameStageCommands {
     
     public static void initializeCommands () {
         
         MinecraftForge.EVENT_BUS.addListener(GameStageCommands::registerCommands);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(GameStageCommands::registerArguments);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(GameStageCommands::registerArgs);
     }
-    
+
+    private static void registerArgs(RegisterEvent event) {
+
+        if (event.getRegistryKey().equals(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY)) {
+
+            event.register(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, new ResourceLocation(Constants.MOD_ID, "stages"), () -> ArgumentTypeInfos.registerByClass(StageArgumentType.class, StageArgumentType.SERIALIZERS));
+        }
+    }
+
     private static void registerCommands (RegisterCommandsEvent event) {
         
         final LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("gamestage");
@@ -40,11 +51,6 @@ public class GameStageCommands {
         root.then(createPlayerStageCommand("check", 2, ctx -> checkStage(ctx, true), ctx -> checkStage(ctx, false)));
         
         event.getDispatcher().register(root);
-    }
-    
-    private static void registerArguments(FMLCommonSetupEvent event) {
-        
-        ArgumentTypes.register("stagename", StageArgumentType.class, StageArgumentType.SERIALIZERS);
     }
     
     private static LiteralArgumentBuilder<CommandSourceStack> createPlayerCommand (String key, int permissions, Command<CommandSourceStack> command, Command<CommandSourceStack> commandNoPlayer) {
@@ -87,11 +93,11 @@ public class GameStageCommands {
             GameStageHelper.addStage(player, knownStage);
         }
         
-        ctx.getSource().sendSuccess(new TranslatableComponent("commands.gamestage.all.target"), true);
+        ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.all.target"), true);
         
         if (player != ctx.getSource().getEntity()) {
             
-            ctx.getSource().sendSuccess(new TranslatableComponent("commands.gamestage.all.sender", player.getDisplayName()), true);
+            ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.all.sender", player.getDisplayName()), true);
         }
     }
     
@@ -117,10 +123,10 @@ public class GameStageCommands {
         
         final int removedStages = GameStageHelper.clearStages(player);
         
-        ctx.getSource().sendSuccess(new TranslatableComponent("commands.gamestage.clear.target", removedStages), true);
+        ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.clear.target", removedStages), true);
         
         if (player != ctx.getSource().getEntity()) {
-            ctx.getSource().sendSuccess(new TranslatableComponent("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
+            ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
         }
     }
     
@@ -146,7 +152,7 @@ public class GameStageCommands {
         
         final String stage = StageArgumentType.getStage(ctx, "stage");
         final boolean hasStage = GameStageHelper.hasStage(player, stage);
-        ctx.getSource().sendSuccess(new TranslatableComponent(hasStage ? "commands.gamestage.check.success" : "commands.gamestage.check.failure", player.getDisplayName(), stage), false);
+        ctx.getSource().sendSuccess(Component.translatable(hasStage ? "commands.gamestage.check.success" : "commands.gamestage.check.failure", player.getDisplayName(), stage), false);
         
         return hasStage;
     }
@@ -154,10 +160,10 @@ public class GameStageCommands {
     private static int reloadGameStages (CommandContext<CommandSourceStack> ctx) {
         
         GameStageSaveHandler.reloadFakePlayers();
-        ctx.getSource().sendSuccess(new TranslatableComponent("commands.gamestage.reloadfakes.info"), true);
+        ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.reloadfakes.info"), true);
         
         GameStageSaveHandler.reloadKnownStages();
-        ctx.getSource().sendSuccess(new TranslatableComponent("commands.gamestage.reloadknown.info", GameStageSaveHandler.getKnownStages().size()), true);
+        ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.reloadknown.info", GameStageSaveHandler.getKnownStages().size()), true);
         return 0;
     }
     
@@ -185,12 +191,12 @@ public class GameStageCommands {
         
         if (stageInfo.isEmpty()) {
             
-            ctx.getSource().sendSuccess(new TranslatableComponent("commands.gamestage.info.empty", player.getDisplayName()), false);
+            ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.info.empty", player.getDisplayName()), false);
         }
         
         else {
             
-            ctx.getSource().sendSuccess(new TranslatableComponent("commands.gamestage.info.stages", player.getDisplayName(), stageInfo), false);
+            ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.info.stages", player.getDisplayName(), stageInfo), false);
         }
     }
     
@@ -212,10 +218,10 @@ public class GameStageCommands {
             
             if (!silent || !BoolArgumentType.getBool(ctx, "silent")) {
                 
-                ctx.getSource().sendSuccess(new TranslatableComponent(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
+                ctx.getSource().sendSuccess(Component.translatable(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
                 
                 if (player != ctx.getSource().getEntity()) {
-                    ctx.getSource().sendSuccess(new TranslatableComponent(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
+                    ctx.getSource().sendSuccess(Component.translatable(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
                 }
             }
         }

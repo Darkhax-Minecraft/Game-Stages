@@ -18,8 +18,9 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import net.darkhax.bookshelf.api.serialization.Serializers;
 import net.darkhax.gamestages.GameStageHelper;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.network.FriendlyByteBuf;
 
 /**
@@ -30,18 +31,23 @@ public class StageArgumentType implements ArgumentType<String> {
     /**
      * Serializer for this argument type.
      */
-    public static final ArgumentSerializer<StageArgumentType> SERIALIZERS = new Serializer();
+    public static final ArgumentTypeInfo<StageArgumentType, ?> SERIALIZERS = new Serializer();
 
     /**
      * A list of examples used for this type.
      */
     private static final List<String> examples = Arrays.asList("stage", "stage_name", "example:stage");
 
-    private Set<String> knownStages;
+    private final Set<String> knownStages;
 
     public StageArgumentType() {
 
-        this.knownStages = GameStageHelper.getKnownStages();
+        this(GameStageHelper.getKnownStages());
+    }
+
+    public StageArgumentType(Set<String> knownStages) {
+
+        this.knownStages = knownStages;
     }
 
     /**
@@ -80,26 +86,53 @@ public class StageArgumentType implements ArgumentType<String> {
         return SharedSuggestionProvider.suggest(this.knownStages, builder);
     }
 
-    static class Serializer implements ArgumentSerializer<StageArgumentType> {
+    static class Template implements ArgumentTypeInfo.Template<StageArgumentType> {
 
-        @Override
-        public void serializeToNetwork(StageArgumentType argument, FriendlyByteBuf buffer) {
+        private final Set<String> knownStages;
 
-            Serializers.STRING.toByteBufList(buffer, new ArrayList<>(argument.knownStages));
+        Template(Set<String> knownStages) {
+
+            this.knownStages = knownStages;
         }
 
         @Override
-        public StageArgumentType deserializeFromNetwork(FriendlyByteBuf buffer) {
+        public StageArgumentType instantiate(CommandBuildContext context) {
 
-            final StageArgumentType arg = new StageArgumentType();
-            arg.knownStages = new HashSet<>(Serializers.STRING.fromByteBufList(buffer));
-            return arg;
+            return new StageArgumentType(this.knownStages);
         }
 
         @Override
-        public void serializeToJson(StageArgumentType argument, JsonObject json) {
+        public ArgumentTypeInfo<StageArgumentType, ?> type() {
 
-            json.add("known_stages", Serializers.STRING.toJSONSet(argument.knownStages));
+            return SERIALIZERS;
+        }
+    }
+
+    static class Serializer implements ArgumentTypeInfo<StageArgumentType, Template> {
+
+
+        @Override
+        public void serializeToNetwork(StageArgumentType.Template template, FriendlyByteBuf buffer) {
+
+            Serializers.STRING.toByteBufList(buffer, new ArrayList<>(template.knownStages));
+        }
+
+        @Override
+        public StageArgumentType.Template deserializeFromNetwork(FriendlyByteBuf buffer) {
+
+            return new StageArgumentType.Template(new HashSet<>(Serializers.STRING.fromByteBufList(buffer)));
+        }
+
+        @Override
+        public void serializeToJson(StageArgumentType.Template template, JsonObject json) {
+
+            json.add("known_stages", Serializers.STRING.toJSONSet(template.knownStages));
+        }
+
+        @Override
+        public StageArgumentType.Template unpack(StageArgumentType arg) {
+
+            return new StageArgumentType.Template(arg.knownStages);
         }
     }
 }

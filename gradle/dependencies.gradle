@@ -6,15 +6,10 @@ repositories {
 
         url 'https://maven.blamejared.com'
     }
-
-    maven {
-
-        url 'https://files.imja.red'
-    }
 }
 
 dependencies {
 
-    implementation fg.deobf(group: 'net.darkhax.bookshelf', name: 'Bookshelf-Forge-1.18.2', version: getProperty('bookshelf_version'))
-    implementation fg.deobf(group: 'com.blamejared.crafttweaker', name: 'CraftTweaker-forge-1.18.2', version: getProperty('crafttweaker_version'))
+    implementation fg.deobf(group: 'net.darkhax.bookshelf', name: 'Bookshelf-Forge-1.19', version: getProperty('bookshelf_version'))
+    //implementation fg.deobf(group: 'com.blamejared.crafttweaker', name: 'CraftTweaker-forge-1.18.2', version: getProperty('crafttweaker_version'))
 }

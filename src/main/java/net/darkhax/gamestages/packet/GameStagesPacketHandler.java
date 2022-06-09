@@ -6,6 +6,7 @@ import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.data.StageData;
 import net.darkhax.gamestages.event.StagesSyncedEvent;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,7 +20,7 @@ import java.util.function.Supplier;
 
 public class GameStagesPacketHandler {
 
-    private final String PROTOCOL = "8";
+    private final String PROTOCOL = "9";
     private final SimpleChannel channel = NetworkRegistry.newSimpleChannel(new ResourceLocation(GameStages.MOD_ID, "main"), () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
     public GameStagesPacketHandler() {
@@ -52,6 +53,7 @@ public class GameStagesPacketHandler {
 
         // Alert all the listeners.
         MinecraftForge.EVENT_BUS.post(new StagesSyncedEvent(clientData));
+        ctx.get().setPacketHandled(true);
     }
 
     private void encodeStageMessage (MessageStages packet, FriendlyByteBuf buffer) {
