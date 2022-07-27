@@ -87,17 +87,17 @@ public class GameStageSaveHandler {
 
                 final CompoundTag tag = NbtIo.readCompressed(playerFile);
                 playerData.readFromNBT(tag);
-                GameStages.LOG.debug("Loaded {} stages for {}.", playerData.getStages().size(), event.getPlayer().getName());
+                GameStages.LOG.debug("Loaded {} stages for {}.", playerData.getStages().size(), event.getEntity().getName());
             }
 
             catch (final IOException e) {
 
-                GameStages.LOG.error("Could not read player data for {}.", event.getPlayer().getName());
+                GameStages.LOG.error("Could not read player data for {}.", event.getEntity().getName());
                 GameStages.LOG.catching(e);
             }
         }
 
-        GLOBAL_STAGE_DATA.put(event.getPlayer().getUUID(), playerData);
+        GLOBAL_STAGE_DATA.put(event.getEntity().getUUID(), playerData);
     }
 
     /**
@@ -108,7 +108,7 @@ public class GameStageSaveHandler {
     @SubscribeEvent
     public static void onPlayerSave(PlayerEvent.SaveToFile event) {
 
-        final UUID playerUUID = event.getPlayer().getUUID();
+        final UUID playerUUID = event.getEntity().getUUID();
 
         if (GLOBAL_STAGE_DATA.containsKey(playerUUID)) {
 
@@ -121,7 +121,7 @@ public class GameStageSaveHandler {
                 try {
 
                     NbtIo.writeCompressed(tag, playerFile);
-                    GameStages.LOG.debug("Saved {} stages for {}.", playerData.getStages().size(), event.getPlayer().getName());
+                    GameStages.LOG.debug("Saved {} stages for {}.", playerData.getStages().size(), event.getEntity().getName());
                 }
 
                 catch (final IOException e) {
@@ -144,9 +144,9 @@ public class GameStageSaveHandler {
 
         // When a player connects to the server, sync their client data with the
         // server's data.
-        if (event.getPlayer() instanceof ServerPlayer) {
+        if (event.getEntity() instanceof ServerPlayer) {
 
-            GameStageHelper.syncPlayer((ServerPlayer) event.getPlayer());
+            GameStageHelper.syncPlayer((ServerPlayer) event.getEntity());
         }
     }
 

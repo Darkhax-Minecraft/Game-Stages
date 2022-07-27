@@ -21,7 +21,7 @@ itemIcon="minecraft:name_tag"
 [[dependencies.gamestages]]
     modId="forge"
     mandatory=true
-    versionRange="[41,]"
+    versionRange="[41.1.0,]"
     ordering="NONE"
     side="BOTH"
 
@@ -35,6 +35,6 @@ itemIcon="minecraft:name_tag"
 [[dependencies.gamestages]]
     modId="bookshelf"
     mandatory=true
-    versionRange="[14,)"
+    versionRange="[14.2.10,)"
     ordering="NONE"
     side="BOTH"

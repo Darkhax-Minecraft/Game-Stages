@@ -2,6 +2,8 @@ package net.darkhax.gamestages;
 
 import net.darkhax.gamestages.packet.GameStagesPacketHandler;
 import net.minecraft.ChatFormatting;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +13,6 @@ import net.darkhax.gamestages.data.IStageData;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,7 +45,7 @@ public class GameStages {
     }
     
     @OnlyIn(Dist.CLIENT)
-    private void onF3Text (RenderGameOverlayEvent.Text event) {
+    private void onF3Text (CustomizeGuiOverlayEvent.DebugText event) {
         
         final Minecraft mc = Minecraft.getInstance();
         
