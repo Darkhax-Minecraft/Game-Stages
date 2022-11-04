@@ -6,11 +6,6 @@ repositories {
 
         url 'https://maven.blamejared.com'
     }
-
-    maven {
-
-        url 'https://files.imja.red'
-    }
 }
 
 dependencies {
