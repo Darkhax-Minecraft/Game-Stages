@@ -1,0 +1,23 @@
+{
+    "commands.gamestage.add.sender": "Estágio %s desbloqueado para %s!",
+    "commands.gamestage.add.target": "Você desbloqueou o estágio %s!",
+
+    "commands.gamestage.remove.sender": "Estágio %s removido para %s!",
+    "commands.gamestage.remove.target": "Você perdeu o acesso ao estágio %s!",
+
+    "commands.gamestage.check.failure": "%s não tem estágio %s",
+    "commands.gamestage.check.success": "%s tem estágio %s",
+
+    "commands.gamestage.info.empty": "%s não tem estágios desbloqueados.",
+	"commands.gamestage.info.stages": "%s tem as seguintes etapas. %s",
+
+    "commands.gamestage.clear.sender": "%d estágios eliminados de %s",
+    "commands.gamestage.clear.target": "Você perdeu %d estágios!",
+
+    "commands.gamestage.playeronly": "Desculpe, apenas jogadores!",
+	
+	"commands.gamestage.reloadfakes.info": "Estágios de jogadores falsos recarregados.",
+	"commands.gamestage.reloadknown.info": "%d estágios conhecidos carregados.",
+	"commands.gamestage.all.target": "Você desbloqueou todos os estágios conhecidos!",
+	"commands.gamestage.all.sender": "%s desbloqueou todos os estágios conhecidos!"
+}
