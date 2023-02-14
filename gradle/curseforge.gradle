@@ -46,7 +46,6 @@ buildscript {
     
         classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
         classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.1.0'
-        classpath group: 'net.darkhax.tweedle', name: 'Tweedle', version: '1.0.5'
     }
 }
 
@@ -97,7 +96,6 @@ curseforge {
             
                 addGameVersion project.ext.mcVersion
                 addGameVersion 'Forge'
-                addGameVersion 'Java 8'
             }
 
             mainArtifact(jar) {
@@ -177,38 +175,4 @@ if (project.hasProperty('curse_discord_webhook')) {
             project.logger.error('Failed to push CF Discord webhook.')
         }
     }
-}
-
-def canTwitter = project.hasProperty('twitter_api_key') && project.hasProperty('twitter_api_key_secret') && project.hasProperty('twitter_access_token') && project.hasProperty('twitter_access_token_secret')
-    
-task postTweet (type: net.darkhax.tweedle.TaskPostTweet){
-    
-    onlyIf {
-    
-        canTwitter
-    }
-    
-    if (canTwitter) {
-    
-        addClient(project.findProperty('twitter_api_key'), project.findProperty('twitter_api_key_secret'), project.findProperty('twitter_access_token'), project.findProperty('twitter_access_token_secret'))
-    }
-    
-    doLast {
-    
-        // Reads the file ID given to us by CurseForge
-        def newFileId = tasks.getByName("curseforge${curse_project}").property('mainArtifact').fileID
-        def tweetBody = "${project.ext.modName} ${project.version} for Minecraft ${project.ext.mcVersion} has been released. #${project.ext.modName.toLowerCase().replaceAll("[^a-zA-Z]", "")}"
-        
-        if (projectPage && newFileId) {
-            
-            tweetBody += " ${projectPage}/files/${newFileId}"
-        }
-        
-        sendTweet(tweetBody)
-    }
-}
-
-if (!canTwitter) {
-    
-    project.logger.warn("Skipping Twitter plugin. APIKey: ${project.hasProperty('twitter_api_key')} ${project.hasProperty('twitter_api_key_secret')} AccessToken: ${project.hasProperty('twitter_access_token')} ${project.hasProperty('twitter_access_token_secret')}")
 }
