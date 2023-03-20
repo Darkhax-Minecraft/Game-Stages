@@ -1,12 +1,12 @@
 package net.darkhax.gamestages;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class GameStageReloader implements PreparableReloadListener {
 

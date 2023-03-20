@@ -1,10 +1,9 @@
 package net.darkhax.gamestages.data;
 
-import java.util.Collection;
+import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.nbt.CompoundTag;
+import java.util.Collection;
 
 public interface IStageData {
     

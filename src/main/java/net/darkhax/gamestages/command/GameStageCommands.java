@@ -1,7 +1,5 @@
 package net.darkhax.gamestages.command;
 
-import java.util.stream.Collectors;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -14,7 +12,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,6 +20,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
+
+import java.util.stream.Collectors;
 
 public class GameStageCommands {
     
@@ -33,9 +33,9 @@ public class GameStageCommands {
 
     private static void registerArgs(RegisterEvent event) {
 
-        if (event.getRegistryKey().equals(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY)) {
+        if (event.getRegistryKey().equals(Registries.COMMAND_ARGUMENT_TYPE)) {
 
-            event.register(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, new ResourceLocation(Constants.MOD_ID, "stages"), () -> ArgumentTypeInfos.registerByClass(StageArgumentType.class, StageArgumentType.SERIALIZERS));
+            event.register(Registries.COMMAND_ARGUMENT_TYPE, new ResourceLocation(Constants.MOD_ID, "stages"), () -> ArgumentTypeInfos.registerByClass(StageArgumentType.class, StageArgumentType.SERIALIZERS));
         }
     }
 

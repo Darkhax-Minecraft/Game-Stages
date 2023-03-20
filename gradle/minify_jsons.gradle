@@ -15,8 +15,9 @@
  Minified Example
  {"key":"value"}
 */
-import groovy.json.JsonSlurper
+
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 
 processResources {
     

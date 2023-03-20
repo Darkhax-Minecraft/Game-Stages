@@ -4,7 +4,7 @@
  
  For further information contact Jared: https://twitter.com/jaredlll08
 */
-import groovy.json.JsonSlurper
+
 import groovy.json.JsonOutput
 
 apply from: 'gradle/property_helper.gradle'

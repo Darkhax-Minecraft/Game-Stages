@@ -2,12 +2,11 @@ package net.darkhax.gamestages.data;
 
 import net.minecraft.nbt.CompoundTag;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
 
 public class FakePlayerData implements IStageData {
     

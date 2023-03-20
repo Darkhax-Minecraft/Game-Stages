@@ -1,13 +1,5 @@
 package net.darkhax.gamestages;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nullable;
-
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
@@ -17,6 +9,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class GameStageHelper {
     

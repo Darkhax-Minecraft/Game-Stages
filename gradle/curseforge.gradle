@@ -49,10 +49,10 @@ buildscript {
     }
 }
 
+
 import com.diluv.schoomp.Webhook
 import com.diluv.schoomp.message.Message
 import com.diluv.schoomp.message.embed.Embed
-import com.diluv.schoomp.message.embed.Footer
 
 apply from: 'gradle/property_helper.gradle'
 apply plugin: com.matthewprenger.cursegradle.CurseGradlePlugin
