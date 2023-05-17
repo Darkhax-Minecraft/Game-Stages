@@ -60,7 +60,7 @@ public class StageData implements IStageData {
     public CompoundTag writeToNBT () {
         
         final CompoundTag tag = new CompoundTag();
-        
+
         final ListTag list = new ListTag();
         
         for (final String stage : this.unlockedStages) {

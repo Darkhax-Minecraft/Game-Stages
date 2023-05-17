@@ -1,27 +1,16 @@
 package net.darkhax.gamestages.event;
 
 import net.darkhax.gamestages.data.IStageData;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import org.quiltmc.qsl.base.api.event.Event;
+import org.quiltmc.qsl.base.api.event.EventAwareListener;
 
-public class StagesSyncedEvent extends PlayerEvent {
-    
-    private final IStageData data;
-    
-    public StagesSyncedEvent(IStageData data) {
-        
-        this(data, Minecraft.getInstance().player);
-    }
-    
-    public StagesSyncedEvent(IStageData data, Player player) {
-        
-        super(player);
-        this.data = data;
-    }
-    
-    public IStageData getData () {
-        
-        return this.data;
-    }
+@FunctionalInterface
+public interface StagesSyncedEvent extends EventAwareListener {
+    Event<StagesSyncedEvent> STAGES_SYNCED_EVENT = Event.create(StagesSyncedEvent.class, callbacks -> (data) -> {
+        for (var callback: callbacks) {
+            callback.onStagesSynced(data);
+        }
+    });
+
+    void onStagesSynced(IStageData data);
 }

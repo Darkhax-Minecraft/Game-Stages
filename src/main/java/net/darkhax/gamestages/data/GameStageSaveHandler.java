@@ -5,20 +5,18 @@ import com.google.gson.Gson;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
+import net.minecraft.network.protocol.game.ServerGamePacketListener;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
+import org.quiltmc.qsl.networking.api.PacketSender;
 
-import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-@EventBusSubscriber(modid = "gamestages")
 public class GameStageSaveHandler {
 
     /**
@@ -65,68 +62,28 @@ public class GameStageSaveHandler {
      * A reference to the client's current stage data. This will be overridden every time the player joins a save
      * instance.
      */
-    @OnlyIn(Dist.CLIENT)
+    @ClientOnly
     private static IStageData clientData;
 
-    /**
-     * Hook for the player LoadFromFile event. Allows game stage data to be loaded when the player's data is loaded.
-     *
-     * @param event The forge event.
-     */
-    @SubscribeEvent
-    public static void onPlayerLoad(PlayerEvent.LoadFromFile event) {
+    public static void loadData(ServerPlayer player) {
+        if (player instanceof IPlayerDataSaver ipds) {
+            final IStageData playerData = new StageData();
+            playerData.readFromNBT(ipds.getPersistentData());
+            GameStages.LOG.debug("Loaded {} stages for {}.", playerData.getStages().size(), player.getName());
 
-        final File playerFile = getPlayerFile(event.getPlayerDirectory(), event.getPlayerUUID());
-        final IStageData playerData = new StageData();
-
-        if (playerFile.exists()) {
-
-            try {
-
-                final CompoundTag tag = NbtIo.readCompressed(playerFile);
-                playerData.readFromNBT(tag);
-                GameStages.LOG.debug("Loaded {} stages for {}.", playerData.getStages().size(), event.getEntity().getName());
-            }
-
-            catch (final IOException e) {
-
-                GameStages.LOG.error("Could not read player data for {}.", event.getEntity().getName());
-                GameStages.LOG.catching(e);
-            }
+            GLOBAL_STAGE_DATA.put(player.getUUID(), playerData);
         }
-
-        GLOBAL_STAGE_DATA.put(event.getEntity().getUUID(), playerData);
     }
 
-    /**
-     * Hook for the player SaveToFile event. Allows game stage data to be saved when the player's data is saved.
-     *
-     * @param event The Forge event.
-     */
-    @SubscribeEvent
-    public static void onPlayerSave(PlayerEvent.SaveToFile event) {
+    public static void saveData(ServerPlayer player) {
+        final UUID uuid = player.getUUID();
+        if (player instanceof IPlayerDataSaver ipds && GLOBAL_STAGE_DATA.containsKey(uuid)) {
+            final IStageData playerData = getPlayerData(uuid);
+            final CompoundTag nbt = playerData.writeToNBT();
 
-        final UUID playerUUID = event.getEntity().getUUID();
-
-        if (GLOBAL_STAGE_DATA.containsKey(playerUUID)) {
-
-            final IStageData playerData = getPlayerData(playerUUID);
-            final File playerFile = getPlayerFile(event.getPlayerDirectory(), event.getPlayerUUID());
-            final CompoundTag tag = playerData.writeToNBT();
-
-            if (tag != null) {
-
-                try {
-
-                    NbtIo.writeCompressed(tag, playerFile);
-                    GameStages.LOG.debug("Saved {} stages for {}.", playerData.getStages().size(), event.getEntity().getName());
-                }
-
-                catch (final IOException e) {
-
-                    GameStages.LOG.error("Could not write player data for {}.", playerFile.getName());
-                    GameStages.LOG.catching(e);
-                }
+            if (nbt != null) {
+                ipds.setPersistentData(nbt);
+                GameStages.LOG.debug("Saved {} stages for {}.", playerData.getStages().size(), player.getName());
             }
         }
     }
@@ -134,18 +91,14 @@ public class GameStageSaveHandler {
     /**
      * Hook for the PlayerLoggedInEvent. If the player is a valid server side player, their data will be synced to the
      * client.
-     *
-     * @param event The Forge event.
      */
-    @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerLoggedInEvent event) {
+    public static void onPlayerJoin(ServerGamePacketListenerImpl handler, PacketSender sender, MinecraftServer server) {
+        loadData(handler.getPlayer());
+        GameStageHelper.syncPlayer(handler.getPlayer());
+    }
 
-        // When a player connects to the server, sync their client data with the
-        // server's data.
-        if (event.getEntity() instanceof ServerPlayer) {
-
-            GameStageHelper.syncPlayer((ServerPlayer) event.getEntity());
-        }
+    public static void onPlayerDisconnect(ServerGamePacketListenerImpl handler, MinecraftServer server) {
+        saveData(handler.getPlayer());
     }
 
     /**
@@ -156,29 +109,9 @@ public class GameStageSaveHandler {
      * @param uuid The uuid of the player to lookup.
      * @return The stage data for the player. If one does not exist, it will be created.
      */
-    @Nullable
     public static IStageData getPlayerData(UUID uuid) {
 
         return GLOBAL_STAGE_DATA.get(uuid);
-    }
-
-    /**
-     * Gets a gamestage save file for a player.
-     *
-     * @param playerDir The instance specific save folder for player data.
-     * @param uuid      The uuid of the player to get a file for.
-     * @return The save file to use for the player.
-     */
-    private static File getPlayerFile(File playerDir, String uuid) {
-
-        final File saveDir = new File(playerDir, "gamestages");
-
-        if (!saveDir.exists()) {
-
-            saveDir.mkdirs();
-        }
-
-        return new File(saveDir, uuid + ".dat");
     }
 
     /**
@@ -352,7 +285,7 @@ public class GameStageSaveHandler {
      *
      * @return The current client side stage data.
      */
-    @OnlyIn(Dist.CLIENT)
+    @ClientOnly
     public static IStageData getClientData() {
 
         return clientData;
@@ -363,7 +296,7 @@ public class GameStageSaveHandler {
      *
      * @param stageData The stage data for the client.
      */
-    @OnlyIn(Dist.CLIENT)
+    @ClientOnly
     public static void setClientData(IStageData stageData) {
 
         clientData = stageData;

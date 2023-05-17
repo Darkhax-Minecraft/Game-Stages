@@ -1,6 +1,7 @@
 package net.darkhax.gamestages.command;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -8,39 +9,31 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.darkhax.bookshelf.Constants;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegisterEvent;
+import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
+import org.quiltmc.qsl.command.api.ServerArgumentType;
 
 import java.util.stream.Collectors;
 
 public class GameStageCommands {
     
     public static void initializeCommands () {
-        
-        MinecraftForge.EVENT_BUS.addListener(GameStageCommands::registerCommands);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(GameStageCommands::registerArgs);
+        CommandRegistrationCallback.EVENT.register(GameStageCommands::registerCommands);
+        registerArgs();
     }
 
-    private static void registerArgs(RegisterEvent event) {
-
-        if (event.getRegistryKey().equals(Registries.COMMAND_ARGUMENT_TYPE)) {
-
-            event.register(Registries.COMMAND_ARGUMENT_TYPE, new ResourceLocation(Constants.MOD_ID, "stages"), () -> ArgumentTypeInfos.registerByClass(StageArgumentType.class, StageArgumentType.SERIALIZERS));
-        }
+    private static void registerArgs() {
+        ServerArgumentType.register(new ResourceLocation(Constants.MOD_ID, "stages"),
+                StageArgumentType.class, StageArgumentType.SERIALIZERS, StageArgumentType::createVanillaFallback);
     }
 
-    private static void registerCommands (RegisterCommandsEvent event) {
-        
+    private static void registerCommands (CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         final LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("gamestage");
         root.then(createSilentStageCommand("add", 2, ctx -> changeStages(ctx, false, true), ctx -> changeStages(ctx, true, true)));
         root.then(createSilentStageCommand("remove", 2, ctx -> changeStages(ctx, false, false), ctx -> changeStages(ctx, true, false)));
@@ -49,8 +42,8 @@ public class GameStageCommands {
         root.then(createPlayerCommand("all", 2, ctx -> grantAll(ctx, true), ctx -> grantAll(ctx, false)));
         root.then(Commands.literal("reload").requires(sender -> sender.hasPermission(2)).executes(GameStageCommands::reloadGameStages));
         root.then(createPlayerStageCommand("check", 2, ctx -> checkStage(ctx, true), ctx -> checkStage(ctx, false)));
-        
-        event.getDispatcher().register(root);
+
+        dispatcher.register(root);
     }
     
     private static LiteralArgumentBuilder<CommandSourceStack> createPlayerCommand (String key, int permissions, Command<CommandSourceStack> command, Command<CommandSourceStack> commandNoPlayer) {

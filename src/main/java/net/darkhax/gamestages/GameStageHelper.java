@@ -2,15 +2,14 @@ package net.darkhax.gamestages;
 
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
-import net.darkhax.gamestages.event.GameStageEvent;
+import net.darkhax.gamestages.event.GameStagesEvents;
+import net.darkhax.gamestages.packet.GameStagesServerPacketHandler;
 import net.darkhax.gamestages.packet.MessageStages;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.util.thread.EffectiveSide;
+import org.quiltmc.loader.impl.gui.QuiltForkComms;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
@@ -78,13 +77,9 @@ public class GameStageHelper {
      * @param stage The stage to look for.
      * @return Whether or not they have the stage.
      */
-    public static boolean hasStage (Player player, @Nullable IStageData data, String stage) {
-        
+    public static boolean hasStage (Player player, IStageData data, String stage) {
         if (data != null) {
-            
-            final GameStageEvent.Check event = new GameStageEvent.Check(player, stage, data.hasStage(stage));
-            MinecraftForge.EVENT_BUS.post(event);
-            return event.hasStage();
+            return GameStagesEvents.CHECK_EVENT.invoker().onCheck(player, stage, data.hasStage(stage));
         }
         
         return false;
@@ -122,7 +117,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had at least one of the stages.
      */
-    public static boolean hasAnyOf (Player player, @Nullable IStageData data, Collection<String> stages) {
+    public static boolean hasAnyOf (Player player, IStageData data, Collection<String> stages) {
         
         return stages.stream().anyMatch(stage -> hasStage(player, data, stage));
     }
@@ -135,7 +130,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had at least one of the stages.
      */
-    public static boolean hasAnyOf (Player player, @Nullable IStageData data, String... stages) {
+    public static boolean hasAnyOf (Player player, IStageData data, String... stages) {
         
         return Arrays.stream(stages).anyMatch(stage -> hasStage(player, data, stage));
     }
@@ -172,7 +167,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had all the stages.
      */
-    public static boolean hasAllOf (Player player, @Nullable IStageData data, Collection<String> stages) {
+    public static boolean hasAllOf (Player player, IStageData data, Collection<String> stages) {
         
         return stages.stream().allMatch(stage -> hasStage(player, data, stage));
     }
@@ -185,7 +180,7 @@ public class GameStageHelper {
      * @param stages The stages to look for.
      * @return Whether or not the player had all the stages.
      */
-    public static boolean hasAllOf (Player player, @Nullable IStageData data, String... stages) {
+    public static boolean hasAllOf (Player player, IStageData data, String... stages) {
         
         return Arrays.stream(stages).allMatch(stage -> hasStage(player, data, stage));
     }
@@ -197,16 +192,14 @@ public class GameStageHelper {
      * @param stage The stage to give.
      */
     public static void addStage (ServerPlayer player, String stage) {
-        
-        if (!MinecraftForge.EVENT_BUS.post(new GameStageEvent.Add(player, stage))) {
-            
+        if (GameStagesEvents.ADD_EVENT.invoker().onAdd(player, stage)) {
             final IStageData data = getPlayerData(player);
-            
+
             if (data != null) {
-                
+
                 data.addStage(stage);
                 syncPlayer(player);
-                MinecraftForge.EVENT_BUS.post(new GameStageEvent.Added(player, stage));
+                GameStagesEvents.ADDED_EVENT.invoker().onAdded(player, stage);
             }
         }
     }
@@ -219,15 +212,14 @@ public class GameStageHelper {
      */
     public static void removeStage (ServerPlayer player, String stage) {
         
-        if (!MinecraftForge.EVENT_BUS.post(new GameStageEvent.Remove(player, stage))) {
-            
+        if (GameStagesEvents.REMOVE_EVENT.invoker().onRemove(player, stage)) {
             final IStageData data = getPlayerData(player);
             
             if (data != null) {
                 
                 data.removeStage(stage);
                 syncPlayer(player);
-                MinecraftForge.EVENT_BUS.post(new GameStageEvent.Removed(player, stage));
+                GameStagesEvents.REMOVED_EVENT.invoker().onRemoved(player, stage);
             }
         }
     }
@@ -247,7 +239,7 @@ public class GameStageHelper {
             final int stageCount = stageInfo.getStages().size();
             stageInfo.clear();
             syncPlayer(player);
-            MinecraftForge.EVENT_BUS.post(new GameStageEvent.Cleared(player, stageInfo));
+            GameStagesEvents.CLEARED_EVENT.invoker().onCleared(player, stageInfo);
             return stageCount;
         }
         
@@ -262,23 +254,13 @@ public class GameStageHelper {
      * @param player The player to resolve.
      * @return The stage data that was found. Will be null if nothing could be found.
      */
-    @Nullable
     public static IStageData getPlayerData (Player player) {
         
         if (player != null) {
             
             if (player instanceof ServerPlayer) {
-                
-                if (player instanceof FakePlayer) {
-                    
-                    return GameStageSaveHandler.getFakeData(player.getName().getString());
-                }
-                
                 return GameStageSaveHandler.getPlayerData(player.getUUID());
-            }
-            
-            else if (EffectiveSide.get().isClient()) {
-                
+            } else if (player instanceof LocalPlayer) {
                 return GameStageSaveHandler.getClientData();
             }
         }
@@ -298,7 +280,7 @@ public class GameStageHelper {
         if (info != null) {
             
             GameStages.LOG.debug("Syncing {} stages for {}.", info.getStages().size(), player.getName());
-            GameStages.NETWORK.syncPlayerStages(player, new MessageStages(info.getStages()));
+            GameStagesServerPacketHandler.syncPlayerStages(player, new MessageStages(info.getStages()));
         }
     }
 }

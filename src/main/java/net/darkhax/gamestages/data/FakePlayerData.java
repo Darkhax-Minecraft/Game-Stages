@@ -1,8 +1,8 @@
 package net.darkhax.gamestages.data;
 
+
 import net.minecraft.nbt.CompoundTag;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,19 +31,19 @@ public class FakePlayerData implements IStageData {
     }
     
     @Override
-    public boolean hasStage (@Nonnull final String stage) {
+    public boolean hasStage (final String stage) {
         
         return this.stages.contains(stage);
     }
     
     @Override
-    public void addStage (@Nonnull final String stage) {
+    public void addStage (final String stage) {
         
         // unsupported
     }
     
     @Override
-    public void removeStage (@Nonnull final String stage) {
+    public void removeStage (final String stage) {
         
         // unsupported
     }
