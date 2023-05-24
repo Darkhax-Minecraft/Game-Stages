@@ -1,82 +1,87 @@
 plugins {
-    id 'maven-publish'
-    alias libs.plugins.quilt.loom
+    id "java"
+    alias libs.plugins.vanilla.gradle apply false
+    alias libs.plugins.forge.gradle apply false
+    alias libs.plugins.mixin apply false
+    alias libs.plugins.quilt.loom apply false
 }
 
-archivesBaseName = project.archives_base_name
-version = "${project.version}+${libs.versions.minecraft.get()}"
-group = project.maven_group
+subprojects {
+    apply plugin: 'java'
 
-repositories {
-    maven { url 'https://maven.blamejared.com' }
-}
+    group "${mod_group}.${mod_id}"
+    version "${mod_version}+${libs.versions.minecraft.get()}"
 
-// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
-// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
-dependencies {
-    minecraft libs.minecraft
-    // mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
-
-    mappings loom.layered {
-        mappings "org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:intermediary-v2"
-        officialMojangMappings()
+    java {
+        toolchain.languageVersion.set(JavaLanguageVersion.of(java_version as int))
+        withSourcesJar()
+        withJavadocJar()
     }
-    modImplementation libs.quilt.loader
 
-    // QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
-    // Quilted Fabric API will automatically pull in the correct QSL version.
-    modImplementation libs.quilted.fabric.api
-    modImplementation "net.darkhax.bookshelf:Bookshelf-Fabric-1.19.4:18.0.2"
-}
-
-processResources {
-    inputs.property 'version', version
-
-    filesMatching('quilt.mod.json') {
-        expand "version": version
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+        it.options.release.set(java_version as int)
     }
-}
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = 'UTF-8'
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release = 17
-}
+    jar {
+        from(rootProject.file("LICENSE")) {
+            rename { "${it}_${mod_id}" }
+        }
 
-java {
-    // Still required by IDEs such as Eclipse and Visual Studio Code
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+        manifest {
+            attributes([
+                    'Specification-Title'     : mod_id,
+                    'Specification-Vendor'    : mod_author,
+                    'Specification-Version'   : "1", // We are version 1 of ourselves (the Manifest attributes specification)
+                    'Implementation-Title'    : mod_name,
+                    'Implementation-Version'  : project.jar.archiveVersion,
+                    'Implementation-Vendor'   : mod_author,
+                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    'Timestamp'               : System.currentTimeMillis(),
+                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+                    'Built-On-Minecraft'      : libs.versions.minecraft.get()
+            ])
+        }
 
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task if it is present.
-    // If you remove this line, sources will not be generated.
-    withSourcesJar()
+        sourcesJar {
+            from(rootProject.file("LICENSE")) {
+                rename { "${it}_${mod_id}" }
+            }
+        }
 
-    // If this mod is going to be a library, then it should also generate Javadocs in order to aid with development.
-    // Uncomment this line to generate them.
-    withJavadocJar()
-}
-
-// If you plan to use a different file for the license, don't forget to change the file name here!
-jar {
-    from('LICENSE') {
-        rename { "${it}_${archivesBaseName}" }
-    }
-}
-
-// Configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
+        // Disables Gradle's custom module metadata from being published to maven. The
+        // metadata includes mapped dependencies which are not reasonably consumable by
+        // other mod developers.
+        tasks.withType(GenerateModuleMetadata).configureEach {
+            it.setEnabled(false)
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        gradlePluginPortal()
+        mavenCentral()
+        maven {
+            name = 'Forge'
+            url = 'https://maven.minecraftforge.net/' }
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven {
+            name = 'Quilt'
+            url = 'https://maven.quiltmc.org/repository/release'
+        }
+        maven {
+            name = 'Sponge'
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+        maven {
+            name = 'Parchment'
+            url = 'https://maven.parchmentmc.org'
+        }
+        maven {
+            name = 'BlameJared Maven (CrT / Bookshelf)'
+            url = 'https://maven.blamejared.com'
+        }
     }
 }

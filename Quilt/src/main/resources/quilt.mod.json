@@ -12,7 +12,8 @@
 				"CozyPenguin": "Contributor"
 			},
 			"contact": {
-				"email": "contact@carlschierig.com"
+				"issues": "https://github.com/Darkhax-Minecraft/Game-Stages/issues",
+				"sources": "https://github.com/Darkhax-Minecraft/Game-Stages"
 			},
 			"license": "LGPL-2.1-only",
 			"icon": "assets/gamestages/mod_logo.png"
@@ -25,7 +26,7 @@
 		"depends": [
 			{
 				"id": "quilt_loader",
-				"versions": ">=0.18.3-"
+				"versions": ">=0.18.10-"
 			},
 			{
 				"id": "quilted_fabric_api",
@@ -37,5 +38,5 @@
 			}
 		]
 	},
-	"mixin": "gamestages.mixins.json"
+	"mixin": "gamestages.quilt.mixins.json"
 }

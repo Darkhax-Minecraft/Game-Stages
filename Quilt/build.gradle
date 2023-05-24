@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+    alias libs.plugins.quilt.loom
+}
+
+loom {}
+
+archivesBaseName =  "${mod_name}-quilt"
+
+dependencies {
+    minecraft libs.minecraft
+
+    mappings loom.layered {
+        mappings "org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:intermediary-v2"
+        officialMojangMappings()
+    }
+    modImplementation libs.quilt.loader
+    modImplementation libs.quilted.fabric.api
+
+    modImplementation libs.bookshelf
+
+    implementation project(":Common")
+}
+
+loom {
+    mixin {
+        defaultRefmapName = "${mod_id}.refmap.json"
+        // See https://github.com/FabricMC/fabric-loom/blob/dev/0.11/src/main/java/net/fabricmc/loom/api/MixinExtensionAPI.java
+        // for options to add additional sourcesets
+    }
+
+    runs {
+        client {
+            client()
+            setConfigName("Quilt Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Quilt Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+// Add the generated resources to the main source set
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+processResources {
+    from project(":Common").sourceSets.main.resources
+    inputs.property "version", mod_version
+
+    filesMatching("quilt.mod.json") {
+        expand "version": mod_version
+    }
+}
+tasks.withType(JavaCompile).configureEach {
+    it.source(project(":Common").sourceSets.main.allSource)
+}
+
+sourcesJar {
+    from project(":Common").sourceSets.main.allSource
+}
+
+javadoc {
+    source(project(":Common").sourceSets.main.allJava)
+}

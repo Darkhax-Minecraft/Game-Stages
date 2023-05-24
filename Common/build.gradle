@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    alias libs.plugins.vanilla.gradle
+}
+
+archivesBaseName = "${mod_name}-common"
+
+minecraft {
+    version(libs.versions.minecraft.get())
+
+    runs {
+        server(common_server_run_name as String) {
+            workingDirectory(this.file("run"))
+        }
+        client(common_client_run_name as String) {
+            workingDirectory(this.file("run"))
+        }
+    }
+}
+
+dependencies {
+    compileOnly libs.mixin
+    sourceSets.main.resources { srcDir 'src/generated/resources' }
+}
+
+processResources {
+    def buildProps = new HashMap<>(project.properties)
+
+    filesMatching(['pack.mcmeta']) {
+        expand buildProps
+    }
+}

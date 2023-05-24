@@ -1,17 +1,25 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
 minecraft = "1.19.4"
+mixin = "0.8.5"
+
 quilt_mappings = "1.19.4+build.10"
 quilt_loader = "0.19.0-beta.13"
-
 quilted_fabric_api = "6.0.0-beta.6+0.79.0-1.19.4"
+
+bookshelf = "18.0.2"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
+
+# Quilt
 quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_mappings" }
 quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
 
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
+
+bookshelf = { module = "net.darkhax.bookshelf:Bookshelf-Fabric-1.19.4", version.ref = "bookshelf" }
 
 # If you have multiple similar dependencies, you can declare a dependency bundle and reference it on the build script with "libs.bundles.example".
 [bundles]
@@ -19,3 +27,6 @@ quilted_fabric_api = ["quilted_fabric_api"]
 
 [plugins]
 quilt_loom = { id = "org.quiltmc.loom", version = "1.1.+" }
+vanilla_gradle = { id = "org.spongepowered.gradle.vanilla", version = "0.2.+"}
+forge_gradle = { id = "net.minecraftforge.gradle", version = "5.1.+" }
+mixin = { id = "org.spongepowered.mixin", version = "0.7.+" }
