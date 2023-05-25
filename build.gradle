@@ -6,55 +6,35 @@ plugins {
     alias libs.plugins.quilt.loom apply false
 }
 
+apply from: 'gradle/property_loader.gradle'
+apply from: 'gradle/build_number.gradle'
+//apply from: 'gradle/git_changelog.gradle'
+apply from: 'gradle/version_checker.gradle'
+
 subprojects {
-    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    apply from: '../gradle/property_loader.gradle'
+    apply from: '../gradle/java.gradle'
+    apply from: '../gradle/build_number.gradle'
+    //apply from: '../gradle/git_changelog.gradle'
+    apply from: '../gradle/minify_jsons.gradle'
+    apply from: '../gradle/signing.gradle'
+
+    // Disables Gradle's custom module metadata from being published to maven. The
+    // metadata includes mapped dependencies which are not reasonably consumable by
+    // other mod developers.
+    tasks.withType(GenerateModuleMetadata) {
+
+        enabled = false
+    }
 
     group "${mod_group}.${mod_id}"
     version "${mod_version}+${libs.versions.minecraft.get()}"
 
-    java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(java_version as int))
-        withSourcesJar()
-        withJavadocJar()
-    }
-
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
         it.options.release.set(java_version as int)
-    }
-
-    jar {
-        from(rootProject.file("LICENSE")) {
-            rename { "${it}_${mod_id}" }
-        }
-
-        manifest {
-            attributes([
-                    'Specification-Title'     : mod_id,
-                    'Specification-Vendor'    : mod_author,
-                    'Specification-Version'   : "1", // We are version 1 of ourselves (the Manifest attributes specification)
-                    'Implementation-Title'    : mod_name,
-                    'Implementation-Version'  : project.jar.archiveVersion,
-                    'Implementation-Vendor'   : mod_author,
-                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    'Timestamp'               : System.currentTimeMillis(),
-                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
-                    'Built-On-Minecraft'      : libs.versions.minecraft.get()
-            ])
-        }
-
-        sourcesJar {
-            from(rootProject.file("LICENSE")) {
-                rename { "${it}_${mod_id}" }
-            }
-        }
-
-        // Disables Gradle's custom module metadata from being published to maven. The
-        // metadata includes mapped dependencies which are not reasonably consumable by
-        // other mod developers.
-        tasks.withType(GenerateModuleMetadata).configureEach {
-            it.setEnabled(false)
-        }
     }
 
     repositories {

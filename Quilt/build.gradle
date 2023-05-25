@@ -3,9 +3,10 @@ plugins {
     alias libs.plugins.quilt.loom
 }
 
-loom {}
+apply from: '../gradle/property_helper.gradle'
+apply from: '../gradle/patreon.gradle'
 
-archivesBaseName =  "${mod_name}-quilt"
+archivesBaseName =  "${mod_name}-Quilt"
 
 dependencies {
     minecraft libs.minecraft
@@ -23,11 +24,6 @@ dependencies {
 }
 
 loom {
-    mixin {
-        defaultRefmapName = "${mod_id}.refmap.json"
-        // See https://github.com/FabricMC/fabric-loom/blob/dev/0.11/src/main/java/net/fabricmc/loom/api/MixinExtensionAPI.java
-        // for options to add additional sourcesets
-    }
 
     runs {
         client {
@@ -55,7 +51,40 @@ processResources {
     filesMatching("quilt.mod.json") {
         expand "version": mod_version
     }
+
+    def buildProps = project.properties.clone()
+
+    if (project.hasProperty('patreon')) {
+
+        def supporters = new ArrayList<String>()
+
+        for (entry in project.ext.patreon.pledges) {
+
+            def pledge = entry.value;
+
+            if (pledge.isValid()) {
+
+                supporters.add(pledge.getDisplayName())
+            }
+        }
+
+        buildProps.put('mod_supporters', supporters.join(/","/))
+    }
+
+    filesMatching(['fabric.mod.json', 'pack.mcmeta']) {
+
+        expand buildProps
+    }
+
+    if (project.ext.mixin_enabled) {
+
+        filesMatching('*.mixins.json') {
+
+            expand buildProps
+        }
+    }
 }
+
 tasks.withType(JavaCompile).configureEach {
     it.source(project(":Common").sourceSets.main.allSource)
 }

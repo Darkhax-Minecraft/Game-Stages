@@ -1,0 +1,154 @@
+plugins {
+    id "java"
+    id "eclipse"
+    alias libs.plugins.forge.gradle
+}
+
+apply from: '../gradle/property_helper.gradle'
+apply from: '../gradle/property_loader.gradle'
+
+apply from: '../gradle/patreon.gradle'
+
+project.ext.mixin_enabled = project.file("src/main/resources/${mod_id}.forge.mixins.json").exists()
+project.ext.mixin_refmap = "${mod_id}.refmap.json"
+project.logger.lifecycle("Mixin ${project.ext.mixin_enabled ? 'enabled' : 'disabled'} for project ${project.name}.")
+
+archivesBaseName = "${mod_name}-Forge"
+
+minecraft {
+
+    mappings channel: 'official', version: minecraft_version
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Client'
+
+            property 'forge.logging.console.level', 'debug'
+            property 'terminal.ansi', 'true'
+
+            if (project.ext.mixin_enabled) {
+                arg "-mixin.config=${mod_id}.common.mixins.json"
+                arg "-mixin.config=${mod_id}.forge.mixins.json"
+            }
+
+            mods {
+                modClientRun {
+                    source sourceSets.main
+                    source project(":Common").sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Server'
+            property 'forge.logging.console.level', 'debug'
+            property 'terminal.ansi', 'true'
+
+            if (project.ext.mixin_enabled) {
+                arg "-mixin.config=${mod_id}.common.mixins.json"
+                arg "-mixin.config=${mod_id}.forge.mixins.json"
+            }
+
+            mods {
+                modServerRun {
+                    source sourceSets.main
+                    source project(":Common").sourceSets.main
+                }
+            }
+        }
+
+        gameTestServer {
+            workingDirectory project.file('run')
+
+            // needed to not make CI think the task failed
+            setForceExit(false)
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'bookshelf'
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                    source project(":Common").sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    compileOnly project(":Common")
+    compileOnly libs.bookshelf
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":Common").sourceSets.main.allSource)
+}
+
+processResources {
+
+    from project(":Common").sourceSets.main.resources
+
+    def buildProps = project.properties.clone()
+
+    // Replaces FML's magic file.jarVersion string with the correct version at
+    // build time.
+    buildProps.put('file', [jarVersion: project.version])
+
+    if (project.hasProperty('patreon')) {
+
+        def supporters = new ArrayList<String>()
+
+        for (entry in project.ext.patreon.pledges) {
+
+            def pledge = entry.value;
+
+            if (pledge.isValid()) {
+
+                supporters.add(pledge.getDisplayName())
+            }
+        }
+
+        buildProps.put('mod_supporters', supporters.join(', '))
+    }
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+
+        expand buildProps
+    }
+
+    if (project.ext.mixin_enabled) {
+
+        filesMatching('*.mixins.json') {
+
+            expand buildProps
+        }
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+// -- Mixin Support
+if (project.ext.mixin_enabled) {
+
+    apply plugin: 'org.spongepowered.mixin'
+
+    mixin {
+
+        // Tells the mixin plugin where to put the generated refmap file.
+        add sourceSets.main, project.ext.mixin_refmap
+
+        config "${mod_id}.common.mixins.json"
+        config "${mod_id}.forge.mixins.json"
+    }
+}
+

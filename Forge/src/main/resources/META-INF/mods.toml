@@ -1,0 +1,40 @@
+modLoader="javafml"
+loaderVersion="[45,]"
+issueTrackerURL="https://github.com/Darkhax-Minecraft/Game-Stages"
+license="LGPL v2.1"
+logoFile="mod_logo.png"
+logoBlur=false
+
+[[mods]]
+modId="gamestages"
+updateJSONURL="https://updates.blamejared.com/get?n=gamestages&gv=1.19.4"
+version="${file.jarVersion}"
+displayName="${mod_name}"
+displayURL="${mod_homepage}"
+credits="${mod_credits}"
+authors="${mod_author}"
+description='''
+${mod_description}
+'''
+itemIcon="minecraft:name_tag"
+
+[[dependencies.gamestages]]
+    modId="forge"
+    mandatory=true
+    versionRange="[45,]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.gamestages]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.4]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.gamestages]]
+    modId="bookshelf"
+    mandatory=true
+    versionRange="[18,)"
+    ordering="NONE"
+    side="BOTH"

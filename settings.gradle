@@ -31,5 +31,5 @@ pluginManagement {
 rootProject.name = 'Game-Stages'
 
 include ":Common"
-//include ":Forge"
+include ":Forge"
 include ":Quilt"

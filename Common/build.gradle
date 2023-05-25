@@ -3,7 +3,9 @@ plugins {
     alias libs.plugins.vanilla.gradle
 }
 
-archivesBaseName = "${mod_name}-common"
+apply from: '../gradle/property_helper.gradle'
+
+archivesBaseName = "${mod_name}-Common"
 
 minecraft {
     version(libs.versions.minecraft.get())
@@ -20,7 +22,6 @@ minecraft {
 
 dependencies {
     compileOnly libs.mixin
-    sourceSets.main.resources { srcDir 'src/generated/resources' }
 }
 
 processResources {
