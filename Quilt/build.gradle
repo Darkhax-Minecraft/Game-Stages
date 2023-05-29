@@ -11,6 +11,7 @@ archivesBaseName =  "${mod_name}-Quilt"
 dependencies {
     minecraft libs.minecraft
 
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     mappings loom.layered {
         mappings "org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:intermediary-v2"
         officialMojangMappings()
