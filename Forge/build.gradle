@@ -33,6 +33,9 @@ minecraft {
                 arg "-mixin.config=${mod_id}.forge.mixins.json"
             }
 
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
                 modClientRun {
                     source sourceSets.main
@@ -52,6 +55,9 @@ minecraft {
                 arg "-mixin.config=${mod_id}.common.mixins.json"
                 arg "-mixin.config=${mod_id}.forge.mixins.json"
             }
+
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
                 modServerRun {
@@ -137,6 +143,20 @@ processResources {
 
 jar.finalizedBy('reobfJar')
 
+jar {
+
+    manifest {
+
+        def newProps = [:]
+
+        if (project.ext.mixin_enabled) {
+            newProps['MixinConfigs'] = "${mod_id}.mixins.json"
+        }
+
+        attributes(newProps)
+    }
+}
+
 // -- Mixin Support
 if (project.ext.mixin_enabled) {
 
@@ -151,4 +171,3 @@ if (project.ext.mixin_enabled) {
         config "${mod_id}.forge.mixins.json"
     }
 }
-

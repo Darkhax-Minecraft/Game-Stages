@@ -32,11 +32,6 @@ subprojects {
     group "${mod_group}.${mod_id}"
     version "${mod_version}+${libs.versions.minecraft.get()}"
 
-    tasks.withType(JavaCompile).configureEach {
-        it.options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-        it.options.release.set(java_version as int)
-    }
-
     repositories {
         gradlePluginPortal()
         mavenCentral()
