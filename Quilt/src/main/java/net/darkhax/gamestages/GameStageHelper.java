@@ -5,6 +5,7 @@ import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStagesEvents;
 import net.darkhax.gamestages.packet.GameStagesServerPacketHandler;
 import net.darkhax.gamestages.packet.MessageStages;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -259,6 +260,9 @@ public class GameStageHelper {
         if (player != null) {
             
             if (player instanceof ServerPlayer) {
+                if (player instanceof FakePlayer) {
+                    return GameStageSaveHandler.getFakeData(player.getName().getString());
+                }
                 return GameStageSaveHandler.getPlayerData(player.getUUID());
             } else if (player instanceof LocalPlayer) {
                 return GameStageSaveHandler.getClientData();
