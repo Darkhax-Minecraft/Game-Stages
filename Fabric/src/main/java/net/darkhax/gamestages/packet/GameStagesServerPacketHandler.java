@@ -1,10 +1,10 @@
 package net.darkhax.gamestages.packet;
 
 import net.darkhax.bookshelf.api.serialization.Serializers;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 public class GameStagesServerPacketHandler extends GameStagesPacketHandler {
 

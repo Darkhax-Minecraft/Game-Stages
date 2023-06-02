@@ -9,6 +9,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.darkhax.bookshelf.Constants;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
+import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -16,8 +18,6 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
-import org.quiltmc.qsl.command.api.ServerArgumentType;
 
 import java.util.stream.Collectors;
 
@@ -29,8 +29,8 @@ public class GameStageCommands {
     }
 
     private static void registerArgs() {
-        ServerArgumentType.register(new ResourceLocation(Constants.MOD_ID, "stages"),
-                StageArgumentType.class, StageArgumentType.SERIALIZERS, StageArgumentType::createVanillaFallback);
+        ArgumentTypeRegistry.registerArgumentType(new ResourceLocation(Constants.MOD_ID, "stages"),
+                StageArgumentType.class, StageArgumentType.SERIALIZERS);
     }
 
     private static void registerCommands (CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {

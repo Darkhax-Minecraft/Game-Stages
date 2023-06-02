@@ -1,15 +1,15 @@
 package net.darkhax.gamestages;
 
 import net.darkhax.gamestages.packet.GameStagesClientPacketHandler;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class GameStagesClient implements ClientModInitializer {
 
     @Override
-    public void onInitializeClient(ModContainer mod) {
+    public void onInitializeClient() {
         GameStagesClientPacketHandler.registerS2CPackets();
     }
 }

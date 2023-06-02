@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "gamestages",
+	"version": "${version}",
+	"name": "GameStages",
+	"description": "A framework for creating custom progression systems.",
+	"contact": {
+		"issues": "https://github.com/Darkhax-Minecraft/Game-Stages/issues",
+		"sources": "https://github.com/Darkhax-Minecraft/Game-Stages"
+	},
+	"authors": [
+		"Darkhax"
+	],
+	"contributors": [
+		"CozyPenguin"
+	],
+	"license": "LGPL-2.1-only",
+	"icon": "assets/gamestages/mod_logo.png",
+	"entrypoints": {
+		"main": ["net.darkhax.gamestages.GameStages"],
+		"client": ["net.darkhax.gamestages.GameStagesClient"]
+	},
+	"mixins": [
+		"gamestages.fabric.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.19",
+		"fabric-api": ">=0.83.0",
+		"minecraft": ">=1.19.4"
+	}
+}

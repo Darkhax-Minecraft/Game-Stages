@@ -32,4 +32,4 @@ rootProject.name = 'Game-Stages'
 
 include ":Common"
 include ":Forge"
-include ":Quilt"
+include ":Fabric"

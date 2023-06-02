@@ -2,13 +2,12 @@ package net.darkhax.gamestages;
 
 import net.darkhax.gamestages.command.GameStageCommands;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.server.packs.PackType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents;
-import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
 
 public class GameStages implements ModInitializer {
     
@@ -43,12 +42,12 @@ public class GameStages implements ModInitializer {
     // }
 
     @Override
-    public void onInitialize(ModContainer mod) {
+    public void onInitialize() {
         GameStageSaveHandler.reloadFakePlayers();
         GameStageSaveHandler.reloadKnownStages();
         GameStageCommands.initializeCommands();
 
-        ResourceLoader.get(PackType.SERVER_DATA).registerReloader(new GameStageReloader());
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new GameStageReloader());
 
         ServerPlayConnectionEvents.JOIN.register(GameStageSaveHandler::onPlayerJoin);
         ServerPlayConnectionEvents.DISCONNECT.register(GameStageSaveHandler::onPlayerDisconnect);

@@ -3,7 +3,7 @@ plugins {
     alias libs.plugins.vanilla.gradle apply false
     alias libs.plugins.forge.gradle apply false
     alias libs.plugins.mixin apply false
-    alias libs.plugins.quilt.loom apply false
+    alias libs.plugins.fabric.loom apply false
 }
 
 apply from: 'gradle/property_loader.gradle'

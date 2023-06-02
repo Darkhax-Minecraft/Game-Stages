@@ -71,7 +71,7 @@ minecraft {
             workingDirectory project.file('run')
 
             // needed to not make CI think the task failed
-            setForceExit(false)
+            // setForceExit(false)
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'

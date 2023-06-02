@@ -6,18 +6,15 @@ import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.data.StageData;
 import net.darkhax.gamestages.event.StagesSyncedEvent;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
-import org.quiltmc.qsl.networking.api.PacketSender;
-import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class GameStagesClientPacketHandler extends GameStagesPacketHandler {
     public static void registerS2CPackets() {
         ClientPlayNetworking.registerGlobalReceiver(CHANNEL, GameStagesClientPacketHandler::receivePacket);

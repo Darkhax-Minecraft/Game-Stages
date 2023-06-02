@@ -1,17 +1,17 @@
 package net.darkhax.gamestages.event;
 
 import net.darkhax.gamestages.data.IStageData;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import org.quiltmc.qsl.base.api.event.Event;
-import org.quiltmc.qsl.base.api.event.EventAwareListener;
 
 /**
  * This class holds all the various game stage events. The main class itself should not be
  * treated as an event.
  */
 public class GameStagesEvents {
-    public static final Event<Add> ADD_EVENT = Event.create(Add.class, callbacks -> (player, stageName) -> {
+    public static final Event<Add> ADD_EVENT = EventFactory.createArrayBacked(Add.class, callbacks -> (player, stageName) -> {
         boolean result = true;
         for (var callback: callbacks) {
             if (!callback.onAdd(player, stageName)) {
@@ -21,13 +21,13 @@ public class GameStagesEvents {
         return result;
     });
 
-    public static final Event<Added> ADDED_EVENT = Event.create(Added.class, callbacks -> (player, stageName) -> {
+    public static final Event<Added> ADDED_EVENT = EventFactory.createArrayBacked(Added.class, callbacks -> (player, stageName) -> {
         for (var callback: callbacks) {
             callback.onAdded(player, stageName);
         }
     });
 
-    public static final Event<Remove> REMOVE_EVENT = Event.create(Remove.class, callbacks -> (player, stageName) -> {
+    public static final Event<Remove> REMOVE_EVENT = EventFactory.createArrayBacked(Remove.class, callbacks -> (player, stageName) -> {
         boolean result = true;
         for (var callback: callbacks) {
             if (!callback.onRemove(player, stageName)) {
@@ -37,19 +37,19 @@ public class GameStagesEvents {
         return result;
     });
 
-    public static final Event<Removed> REMOVED_EVENT = Event.create(Removed.class, callbacks -> (player, stageName) -> {
+    public static final Event<Removed> REMOVED_EVENT = EventFactory.createArrayBacked(Removed.class, callbacks -> (player, stageName) -> {
         for (var callback: callbacks) {
             callback.onRemoved(player, stageName);
         }
     });
 
-    public static final Event<Cleared> CLEARED_EVENT = Event.create(Cleared.class, callbacks -> (player, stageName) -> {
+    public static final Event<Cleared> CLEARED_EVENT = EventFactory.createArrayBacked(Cleared.class, callbacks -> (player, stageName) -> {
         for (var callback: callbacks) {
             callback.onCleared(player, stageName);
         }
     });
 
-    public static final Event<Check> CHECK_EVENT = Event.create(Check.class, callbacks -> (player, stageName, hasStage) -> {
+    public static final Event<Check> CHECK_EVENT = EventFactory.createArrayBacked(Check.class, callbacks -> (player, stageName, hasStage) -> {
         boolean result = hasStage;
         for (var callback: callbacks) {
             if (!callback.onCheck(player, stageName, hasStage)) {
@@ -60,7 +60,7 @@ public class GameStagesEvents {
     });
 
     @FunctionalInterface
-    public interface Add extends EventAwareListener {
+    public interface Add {
 
         /**
          * This event is fired every time a stage is added to the player via
@@ -71,7 +71,7 @@ public class GameStagesEvents {
     }
     
     @FunctionalInterface
-    public interface Added extends EventAwareListener{
+    public interface Added {
 
         /**
          * This event is fired after a stage has been successfully added using
@@ -82,7 +82,7 @@ public class GameStagesEvents {
     }
     
     @FunctionalInterface
-    public interface Remove extends EventAwareListener {
+    public interface Remove {
 
         /**
          * This event is fired when a stage is removed from a player via
@@ -93,7 +93,7 @@ public class GameStagesEvents {
     }
 
     @FunctionalInterface
-    public interface Removed extends EventAwareListener{
+    public interface Removed {
 
         /**
          * This event is fired after a stage has been successfully removed using
@@ -104,7 +104,7 @@ public class GameStagesEvents {
     }
 
     @FunctionalInterface
-    public interface Cleared extends EventAwareListener {
+    public interface Cleared {
         /**
          * This event is fired after the stages have been cleared from a player.
          */
@@ -112,7 +112,7 @@ public class GameStagesEvents {
     }
     
     @FunctionalInterface
-    public interface Check extends EventAwareListener {
+    public interface Check {
         /**
          * This event is fired when a stage check is done on a player using
          * {@link net.darkhax.gamestages.GameStageHelper#hasStage(Player, net.darkhax.gamestages.data.IStageData, String)}.

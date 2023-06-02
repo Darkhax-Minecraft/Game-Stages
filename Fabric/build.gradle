@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    alias libs.plugins.quilt.loom
+    alias libs.plugins.fabric.loom
 }
 
 apply from: '../gradle/property_helper.gradle'
@@ -16,8 +16,8 @@ dependencies {
         mappings "org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:intermediary-v2"
         officialMojangMappings()
     }
-    modImplementation libs.quilt.loader
-    modImplementation libs.quilted.fabric.api
+    modImplementation libs.fabric.loader
+    modImplementation libs.fabric.api
 
     modImplementation libs.bookshelf
 
@@ -29,13 +29,13 @@ loom {
     runs {
         client {
             client()
-            setConfigName("Quilt Client")
+            setConfigName("Fabric Client")
             ideConfigGenerated(true)
             runDir("run")
         }
         server {
             server()
-            setConfigName("Quilt Server")
+            setConfigName("Fabric Server")
             ideConfigGenerated(true)
             runDir("run")
         }
@@ -49,7 +49,7 @@ processResources {
     from project(":Common").sourceSets.main.resources
     inputs.property "version", mod_version
 
-    filesMatching("quilt.mod.json") {
+    filesMatching("fabric.mod.json") {
         expand "version": mod_version
     }
 

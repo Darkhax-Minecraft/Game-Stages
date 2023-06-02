@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import org.quiltmc.loader.impl.gui.QuiltForkComms;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -4,16 +4,14 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.networking.api.PacketSender;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,7 +60,7 @@ public class GameStageSaveHandler {
      * A reference to the client's current stage data. This will be overridden every time the player joins a save
      * instance.
      */
-    @ClientOnly
+    @Environment(EnvType.CLIENT)
     private static IStageData clientData;
 
     public static void loadData(ServerPlayer player) {
@@ -285,7 +283,7 @@ public class GameStageSaveHandler {
      *
      * @return The current client side stage data.
      */
-    @ClientOnly
+    @Environment(EnvType.CLIENT)
     public static IStageData getClientData() {
 
         return clientData;
@@ -296,7 +294,7 @@ public class GameStageSaveHandler {
      *
      * @param stageData The stage data for the client.
      */
-    @ClientOnly
+    @Environment(EnvType.CLIENT)
     public static void setClientData(IStageData stageData) {
 
         clientData = stageData;
