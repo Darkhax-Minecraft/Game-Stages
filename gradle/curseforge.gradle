@@ -57,7 +57,7 @@ import com.diluv.schoomp.message.embed.Embed
 
 apply from: 'gradle/property_helper.gradle'
 apply plugin: com.matthewprenger.cursegradle.CurseGradlePlugin
-apply plugin: "com.modrinth.minotaur.Minotaur"
+apply plugin: 'com.modrinth.minotaur'
 
 def projectPage = project.findProperty('curse_page')
             
