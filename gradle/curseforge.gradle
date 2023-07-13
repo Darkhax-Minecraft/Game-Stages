@@ -45,7 +45,7 @@ buildscript {
     dependencies {
     
         classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
-        classpath group: 'gradle.com.modrinth.minotaur', name: 'Minotaur', version: '2.8.1'
+        classpath group: 'com.modrinth.minotaur', name: 'Minotaur', version: '2.8.1'
         classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.1.0'
     }
 }
@@ -57,7 +57,7 @@ import com.diluv.schoomp.message.embed.Embed
 
 apply from: 'gradle/property_helper.gradle'
 apply plugin: com.matthewprenger.cursegradle.CurseGradlePlugin
-apply plugin: com.modrinth.minotaur
+apply(plugin = "com.modrinth.minotaur")
 
 def projectPage = project.findProperty('curse_page')
             
