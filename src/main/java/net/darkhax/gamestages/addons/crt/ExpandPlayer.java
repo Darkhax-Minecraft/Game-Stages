@@ -15,7 +15,6 @@ public class ExpandPlayer {
     @ZenCodeType.Method
     public static void addGameStage (Player player, String... stages) {
 
-        LivingEvent
         if (player instanceof ServerPlayer) {
             
             GameStageHelper.addStage((ServerPlayer) player, stages);
