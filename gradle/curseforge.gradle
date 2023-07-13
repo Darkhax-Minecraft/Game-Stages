@@ -137,7 +137,7 @@ curseforge {
 modrinth {
 
     def patreonInfo = project.findProperty('patreon')
-    def changelogText = project.ext.mod_changelog
+    def changelogText = project.ext.modChangelog
 
     if (patreonInfo) {
         changelogText += "\n\nThis project is made possible by [Patreon](${patreonInfo.campaignUrlTracked}) support from players like you. Thank you!\n\n${patreonInfo.pledgeLog}"
