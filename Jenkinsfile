@@ -31,7 +31,7 @@ pipeline {
                 ]) {
             
                     echo 'Building project.'
-                    sh './gradlew build publish curseforge updateVersionTracker --stacktrace --warn'
+                    sh './gradlew build publish curseforge modrinth updateVersionTracker --stacktrace --warn'
                 }
             }
         }

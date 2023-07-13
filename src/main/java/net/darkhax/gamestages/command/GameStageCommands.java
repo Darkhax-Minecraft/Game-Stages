@@ -93,11 +93,11 @@ public class GameStageCommands {
             GameStageHelper.addStage(player, knownStage);
         }
         
-        ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.all.target"), true);
+        ctx.getSource().sendSuccess(() -> Component.translatable("commands.gamestage.all.target"), true);
         
         if (player != ctx.getSource().getEntity()) {
             
-            ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.all.sender", player.getDisplayName()), true);
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.gamestage.all.sender", player.getDisplayName()), true);
         }
     }
     
@@ -123,10 +123,10 @@ public class GameStageCommands {
         
         final int removedStages = GameStageHelper.clearStages(player);
         
-        ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.clear.target", removedStages), true);
+        ctx.getSource().sendSuccess(() -> Component.translatable("commands.gamestage.clear.target", removedStages), true);
         
         if (player != ctx.getSource().getEntity()) {
-            ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.gamestage.clear.sender", removedStages, player.getDisplayName()), true);
         }
     }
     
@@ -152,7 +152,7 @@ public class GameStageCommands {
         
         final String stage = StageArgumentType.getStage(ctx, "stage");
         final boolean hasStage = GameStageHelper.hasStage(player, stage);
-        ctx.getSource().sendSuccess(Component.translatable(hasStage ? "commands.gamestage.check.success" : "commands.gamestage.check.failure", player.getDisplayName(), stage), false);
+        ctx.getSource().sendSuccess(() -> Component.translatable(hasStage ? "commands.gamestage.check.success" : "commands.gamestage.check.failure", player.getDisplayName(), stage), false);
         
         return hasStage;
     }
@@ -160,10 +160,10 @@ public class GameStageCommands {
     private static int reloadGameStages (CommandContext<CommandSourceStack> ctx) {
         
         GameStageSaveHandler.reloadFakePlayers();
-        ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.reloadfakes.info"), true);
+        ctx.getSource().sendSuccess(() -> Component.translatable("commands.gamestage.reloadfakes.info"), true);
         
         GameStageSaveHandler.reloadKnownStages();
-        ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.reloadknown.info", GameStageSaveHandler.getKnownStages().size()), true);
+        ctx.getSource().sendSuccess(() -> Component.translatable("commands.gamestage.reloadknown.info", GameStageSaveHandler.getKnownStages().size()), true);
         return 0;
     }
     
@@ -191,12 +191,12 @@ public class GameStageCommands {
         
         if (stageInfo.isEmpty()) {
             
-            ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.info.empty", player.getDisplayName()), false);
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.gamestage.info.empty", player.getDisplayName()), false);
         }
         
         else {
             
-            ctx.getSource().sendSuccess(Component.translatable("commands.gamestage.info.stages", player.getDisplayName(), stageInfo), false);
+            ctx.getSource().sendSuccess(() -> Component.translatable("commands.gamestage.info.stages", player.getDisplayName(), stageInfo), false);
         }
     }
     
@@ -218,10 +218,10 @@ public class GameStageCommands {
             
             if (!silent || !BoolArgumentType.getBool(ctx, "silent")) {
                 
-                ctx.getSource().sendSuccess(Component.translatable(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
+                ctx.getSource().sendSuccess(() -> Component.translatable(adding ? "commands.gamestage.add.target" : "commands.gamestage.remove.target", stageName), true);
                 
                 if (player != ctx.getSource().getEntity()) {
-                    ctx.getSource().sendSuccess(Component.translatable(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
+                    ctx.getSource().sendSuccess(() -> Component.translatable(adding ? "commands.gamestage.add.sender" : "commands.gamestage.remove.sender", stageName, player.getDisplayName()), true);
                 }
             }
         }

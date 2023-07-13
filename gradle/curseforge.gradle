@@ -45,6 +45,7 @@ buildscript {
     dependencies {
     
         classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
+        classpath group: 'com.modrinth.minotaur', name: 'Minotaur', version: '2.8.1'
         classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.1.0'
     }
 }
@@ -56,6 +57,7 @@ import com.diluv.schoomp.message.embed.Embed
 
 apply from: 'gradle/property_helper.gradle'
 apply plugin: com.matthewprenger.cursegradle.CurseGradlePlugin
+apply plugin: 'com.modrinth.minotaur'
 
 def projectPage = project.findProperty('curse_page')
             
@@ -129,6 +131,24 @@ curseforge {
     
         project.logger.lifecycle('Skipping CurseForge module. No auth info provided.')
     }
+}
+
+// Modrinth
+modrinth {
+
+    def patreonInfo = project.findProperty('patreon')
+    def changelogText = project.ext.mod_changelog
+
+    if (patreonInfo) {
+        changelogText += "\n\nThis project is made possible by [Patreon](${patreonInfo.campaignUrlTracked}) support from players like you. Thank you!\n\n${patreonInfo.pledgeLog}"
+    }
+
+    token.set(project.findProperty('modrinth_auth'))
+    projectId.set(modrinth_project)
+    changelog.set(changelogText)
+    versionName.set("${mod_name}-Forge-${minecraft_version}-$version")
+    versionType.set('release')
+    uploadFile.set(tasks.jar)
 }
 
 if (project.hasProperty('curse_discord_webhook')) {

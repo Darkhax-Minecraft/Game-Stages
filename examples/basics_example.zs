@@ -10,8 +10,7 @@
 // for your pack. The following example combines these ideas to prevent players
 // from trading with villagers until they have crafted a chest.
 
-import crafttweaker.api.events.CTEventManager;
-import crafttweaker.api.event.entity.player.interact.EntityInteractEvent;
+import crafttweaker.forge.api.event.interact.EntityInteractEvent;
 import crafttweaker.api.util.InteractionHand;
 import mods.gamestages.StageHelper;
 
@@ -21,17 +20,17 @@ StageHelper.grantStageWhenCrafting(<item:minecraft:chest>, "crafted_chest");
 
 // Registers an event listener with CraftTweaker. The code inside here will be 
 // ran every time the player interacts with another entity.
-CTEventManager.register<EntityInteractEvent>((event) => {
+events.register<EntityInteractEvent>((event) => {
 
     // The first bit makes sure the code is running on the server/logic thread.
     // The second part makes sure we are listening to mainhand clicks.
-    if (!event.player.level.isClientSide() && event.hand == InteractionHand.MAIN_HAND) {
+    if (!event.entity.level.isClientSide && event.hand == InteractionHand.MAIN_HAND) {
     
         // Checks if the entity being interracted with is a villager.
         if (event.target.getType() == <entitytype:minecraft:villager>) {
         
             // Checks if the player does NOT have the crafted_chest stage.
-            if (!event.player.hasGameStage("crafted_chest")) {
+            if (!event.entity.hasGameStage("crafted_chest")) {
             
                 // Cancelling the event prevents it from happening. The player
                 // can not trade with the villager if they can't click it.
@@ -39,7 +38,7 @@ CTEventManager.register<EntityInteractEvent>((event) => {
                 
                 // Send the player a chat message telling them why they could
                 // not trade with the villager.
-                event.player.sendMessage("You need to craft a chest first!");
+                event.entity.sendMessage("You need to craft a chest first!");
             }
         }
     }

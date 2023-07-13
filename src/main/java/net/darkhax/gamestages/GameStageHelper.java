@@ -34,9 +34,7 @@ public class GameStageHelper {
 
         return STAGE_PATTERN.test(stageName);
     }
-    
 
-    
     /**
      * Gets an immutable set of all the stages defined in the known stages json file.
      * 
@@ -194,19 +192,22 @@ public class GameStageHelper {
      * Attempts to give a player a stage. Events may cancel this.
      * 
      * @param player The player to give the stage.
-     * @param stage The stage to give.
+     * @param stages The stage to give.
      */
-    public static void addStage (ServerPlayer player, String stage) {
-        
-        if (!MinecraftForge.EVENT_BUS.post(new GameStageEvent.Add(player, stage))) {
-            
-            final IStageData data = getPlayerData(player);
-            
-            if (data != null) {
-                
-                data.addStage(stage);
-                syncPlayer(player);
-                MinecraftForge.EVENT_BUS.post(new GameStageEvent.Added(player, stage));
+    public static void addStage (ServerPlayer player, String... stages) {
+
+        for (String stage : stages) {
+
+            if (!MinecraftForge.EVENT_BUS.post(new GameStageEvent.Add(player, stage))) {
+
+                final IStageData data = getPlayerData(player);
+
+                if (data != null) {
+
+                    data.addStage(stage);
+                    syncPlayer(player);
+                    MinecraftForge.EVENT_BUS.post(new GameStageEvent.Added(player, stage));
+                }
             }
         }
     }
@@ -215,19 +216,22 @@ public class GameStageHelper {
      * Attempts to remove a stage from a player. Events may cancel this.
      * 
      * @param player The player to remove the stage from.
-     * @param stage The stage to remove.
+     * @param stages The stage to remove.
      */
-    public static void removeStage (ServerPlayer player, String stage) {
-        
-        if (!MinecraftForge.EVENT_BUS.post(new GameStageEvent.Remove(player, stage))) {
-            
-            final IStageData data = getPlayerData(player);
-            
-            if (data != null) {
-                
-                data.removeStage(stage);
-                syncPlayer(player);
-                MinecraftForge.EVENT_BUS.post(new GameStageEvent.Removed(player, stage));
+    public static void removeStage (ServerPlayer player, String... stages) {
+
+        for (String stage : stages) {
+
+            if (!MinecraftForge.EVENT_BUS.post(new GameStageEvent.Remove(player, stage))) {
+
+                final IStageData data = getPlayerData(player);
+
+                if (data != null) {
+
+                    data.removeStage(stage);
+                    syncPlayer(player);
+                    MinecraftForge.EVENT_BUS.post(new GameStageEvent.Removed(player, stage));
+                }
             }
         }
     }
