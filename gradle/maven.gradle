@@ -18,48 +18,36 @@ if (!(project.hasProperty('group') || project.hasProperty('groupId'))) {
 if (canLoad) {
 
     project.logger.lifecycle('Loading maven module.')
-    
+
+    // -- MAVEN PUBLISHING --
     project.publishing {
 
-        tasks.publish.dependsOn 'build'
-        
         publications {
 
             mavenJava(MavenPublication) {
-            
-                artifactId project.archivesBaseName
 
-                // Base mod archive.
-                artifact jar
-                
-                // Adds the sources as an artifact.
-                artifact project.sourcesJar {
-                    classifier 'sources'
-                }
-
-                // Adds the javadocs as an artifact.
-                artifact project.javadocJar {
-                    classifier 'javadoc'
-                }
+                artifactId = base.archivesName.get()
+                from components.java
+                fg.component(it)
             }
         }
 
         repositories {
-        
+
             maven {
-            
+
                 // Sets maven credentials if they are provided. This is generally
                 // only used for external/remote uploads.
                 if (project.hasProperty('mavenUsername') && project.hasProperty('mavenPassword')) {
-                
+
                     credentials {
-                    
+
                         username findProperty('mavenUsername')
                         password findProperty('mavenPassword')
                     }
                 }
 
-                url getRequiredString('mavenURL')
+                url getDefaultString('mavenURL', 'undefined', true)
             }
         }
     }
