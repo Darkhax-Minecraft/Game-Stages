@@ -7,7 +7,6 @@ import net.darkhax.gamestages.packet.MessageStages;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 
 import javax.annotation.Nullable;
@@ -273,7 +272,7 @@ public class GameStageHelper {
             
             if (player instanceof ServerPlayer) {
                 
-                if (player instanceof FakePlayer) {
+                if (player.getClass() != ServerPlayer.class) {
                     
                     return GameStageSaveHandler.getFakeData(player.getName().getString());
                 }

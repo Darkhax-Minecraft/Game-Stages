@@ -6,6 +6,7 @@ import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.packet.GameStagesPacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
@@ -46,8 +47,8 @@ public class GameStages {
     private void onF3Text (CustomizeGuiOverlayEvent.DebugText event) {
         
         final Minecraft mc = Minecraft.getInstance();
-        
-        if (mc.options.renderDebug) {
+
+        if (mc.gui != null && mc.gui.getDebugOverlay() != null && mc.gui.getDebugOverlay().showDebugScreen()) {
             
             if (mc.player.isShiftKeyDown()) {
                 

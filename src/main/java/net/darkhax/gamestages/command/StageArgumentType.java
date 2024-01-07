@@ -1,5 +1,6 @@
 package net.darkhax.gamestages.command;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -7,7 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.darkhax.bookshelf.api.serialization.Serializers;
+import net.darkhax.bookshelf.api.data.bytebuf.BookshelfByteBufs;
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -113,19 +114,22 @@ public class StageArgumentType implements ArgumentType<String> {
         @Override
         public void serializeToNetwork(StageArgumentType.Template template, FriendlyByteBuf buffer) {
 
-            Serializers.STRING.toByteBufList(buffer, new ArrayList<>(template.knownStages));
+            BookshelfByteBufs.STRING.writeSet(buffer, template.knownStages);
         }
 
         @Override
         public StageArgumentType.Template deserializeFromNetwork(FriendlyByteBuf buffer) {
 
-            return new StageArgumentType.Template(new HashSet<>(Serializers.STRING.fromByteBufList(buffer)));
+            final Set<String> readStages = BookshelfByteBufs.STRING.readSet(buffer);
+            return new StageArgumentType.Template(readStages);
         }
 
         @Override
         public void serializeToJson(StageArgumentType.Template template, JsonObject json) {
 
-            json.add("known_stages", Serializers.STRING.toJSONSet(template.knownStages));
+            final JsonArray stagesArray = new JsonArray();
+            template.knownStages.forEach(stagesArray::add);
+            json.add("known_stages", stagesArray);
         }
 
         @Override

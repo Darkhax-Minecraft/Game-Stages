@@ -259,11 +259,11 @@ public class StageHelper {
 
         ZenEventManager.EVENTS.register(AdvancementEvent.AdvancementEarnEvent.class, event -> {
 
-            if (event.getEntity() instanceof ServerPlayer player && predicate.test(event.getAdvancement().getId())) {
+            if (event.getEntity() instanceof ServerPlayer player && predicate.test(event.getAdvancement().id())) {
 
                 if (grantStages(player, stages) && hook != null) {
 
-                    hook.accept(player, event.getAdvancement().getId());
+                    hook.accept(player, event.getAdvancement().id());
                 }
             }
         });
