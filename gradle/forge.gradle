@@ -298,3 +298,9 @@ task configEula(type: WriteProperties) {
         project.logger.warn("You have agreed to Mojang's EULA! https://account.mojang.com/documents/minecraft_eula");
     }
 }
+
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
+}

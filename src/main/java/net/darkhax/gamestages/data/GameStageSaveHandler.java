@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -83,7 +84,7 @@ public class GameStageSaveHandler {
 
             try {
 
-                final CompoundTag tag = NbtIo.readCompressed(playerFile);
+                final CompoundTag tag = NbtIo.readCompressed(playerFile.toPath(), NbtAccounter.unlimitedHeap());
                 playerData.readFromNBT(tag);
                 GameStages.LOG.debug("Loaded {} stages for {}.", playerData.getStages().size(), event.getEntity().getName());
             }
@@ -118,7 +119,7 @@ public class GameStageSaveHandler {
 
                 try {
 
-                    NbtIo.writeCompressed(tag, playerFile);
+                    NbtIo.writeCompressed(tag, playerFile.toPath());
                     GameStages.LOG.debug("Saved {} stages for {}.", playerData.getStages().size(), event.getEntity().getName());
                 }
 
