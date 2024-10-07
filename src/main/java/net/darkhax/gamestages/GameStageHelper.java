@@ -1,5 +1,6 @@
 package net.darkhax.gamestages;
 
+import net.darkhax.gamestages.advancement.HasStageTrigger;
 import net.darkhax.gamestages.data.GameStageSaveHandler;
 import net.darkhax.gamestages.data.IStageData;
 import net.darkhax.gamestages.event.GameStageEvent;
@@ -303,6 +304,10 @@ public class GameStageHelper {
             
             GameStages.LOG.debug("Syncing {} stages for {}.", info.getStages().size(), player.getName());
             GameStages.NETWORK.syncPlayerStages(player, new MessageStages(info.getStages()));
+
+            for (String stage : info.getStages()) {
+                HasStageTrigger.INSTANCE.trigger(player, stage);
+            }
         }
     }
 }
