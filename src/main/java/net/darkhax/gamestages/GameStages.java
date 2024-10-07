@@ -49,7 +49,7 @@ public class GameStages {
         
         if (mc.options.renderDebug) {
             
-            if (mc.player.isShiftKeyDown()) {
+            if (mc.player != null && mc.player.isShiftKeyDown()) {
                 
                 final IStageData data = GameStageHelper.getPlayerData(mc.player);
                 
